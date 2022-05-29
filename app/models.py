@@ -1,11 +1,22 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
-from app import db
+from app import db, login
 
 
-class User(db.Model):
+# the login extension register this load_user function
+# it executes it when someone send a request to our app
+# the user_loader decorator passes the id as string
+# so we convert it to int
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
+# The UserMixin adds stuff for us like is_authenticated property
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=True)
@@ -41,3 +52,5 @@ class User(db.Model):
     # TODO: Revisit this code
     # def update(self):
     #     pass
+
+
