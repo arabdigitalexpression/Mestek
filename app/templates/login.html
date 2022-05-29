@@ -1,0 +1,10 @@
+
+
+{{msg}}
+<form method="POST" action="/login">
+{{ form.csrf_token }}
+{{ form.username.label }} {{ form.username }}
+<br />
+{{ form.password.label }} {{ form.password }}
+<input type="submit" value="تسجيل الدخول">
+</form>

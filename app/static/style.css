@@ -1,0 +1,156 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Anek Tamil", sans-serif;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+.container {
+	width: 80%;
+	margin: auto;
+}
+
+.row {
+	width: 90vw;
+	margin: 0 auto;
+}
+
+.row .site-logo {
+	width: 20%;
+	float: left;
+}
+
+.row .site-nav {
+	float: right;
+	width: 80%;
+	text-align: right;
+}
+
+.site-nav ul {
+	display: flex;
+	padding: 5px 10px;
+	list-style: none;
+	justify-content: space-between;
+}
+
+.site-nav ul a {
+	text-decoration: none;
+	color: #333;
+	padding: 20px;
+	transition: all 0.3s ease-in-out;
+}
+
+.site-nav ul li:hover a {
+	background-color: #333;
+	color: white;
+}
+
+.site-hero img {
+	width: 100%;
+	height: calc(100vh - 65.2px);
+	object-fit: cover;
+	-o-object-fit: cover;
+	-webkit-object-fit: cover;
+}
+
+#about {
+	padding: 70px 0;
+}
+
+#about::after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+#about .right-col {
+	width: 33%;
+	float: right;
+}
+
+#about .left-col {
+	width: 66%;
+	float: left;
+}
+
+#about .left-col img {
+	float: left;
+}
+
+#spaces {
+	clear: both;
+	background: #eee;
+}
+
+#spaces h2 {
+	text-align: center;
+	padding: 40px 0;
+	text-transform: uppercase;
+	font-weight: 400;
+	letter-spacing: 2px;
+}
+
+#spaces .flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#spaces .flex .text-item {
+	width: 70%;
+	padding: 0 30px;
+}
+
+#spaces .flex .img-item {
+	width: 30%;
+}
+
+#spaces .flex .img-item img {
+	width: 100%;
+}
+
+#spaces .flex .img-item:nth-of-type(2) {
+	border: 2px solid red;
+}
+
+
+.workshops .right-col {
+	width: 33%;
+	float: right;
+}
+
+.workshops .middle-col {
+	width: 33%;
+	float: right;
+}
+
+.workshops .left-col {
+	width: 33%;
+	float: left;
+}
+
+footer .right-col {
+	width: 33%;
+	float: right;
+}
+
+footer .middle-col {
+	width: 33%;
+	float: right;
+}
+
+footer .left-col {
+	width: 33%;
+	float: left;
+}
+
+footer p {
+	/* text-align: center; */
+	margin-left: 35%;
+}
+
+hr {
+	border-top: 3px solid #bbb;
+}
