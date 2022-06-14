@@ -29,7 +29,7 @@ class User(UserMixin, db.Model):
     # Date is year-month-day
     # Time Hour:Minute:Second nano timezone
     created_at = db.Column(
-        db.DateTime(), default=datetime.utcnow,
+        db.DateTime(), default=datetime.utcnow(),
         nullable=False
         )
 
