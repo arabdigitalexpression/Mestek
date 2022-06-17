@@ -1,10 +1,11 @@
-{% extends '/base.html' %} 
+{% extends 'default/base.html' %} 
 {% block title %}signup{% endblock %}
-{% block body %}
 
-{% if errors %}
-{{ errors }}
-{% endif %}
+{% block content %}
+
+    {% if errors %}
+    {{ errors }}
+    {% endif %}
 
 <div class="card">
     <!-- The url_for function get the route url of signup_page controller -->
