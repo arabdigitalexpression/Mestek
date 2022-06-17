@@ -14,7 +14,7 @@ spaces = [
 @app.route("/")
 @login_required
 def main_page():
-    return render_template('home.html', spaces=spaces, name="hello")
+    return render_template('default/home.html', spaces=spaces, name="hello")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -44,10 +44,10 @@ def signup_page():
             # TODO: there's a logic error here, fix it!
             errors = f"hey, There's a user with this email: {email}"
             # render_template does autoescaping html form input data
-            return render_template("signup.html", form=form, errors=errors)
+            return render_template("default/signup.html", form=form, errors=errors)
         errors = f"Please check your form data again"
-        return render_template("signup.html", form=form, errors=errors)
-    return render_template("signup.html", form=form)
+        return render_template("default/signup.html", form=form, errors=errors)
+    return render_template("default/signup.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -76,7 +76,7 @@ def login_page():
         # TODO: add remember me button to the form
         login_user(user, remember=True)
         return redirect(url_for("main_page"))
-    return render_template("login.html", form=form)
+    return render_template("default/login.html", form=form)
 
 
 @app.route('/logout')
