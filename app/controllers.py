@@ -8,25 +8,17 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from app import app, db, login
 from app.models import (
-    User, Space, Image
+    User, Space, Tool, Image
 )
 from app.forms import (
-    SignupForm, LoginForm, SpaceForm
+    SignupForm, LoginForm, SpaceForm, ToolForm
 )
 
-
-# TODO: Remove this unused stuff
-imgUrl = "https://via.placeholder.com/300/777777/FFFFFF/?text=Space"
-spaces = [
-        {"imgUrl": imgUrl, "title": "title1", "description": "des1"},
-        {"imgUrl": imgUrl, "title": "title2", "description": "des2"},
-        {"imgUrl": imgUrl, "title": "title3", "description": "des3"}
-]
 
 @app.route("/")
 @login_required
 def main_page():
-    return render_template('default/home.html', spaces=spaces, name="hello")
+    return render_template('default/home.html', name="hello")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -113,7 +105,6 @@ def space_list():
         return render_template('dashboard/space/table.html', spaces=data)
     else:
         return render_template("spaces.html", spaces=data)
-    
 
 
 @app.route('/space/<int:id>/delete', methods=['POST'])
@@ -138,7 +129,10 @@ def create_space():
                 guidelines = form.guidelines.data
             )
             imagesObjs = list()
+            # print(dir(form.images.data[0]))
             for file in form.images.data:
+                if file.content_length == 0:
+                    continue
                 filename = secure_filename(file.filename)
                 # TODO: image is overwritten when there's 
                 # an existing image with the same name
@@ -149,7 +143,11 @@ def create_space():
                     filename
                 ))
                 imagesObjs.append(Image(
-                    url = url_for("download_file", filename=filename)
+                    url = url_for(
+                        "download_file",
+                        dir="space",
+                        filename=filename
+                        )
                 ))
             space.images = imagesObjs
             db.session.add(space)
@@ -186,6 +184,8 @@ def update_space(id):
                 space.guidelines = form.guidelines.data
                 imagesObjs = list()
                 for file in form.images.data:
+                    if file.content_length == 0:
+                        continue
                     filename = secure_filename(file.filename)
                     # TODO: image is overwritten when there's 
                     # an existing image with the same name
@@ -197,7 +197,11 @@ def update_space(id):
                     ))
                     imagesObjs.append(Image(
                         space=space,
-                        url = url_for("download_file", filename=filename)
+                        url = url_for(
+                        "download_file",
+                        dir="space",
+                        filename=filename
+                        )
                     ))
                 db.session.add_all(imagesObjs)
                 db.session.commit()
@@ -210,10 +214,132 @@ def update_space(id):
         return redirect(url_for("main_page"))
 
 
-@app.route('/uploads/<filepath>')
-def download_file(filepath):
+# Tools
+@app.route('/tools')
+def tool_list():
+    data = Tool.query.all()
+    if current_user.role == "admin":
+        return render_template('dashboard/tool/table.html', tools=data)
+    else:
+        return render_template("tools.html", tools=data)
+
+
+@app.route('/tool/<int:id>/delete', methods=['POST'])
+def delete_tool(id):
+    tool = Tool.query.get(id)
+    db.session.delete(tool)
+    db.session.commit()
+    return redirect(url_for("tool_list"))
+
+
+@app.route("/tool/create", methods=["GET", "POST"])
+@login_required
+def create_tool():
+    spaces = Space.query.all()
+    form = ToolForm()
+    form.space.choices = [(s.id, s.name) for s in spaces]
+    if current_user.role == "admin":
+        if form.validate_on_submit():
+            tool = Tool(
+                name = form.name.data,
+                price = form.price.data,
+                has_operator = form.has_operator.data,
+                description = form.description.data,
+                guidelines = form.guidelines.data,
+                space = Space.query.get(form.space.data)
+            )
+            imagesObjs = list()
+            for file in form.images.data:
+                if file.content_length == 0:
+                    continue
+                filename = secure_filename(file.filename)
+                # TODO: image is overwritten when there's 
+                # an existing image with the same name
+                file.save(os.path.join(
+                    app.config["APP_PATH"],
+                    app.config["UPLOAD_PATH"],
+                    "tool",
+                    filename
+                ))
+                imagesObjs.append(Image(
+                    url = url_for(
+                        "download_file",
+                        dir="tool",
+                        filename=filename
+                        )
+                ))
+            tool.images = imagesObjs
+            db.session.add(tool)
+            db.session.commit()
+            return redirect(url_for("tool_list"))
+        return render_template("dashboard/tool/form.html", form=form)
+    else:
+        return redirect(url_for("main_page"))
+
+
+@app.route("/tool/<int:id>/update", methods=["GET", "POST"])
+@login_required
+def update_tool(id):
+    if current_user.role == "admin":
+        spaces = Space.query.all()
+        form = ToolForm()
+        form.space.choices = [(s.id, s.name) for s in spaces]
+        tool = Tool.query.get(id)
+        if request.method == "GET":
+            form.name.data = tool.name
+            form.price.data = tool.price
+            form.images.data = tool.images
+            form.guidelines.data = tool.guidelines
+            form.description.data = tool.description
+            form.has_operator.data = tool.has_operator
+            return render_template(
+                'dashboard/tool/form.html',
+                form=form, isUpdate=True, tool=tool
+            )
+        elif request.method == "POST":
+            if form.validate_on_submit():
+                tool.name = form.name.data
+                tool.price = form.price.data
+                tool.has_operator = form.has_operator.data
+                tool.description = form.description.data
+                tool.guidelines = form.guidelines.data
+                tool.space = Space.query.get(form.space.data)
+                imagesObjs = list()
+                for file in form.images.data:
+                    if file.content_length == 0:
+                        continue
+                    filename = secure_filename(file.filename)
+                    # TODO: image is overwritten when there's 
+                    # an existing image with the same name
+                    file.save(os.path.join(
+                        app.config["APP_PATH"],
+                        app.config["UPLOAD_PATH"],
+                        "tool",
+                        filename
+                    ))
+                    imagesObjs.append(Image(
+                        tool=tool,
+                        url = url_for(
+                        "download_file",
+                        dir="tool",
+                        filename=filename
+                        )
+                    ))
+                db.session.add_all(imagesObjs)
+                db.session.commit()
+                return redirect(url_for("tool_list"))
+            return render_template(
+                "dashboard/tool/form.html",
+                form=form, isUpdate=True, tool=tool
+            )
+    else:
+        return redirect(url_for("main_page"))
+
+
+@app.route('/uploads/<dir>/<filename>')
+def download_file(dir, filename):
     return send_file(os.path.join(
         app.config["APP_PATH"],
         app.config["UPLOAD_PATH"],
-        filepath
+        f'{dir}/{filename}'
     ))
