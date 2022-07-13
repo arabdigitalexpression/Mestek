@@ -1,5 +1,11 @@
-from flask import render_template, request, redirect, url_for
+import os
+import re
+from flask import (
+    render_template, request, redirect,
+    url_for, send_file
+)
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 from app import app, db, login
 from app.models import (
     User, Space, Image
@@ -60,7 +66,7 @@ def signup_page():
 def login_page():
     if current_user.is_authenticated:
         return redirect(url_for("main_page"))
-    
+
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -91,21 +97,73 @@ def logout():
     return redirect(url_for('main_page'))
 
 
-@app.route('/dashboard')
+@app.route('/dashboard/')
 @login_required
-def dashboard():
-    return render_template("dashboard/index.html")
+def dashboard():        
+    if current_user.role == "admin":
+        return render_template("dashboard/index.html")
+    else:
+        return redirect(url_for('main_page'))
 
 
 @app.route('/spaces')
 def space_list():
     data = Space.query.all()
-    return render_template('dashboard/spaces.html', spaces=data)
+    if current_user.role == "admin":
+        return render_template('dashboard/spaces.html', spaces=data)
+    else:
+        return render_template("spaces.html", spaces=data)
+    
 
 
-@app.route('/space/<int:id>', methods=['POST'])
+@app.route('/space/<int:id>/delete', methods=['POST'])
 def delete_space(id):
     space = Space.query.get(id)
     db.session.delete(space)
     db.session.commit()
     return redirect(url_for("space_list"))
+
+
+@app.route("/space/create", methods=["GET", "POST"])
+@login_required
+def create_space():
+    form = CreateSpaceForm()
+    if current_user.role == "admin":
+        if form.validate_on_submit():
+            space = Space(
+                name = form.name.data,
+                price = form.price.data,
+                has_operator = form.has_operator.data,
+                description = form.description.data,
+                guidelines = form.guidelines.data
+            )
+            imagesObjs = list()
+            for file in form.images.data:
+                filename = secure_filename(file.filename)
+                # TODO: image is overwritten when there's 
+                # an existing image with the same name
+                file.save(os.path.join(
+                    app.config["APP_PATH"],
+                    app.config["UPLOAD_PATH"],
+                    filename
+                ))
+                imagesObjs.append(Image(
+                    url = url_for("download_file", filename=filename)
+                ))
+            space.images = imagesObjs
+            db.session.add(space)
+            db.session.commit()
+            return redirect(url_for("space_list"))
+        return render_template("dashboard/create_space.html", form=form)
+    else:
+        return redirect(url_for("main_page"))
+
+
+@app.route('/uploads/<filename>')
+def download_file(filename):
+    filepath = os.path.join(
+        app.config["APP_PATH"],
+        app.config["UPLOAD_PATH"],
+        filename
+    )
+    return send_file(filepath)
