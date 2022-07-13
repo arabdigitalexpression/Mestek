@@ -1,0 +1,65 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}
+{% if isUpdate %}
+تعديل المساحة
+{% else %}
+ إنشاء مساحة
+{% endif %}
+ {% endblock %}
+
+{% block content %}
+<h2>
+    {% if isUpdate %}
+    تعديل المساحة
+    {% else %}
+     إنشاء مساحة
+    {% endif %}
+</h2>
+
+{% if isUpdate %}
+{%
+    set form_action = url_for('update_space', id=space.id)
+%}
+{% else %}
+{%
+    set form_action = url_for('create_space')
+%}
+{% endif %}
+
+
+<form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
+    {{ form.csrf_token }}
+    
+    {{ form.name.label}}
+    {{ form.name}}
+
+    {{ form.price.label}}
+    {{ form.price}}
+
+    {{ form.has_operator.label}}
+    {{ form.has_operator}}
+
+    {{ form.description.label}}
+    {{ form.description}}
+
+    {{ form.guidelines.label}}
+    {{ form.guidelines}}
+
+    {{ form.images.label}}
+    {{ form.images}}
+
+    <button type="submit" class="btn btn-secondary col" style="width: 200px;">
+        {% if isUpdate %}
+        تعديل المساحة
+        {% else %}
+        إضافة مساحة
+        {% endif %}
+    </button>
+
+
+    {% for image in space.images %}
+        <img src="{{image.url}}">
+    {% endfor %}
+</form>
+{% endblock %}
