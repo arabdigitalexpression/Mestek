@@ -1,35 +1,37 @@
 {% extends 'dashboard/base.html' %}
 
-{% block title %} المساحات {% endblock %}
+{% block title %} اﻷدوات {% endblock %}
 
 {% block content %}
-<h2>عنوان القسم</h2>
+<h2>اﻷدوات</h2>
 <div class="table-responsive">
     <table class="table table-striped table-sm">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">إسم المساحة</th>
-                <th scope="col">قيمة الحجر</th>
+                <th scope="col">إسم اﻷداة</th>
+                <th scope="col">قيمة الحجز</th>
                 <th scope="col">مشرف؟</th>
+                <th scope="col">المساحة</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
-            {% for space in spaces %}
+            {% for tool in tools %}
             <tr>
-                <td>{{space.id}}</td>
-                <td>{{space.name}}</td>
-                <td>{{space.price}}</td>
-                <td>{{space.has_operator}}</td>
+                <td>{{tool.id}}</td>
+                <td>{{tool.name}}</td>
+                <td>{{tool.price}}</td>
+                <td>{{tool.has_operator}}</td>
+                <td>{{tool.space.name}}</td>
                 <td class="d-flex">
                     <button type="button" class="btn btn-info text-white mx-1">
                         <i class="bi bi-info-circle"></i>
                     </button>
-                    <a href="{{url_for('update_space', id=space.id)}}" class="text-white btn btn-warning mx-1">
+                    <a href="{{url_for('update_tool', id=tool.id)}}" class="text-white btn btn-warning mx-1">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <form method="POST" action="{{url_for('delete_space', id=space.id)}}">
+                    <form method="POST" action="{{url_for('delete_tool', id=tool.id)}}">
                         <button type="submit" class="text-white btn btn-danger rounded-end mx-1">
                             <i class="bi bi-trash3"></i>
                         </button>

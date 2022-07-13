@@ -9,6 +9,7 @@
  {% endblock %}
 
 {% block content %}
+
 <h2>
     {% if isUpdate %}
     تعديل المساحة
@@ -30,36 +31,76 @@
 
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
     {{ form.csrf_token }}
+
+    <div class="row m-5">
+        <div class="col">
+            {% if form.name.errors %}
+                {%for error in form.name.errors %}
+                <span class="form_error">{{ error }}</span>
+                {%endfor%}
+            {% endif%}
+            {{form.name}}
+            <!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+        </div>
+        <div class="col">
+            {% if form.price.errors %}
+                {%for error in form.price.errors %}
+                <span class="form_error">{{ error }}</span>
+                {%endfor%}
+            {% endif%}
+            {{form.price}}
+        </div>
+        <div class="col">
+            {% if form.has_operator.errors %}
+                {%for error in form.has_operator.errors %}
+                <span class="form_error">{{ error }}</span>
+                {%endfor%}
+            {% endif%}
+            <div class="form-check form-switch">
+                {{form.has_operator}}
+                {{form.has_operator.label(class_="form-check-label")}}
+            </div>          
+        </div>
+    </div>
     
-    {{ form.name.label}}
-    {{ form.name}}
+    <div class="m-5">
+        {% if form.description.errors %}
+            {%for error in form.description.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%}
+        {% endif%}
+        {{form.description}}
+    </div>
 
-    {{ form.price.label}}
-    {{ form.price}}
+    <div  class="m-5">
+        {% if form.guidelines.errors %}
+            {%for error in form.guidelines.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%}
+        {% endif%}
+        {{form.guidelines}}
+    </div>
 
-    {{ form.has_operator.label}}
-    {{ form.has_operator}}
-
-    {{ form.description.label}}
-    {{ form.description}}
-
-    {{ form.guidelines.label}}
-    {{ form.guidelines}}
-
-    {{ form.images.label}}
-    {{ form.images}}
-
-    <button type="submit" class="btn btn-secondary col" style="width: 200px;">
-        {% if isUpdate %}
-        تعديل المساحة
-        {% else %}
-        إضافة مساحة
-        {% endif %}
-    </button>
-
-
-    {% for image in space.images %}
-        <img src="{{image.url}}">
-    {% endfor %}
+    <div class="m-5">
+        {{ form.images.label(class_="form-label")}}
+        {{ form.images}}
+    </div>
+    {% if isUpdate %}
+    <div class="row m-5">        
+        {% for image in space.images %}
+            <img class="col" width="100" src="{{image.url}}" style="object-fit: cover">
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="float-end m-5">
+        <a href="{{url_for('space_list')}}" type="button" class="btn btn-outline-danger" >الغاء</a>
+        <button type="submit" class="btn btn-secondary">
+            {% if isUpdate %}
+            تعديل المساحة
+            {% else %}
+            إضافة مساحة
+            {% endif %}
+        </button>
+    </div>
 </form>
 {% endblock %}

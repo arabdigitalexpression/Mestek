@@ -64,10 +64,25 @@ class Space(db.Model):
     price = db.Column(db.Float, nullable=False)
 
     images = db.relationship('Image', backref='space', lazy=True)
+    tools = db.relationship('Tool', backref='space', lazy=True)
+
+
+class Tool(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(128), nullable=False)
+    guidelines = db.Column(db.String(256), nullable=False)
+    has_operator = db.Column(db.Boolean, default=False, nullable=False)
+    # price per day
+    price = db.Column(db.Float, nullable=False)
+
+    images = db.relationship('Image', backref='tool', lazy=True)
+    space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
 
 
 class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(128), nullable=False)
 
-    space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=False)
+    space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
+    tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=True)
