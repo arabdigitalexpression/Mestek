@@ -1,0 +1,49 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %} المساحات {% endblock %}
+
+{% block content %}
+<h2>عنوان القسم</h2>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">إسم المساحة</th>
+                <th scope="col">قيمة الحجر</th>
+                <th scope="col">مشرف؟</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for space in spaces %}
+            <tr>
+                <td>{{space.id}}</td>
+                <td>{{space.name}}</td>
+                <td>{{space.price}}</td>
+                <td>{{space.has_operator}}</td>
+                <td>
+                    <div
+                        class="btn-group"
+                        role="group"
+                        aria-label="Basic mixed styles example"
+                    >
+                        <button type="button" class="btn btn-info text-white">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                        <button type="button" class="text-white btn btn-warning">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <form method="POST" action="{{url_for('delete_space', id=space.id)}}">
+                            <button type="submit" class="text-white btn btn-danger">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
