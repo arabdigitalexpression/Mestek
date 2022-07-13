@@ -31,9 +31,9 @@
                         <button type="button" class="btn btn-info text-white">
                             <i class="bi bi-info-circle"></i>
                         </button>
-                        <button type="button" class="text-white btn btn-warning">
+                        <a href="{{url_for('update_space', id=space.id)}}" class="text-white btn btn-warning">
                             <i class="bi bi-pencil"></i>
-                        </button>
+                        </a>
                         <form method="POST" action="{{url_for('delete_space', id=space.id)}}">
                             <button type="submit" class="text-white btn btn-danger">
                                 <i class="bi bi-trash3"></i>
