@@ -34,10 +34,10 @@ class SignupForm(FlaskForm):
     submit= SubmitField('تسجيل الحساب')
 
 
-class CreateSpaceForm(FlaskForm):
+class SpaceForm(FlaskForm):
     name = StringField('أسم المساحة', validators=[DataRequired(), Length(max=50)])
     price = FloatField('السعر', validators=[DataRequired()])
-    has_operator = BooleanField('مشرف؟', validators=[DataRequired()])
+    has_operator = BooleanField('مشرف؟')
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)])
     guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)])
     images = MultipleFileField('الصور', name="images", validators=[

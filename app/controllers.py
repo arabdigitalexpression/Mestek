@@ -11,7 +11,7 @@ from app.models import (
     User, Space, Image
 )
 from app.forms import (
-    SignupForm, LoginForm, CreateSpaceForm
+    SignupForm, LoginForm, SpaceForm
 )
 
 
@@ -110,7 +110,7 @@ def dashboard():
 def space_list():
     data = Space.query.all()
     if current_user.role == "admin":
-        return render_template('dashboard/spaces.html', spaces=data)
+        return render_template('dashboard/space/table.html', spaces=data)
     else:
         return render_template("spaces.html", spaces=data)
     
@@ -127,7 +127,7 @@ def delete_space(id):
 @app.route("/space/create", methods=["GET", "POST"])
 @login_required
 def create_space():
-    form = CreateSpaceForm()
+    form = SpaceForm()
     if current_user.role == "admin":
         if form.validate_on_submit():
             space = Space(
@@ -145,6 +145,7 @@ def create_space():
                 file.save(os.path.join(
                     app.config["APP_PATH"],
                     app.config["UPLOAD_PATH"],
+                    "space",
                     filename
                 ))
                 imagesObjs.append(Image(
@@ -154,16 +155,65 @@ def create_space():
             db.session.add(space)
             db.session.commit()
             return redirect(url_for("space_list"))
-        return render_template("dashboard/create_space.html", form=form)
+        return render_template("dashboard/space/form.html", form=form)
     else:
         return redirect(url_for("main_page"))
 
 
-@app.route('/uploads/<filename>')
-def download_file(filename):
-    filepath = os.path.join(
+@app.route("/space/<int:id>/update", methods=["GET", "POST"])
+@login_required
+def update_space(id):
+    if current_user.role == "admin":
+        form = SpaceForm()
+        space = Space.query.get(id)
+        if request.method == "GET":
+            form.name.data = space.name
+            form.price.data = space.price
+            form.images.data = space.images
+            form.guidelines.data = space.guidelines
+            form.description.data = space.description
+            form.has_operator.data = space.has_operator
+            return render_template(
+                'dashboard/space/form.html',
+                form=form, isUpdate=True, space=space
+            )
+        elif request.method == "POST":
+            if form.validate_on_submit():
+                space.name = form.name.data
+                space.price = form.price.data
+                space.has_operator = form.has_operator.data
+                space.description = form.description.data
+                space.guidelines = form.guidelines.data
+                imagesObjs = list()
+                for file in form.images.data:
+                    filename = secure_filename(file.filename)
+                    # TODO: image is overwritten when there's 
+                    # an existing image with the same name
+                    file.save(os.path.join(
+                        app.config["APP_PATH"],
+                        app.config["UPLOAD_PATH"],
+                        "space",
+                        filename
+                    ))
+                    imagesObjs.append(Image(
+                        space=space,
+                        url = url_for("download_file", filename=filename)
+                    ))
+                db.session.add_all(imagesObjs)
+                db.session.commit()
+                return redirect(url_for("space_list"))
+            return render_template(
+                "dashboard/space/form.html",
+                form=form, isUpdate=True, space=space
+            )
+    else:
+        return redirect(url_for("main_page"))
+
+
+@app.route('/uploads/<filepath>')
+def download_file(filepath):
+    return send_file(os.path.join(
         app.config["APP_PATH"],
         app.config["UPLOAD_PATH"],
-        filename
-    )
-    return send_file(filepath)
+        filepath
+    ))
