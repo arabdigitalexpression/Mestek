@@ -1,91 +1,43 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block styles %}
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700&display=swap"
+	rel="stylesheet"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	href="{{ url_for('static',filename='bootstrap.min.css') }}"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	href="{{ url_for('static',filename='signin.css') }}"
+/>
+<link
+	rel="stylesheet"
+	type="text/css"
+	href="{{ url_for('static',filename='style.css') }}"
+/>
+<!-- Custom styles for this template -->
+{% endblock %} {% block body %}
+<header class="position-absolute">
+	{% block header %}
+	<div class="row">
+		<ul>
+			{% if current_user.is_anonymous %}
+			<li><a href="{{ url_for('login_page') }}">Login</a></li>
+			{% else %}
+			<li>Hi, {{ current_user.username }}!</li>
+			<li><a href="{{ url_for('logout') }}">Logout</a></li>
+			{% endif %}
+		</ul>
+	</div>
+	{% endblock %}
+</header>
 
-{% block styles %}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link href="https://fonts.googleapis.com/css2?family=Anek+Tamil:wght@100;200;300;600&display=swap"
-		rel="stylesheet" />
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+<main class="d-flex justify-content-center align-items-center w-100 vh-100">
+	{% block content %}{% endblock %}
+</main>
 {% endblock %}
-
-{% block body %}
-	<header>
-        {% block header %}
-		<div class="row">
-			<div class="site-logo">
-				<img src="static/Adef_logo.svg" alt="ADEF" width="100" height="50" />
-			</div>
-			<nav class="site-nav">
-				<ul>
-					<li><a href="#">About Us</a></li>
-					<li><a href="#">Spaces</a></li>
-					<li><a href="#">Workshops</a></li>
-					<li><a href="#">Contact Us</a></li>
-				</ul>
-			</nav>
-			<ul>
-				{% if current_user.is_anonymous %}
-				<li><a href="{{ url_for('login_page') }}">Login</a></li>
-				{% else %}
-				<li>Hi, {{ current_user.username }}!</li>
-				<li><a href="{{ url_for('logout') }}">Logout</a></li>
-				{% endif %}
-				
-			</ul>
-		</div>
-		<div class="site-hero">
-			<img src="https://image.isu.pub/180130124759-b3fd270b85b5044066792d735743d99c/jpg/page_1.jpg"
-				alt="hero img" />
-		</div>
-        {% endblock %}
-	</header>
-
-	<main>
-		{% block content %}{% endblock %}
-	</main>
-	<br />
-	<hr>
-    
-	<!-- <footer>
-        {% block footer %}
-		<section class="container">
-			<div class="left-col">
-				<h3>sitemap</h3>
-				<div>
-					<ul>
-						<li><a href="#">Home</a></li>
-						<li><a href="#">About Us</a></li>
-						<li><a href="#">Spaces</a></li>
-						<li><a href="#">Workshops</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="right-col">
-				<h3>Subscribe</h3>
-				<form>
-					<input type="email" placeholder="Enter your email" />
-					<button type="submit">Subscribe</button>
-				</form>
-			</div>
-			<div class="middle-col">
-				<h3>contact Us {{name}}</h3>
-				<div>
-					<ul>
-						<li>
-							Address: building 7, Street 23, Al Abageyah, El Mukkatam, Cairo
-							Governorate Cairo, Cairo Governorate, Egypt 11571
-						</li>
-						<li>Mail: info@arabdigitalexpression.org</li>
-						<li>Tel: +2014987254</li>
-						<li>Open from 10:00 AM to 6:00 PM</li>
-					</ul>
-				</div>
-			</div>
-		</section>
-		<section class="container">
-			<p>Copyright &copy; 2022 ... All right are reserved</p>
-		</section>
-        {% endblock %}
-	</footer> -->
-{% endblock %}
-
