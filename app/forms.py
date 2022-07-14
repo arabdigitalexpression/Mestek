@@ -14,8 +14,14 @@ images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
 
 class LoginForm(FlaskForm):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired()])
+    username = StringField('البريد الإلكترونى', validators=[DataRequired()],
+        render_kw={
+        "class": "form-control rounded-0",
+        })
+    password = PasswordField('كلمة المرور', validators=[DataRequired()],
+        render_kw={
+        "class": "form-control rounded-0",
+        })
     
     # our own custom validator for the length
     def validate_user_is_unique(form, field):
@@ -25,13 +31,34 @@ class LoginForm(FlaskForm):
 
 
 class SignupForm(FlaskForm):
-    firstName = StringField('firstname', validators=[DataRequired(),Length(min=3,max=20)])
-    lastName = StringField('lastname', validators=[DataRequired(),Length(min=3,max=20)])
-    userName = StringField('username', validators=[DataRequired(),Length(min=3,max=20)])
-    email= EmailField('email',validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired(),Length(min=6,max=20)])
-    confirm_password = PasswordField('password', validators=[DataRequired(),EqualTo('password')])
-    submit= SubmitField('تسجيل الحساب')
+    firstName = StringField('الاسم الأول', validators=[DataRequired(),Length(min=3,max=20)],
+        render_kw={
+             "class": "form-control rounded-0",
+        })
+    lastName = StringField('الاسم الأخير', validators=[DataRequired(),Length(min=3,max=20)],
+        render_kw={
+            "class": "form-control rounded-0",
+        })
+    userName = StringField('إسم المستخدم', validators=[DataRequired(),Length(min=3,max=20)],
+        render_kw={
+            "class": "form-control rounded-0",
+        })
+    email= EmailField('البريد الإلكترونى',validators=[DataRequired()],
+        render_kw={
+            "class": "form-control rounded-0",
+        })
+    password = PasswordField('كلمة المرور', validators=[DataRequired(),Length(min=6,max=20)],
+        render_kw={
+            "class": "form-control rounded-0",
+        })
+    confirm_password = PasswordField('تأكيد كلمة المرور', validators=[DataRequired(),EqualTo('password')],
+        render_kw={
+            "class": "form-control rounded-0",
+        })
+    submit= SubmitField('تسجيل الحساب',
+        render_kw={
+            "class": "w-100 btn btn-lg btn-dark rounded-0",
+        })
 
 
 class SpaceForm(FlaskForm):
