@@ -1,54 +1,13 @@
-{% extends 'default/base.html' %}
-
-{% block title%}z عن أضف {% endblock%}
-
-{% block content %}
-
-<!-- Start about us section -->
-<section id="about" class="container">
-    <div class="left-col">
-        <p>
-            <img src="images/Adef_logo.svg" alt="ADEF" width="100" height="50" />
-            Synergistically supply front-end opportunities rather than
-            technically sound synergy. Progressively synthesize reliable
-            leadership skills whereas interactive users. Synergistically network
-            installed base strategic theme areas through cooperative action
-            items. Energistically maintain just in time synergy and installed
-            base models. Interactively initiate reliable technologies rather
-            than accurate ideas. Conveniently myocardinate out-of-the-box users
-            through 24/365 testing procedures. Professionally evolve
-            out-of-the-box manufactured products through parallel internal or
-            "organic" sources. Enthusiastically enhance customer directed
-            synergy before competitive users. Enthusiastically evisculate
-            integrated infrastructures rather than extensive paradigms.
-            Energistically synthesize focused portals without virtual
-        </p>
+{% extends 'default/base.html' %} {% block title%} أضف {% endblock%} {% block
+content %}
+<div class="card text-center rounded-0" style="width: 18rem">
+	<div class="card-body">
+    <a href="#" class="w-100 btn btn-lg btn-dark rounded-0">حجز مساحة</a>
+		<div class="card-text my-4 text-dark">
+			أو
     </div>
-    <div class="right-col">
-        <img src="https://via.placeholder.com/300/777777/FFFFFF?text=About ADEF" alt="About ADEF" />
-    </div>
-</section>
-<!-- Start ADEF Spaces section -->
-<section id="spaces">
-    <div class="container">
-        <h2>ADEF Spaces</h2>
-        <div class="flex">
-            {% for space in spaces %}
-            <div class="img-item">
-                
-                <img src="{{ space['imgUrl'] }}" alt="Space" />
-            </div>
-            <div class="text-item">
-
-                <h3>{{ space['title'] }}</h3>
-                <p>
-                    {{ space['description'] }}
-                </p>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
+		<a href="#" class="w-100 btn btn-lg btn-dark rounded-0">حجز أداة</a>
+	</div>
+</div>
 
 {% endblock %}

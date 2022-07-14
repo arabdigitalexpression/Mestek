@@ -22,15 +22,15 @@
 />
 <!-- Custom styles for this template -->
 {% endblock %} {% block body %}
-<header class="position-absolute">
+<header class="position-absolute top-0 start-0">
 	{% block header %}
 	<div class="row">
-		<ul>
+		<ul class="list-unstyled d-flex m-3 align-items-center">
 			{% if current_user.is_anonymous %}
 			<li><a href="{{ url_for('login_page') }}">Login</a></li>
 			{% else %}
-			<li>Hi, {{ current_user.username }}!</li>
-			<li><a href="{{ url_for('logout') }}">Logout</a></li>
+			<li>مرحبا, {{ current_user.username }} !</li>
+			<li><a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm mx-2">Logout</a></li>
 			{% endif %}
 		</ul>
 	</div>
