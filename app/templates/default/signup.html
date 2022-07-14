@@ -1,74 +1,36 @@
-{% extends 'default/base.html' %} 
-{% block title %}signup{% endblock %}
+{% extends 'default/base.html' %} {% block title %}signup{% endblock %} {% block
+content %}
+<!-- The url_for function get the route url of signup_page controller -->
+<form action="{{ url_for('signup_page') }}" class="form" method="POST">
+	{{ form.hidden_tag() }} {{ form.csrf_token }}
+	<p class="text-danger">{% if errors%}{{ errors }}{% endif %}</p>
+	<div class="row">
+		<div class="col">
+			<div class="form-floating mb-2">
+				{{ form.firstName }} {{ form.firstName.label }}
+			</div>
+		</div>
+		<div class="col">
+			<div class="form-floating mb-2">
+				{{ form.lastName }} {{ form.lastName.label }}
+			</div>
+		</div>
+	</div>
 
-{% block content %}
+	<div class="form-floating mb-2">
+		{{ form.userName}} {{ form.userName.label }}
+	</div>
 
-    {% if errors %}
-    {{ errors }}
-    {% endif %}
+	<div class="form-floating mb-2">{{ form.email }} {{ form.email.label }}</div>
 
-<div class="card">
-    <!-- The url_for function get the route url of signup_page controller -->
-    <form action="{{ url_for('signup_page') }}"  class="form"  method='POST'>
-        {{ form.hidden_tag() }}
-        {{ form.csrf_token }}
+	<div class="form-floating mb-2">
+		{{ form.password }} {{ form.password.label }}
+	</div>
 
-        {% if form.firstName.errors %}
-            {{ form.firstName(placeholder_="first name") }}
-            {%for error in form.firstName.errors %}
-                <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-             {{ form.firstName(placeholder_="first name") }}
-        {% endif %}
-        
-        {% if form.lastName.errors %}
-            {{ form.lastName(placeholder_="last name") }}
-            {%for error in form.lastName.errors %}
-                <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-                {{ form.lastName(placeholder_="last name") }}
-        {% endif %}
-
-        {% if form.userName.errors %}
-            {{ form.userName(placeholder_="user name") }}
-            {%for error in form.userName.errors %}
-                 <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-                {{ form.userName(placeholder_="user name") }}
-        {% endif %}
-        
-        {% if form.email.errors %}
-            {{ form.email(placeholder_="Enter Email") }}
-            {%for error in form.email.errors %}
-                <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-                {{ form.email(placeholder_="Enter Email") }}
-        {% endif %}
-        
-        {% if form.password.errors %}
-            {{ form.password(class_="form-passwd", placeholder_="Password") }}
-            {%for error in form.password.errors %}
-                <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-                {{ form.password(class_="form-passwd", placeholder_="Password") }}
-        {% endif %}
-
-        {% if form.confirm_password.errors %}
-            {{ form.confirm_password(class_="form-passwd", placeholder_="Password") }}
-            {%for error in form.confirm_password.errors %}
-                <span class="form_error">{{ error }}</span>
-            {%endfor%}
-            {% else %}
-                {{ form.confirm_password(class_="form-passwd", placeholder_="Password") }}
-        {% endif %}
-        
-        {{ form.submit }}
-    </form>
-</div>
+	<div class="form-floating mb-2">
+		{{ form.confirm_password }} {{ form.confirm_password.label }}
+	</div>
+	{{ form.submit }}
+</form>
 
 {% endblock %}
