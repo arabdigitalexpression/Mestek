@@ -66,13 +66,11 @@ class SpaceForm(FlaskForm):
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
         render_kw={
             "placeholder":"أسم المساحة", "class": "form-control",
-            "style": "height: 50px;"
         }
     )
     price = FloatField('السعر', validators=[DataRequired()],
         render_kw={
             "placeholder":"السعر", "class": "form-control",
-            "style": "height: 50px;"
         })
     has_operator = BooleanField('مشرف؟',
         render_kw={
@@ -81,14 +79,12 @@ class SpaceForm(FlaskForm):
     )
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
         render_kw={
-            "placeholder":"الوصف", "class": "form-control",
-            "style": "height: 150px; margin-top: -20px;"
+            "placeholder":"الوصف", "class": "form-control", "rows":"5"
         }
     )
     guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
         render_kw={
-            "placeholder":"قواعد", "class": "form-control",
-            "style": "height: 150px; margin-top: -20px;"
+            "placeholder":"قواعد", "class": "form-control", "rows":"5"
         }
     )
     images = MultipleFileField('الصور', name="images", validators=[
@@ -101,13 +97,32 @@ class SpaceForm(FlaskForm):
 
 
 class ToolForm(FlaskForm):
-    name = StringField('أسم اﻹداة', validators=[DataRequired(), Length(max=50)])
-    price = FloatField('السعر', validators=[DataRequired()])
-    has_operator = BooleanField('مشرف؟')
-    description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)])
-    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)])
-    space = SelectField('المساحة')
+    name = StringField('أسم اﻹداة', validators=[DataRequired(), Length(max=50)],
+        render_kw={
+            "placeholder":"أسم المساحة", "class": "form-control",
+        })
+    price = FloatField('السعر', validators=[DataRequired()],
+        render_kw={
+            "placeholder":"السعر", "class": "form-control",
+        })
+    has_operator = BooleanField('مشرف؟',
+        render_kw={
+            "class": "form-check-input"
+        })
+    description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
+        render_kw={
+            "placeholder":"الوصف", "class": "form-control", "rows":"5"
+        })
+    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
+        render_kw={
+            "placeholder":"قواعد", "class": "form-control", "rows":"5"
+        })
+    space = SelectField('المساحة',render_kw={
+            "class": "form-select", 
+        })
     images = MultipleFileField('الصور', name="images", validators=[
         # FileRequired(),
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
-    ])
+    ], render_kw={
+        "class": "form-control"
+    })
