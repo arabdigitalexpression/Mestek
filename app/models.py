@@ -1,3 +1,4 @@
+import enum
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
@@ -31,7 +32,9 @@ class User(UserMixin, db.Model):
     created_at = db.Column(
         db.DateTime(), default=datetime.utcnow(),
         nullable=False
-        )
+    )
+
+    reservations = db.relationship('Reservation', backref='user', lazy=True)
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -57,7 +60,7 @@ class User(UserMixin, db.Model):
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text(128), nullable=False)
     guidelines = db.Column(db.String(256), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     # price per hour
@@ -86,3 +89,41 @@ class Image(db.Model):
 
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
     tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=True)
+
+
+class ReservationTypes(enum.Enum):
+    space = 0
+    tool = 1
+
+
+class PaymentTypes(enum.Enum):
+    no_payment = 0
+    down_payment = 1
+    full_payment = 2
+
+
+class Reservation(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.Enum(ReservationTypes), nullable=False)
+    payment_status = db.Column(db.Enum(PaymentTypes), nullable=False)
+    transaction_num = db.Column(db.String(128))
+    created_at = db.Column(
+        db.DateTime(), default=datetime.utcnow(),
+        nullable=False
+    )
+    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+
+class Calendar(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    day = db.Column(db.Date(), nullable=False)
+    intervals = db.relationship('Interval', backref='interval', lazy=True)
+    reservations = db.relationship('Reservation', backref='calendar', lazy=True)
+
+
+class Interval(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    start_time = db.Column(db.Time)
+    end_time = db.Column(db.Time)
+    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'), nullable=True)
