@@ -38,6 +38,8 @@ def signup_page():
             if user == None:
                 # TODO: Edit the category with user input
                 user = User(
+                    first_name=first_name,
+                    last_name=last_name,
                     username=username,
                     email=email,
                     role="user",
