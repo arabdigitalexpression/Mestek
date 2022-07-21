@@ -26,6 +26,8 @@ def signup_page():
     form = SignupForm()
     if request.method == "POST":
         if form.validate_on_submit():
+            first_name = form.firstName.data
+            last_name = form.lastName.data
             username = form.userName.data
             email = form.email.data
             password = form.password.data
