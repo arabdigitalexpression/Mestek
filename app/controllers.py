@@ -252,7 +252,7 @@ def create_tool():
     spaces = Space.query.all()
     form = ToolForm()
     form.space.choices = [(s.id, s.name) for s in spaces]
-    form.space.choices.insert(0, (0, "اختر المساحة"))
+    form.space.choices.insert(0, (0, "-- اختر المساحة --"))
     if current_user.role.name == "admin":
         if form.validate_on_submit():
             tool = Tool(
