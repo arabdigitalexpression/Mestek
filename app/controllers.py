@@ -300,7 +300,7 @@ def update_tool(id):
         spaces = Space.query.all()
         form = ToolForm()
         form.space.choices = [(s.id, s.name) for s in spaces]
-        form.space.choices.insert(0, (0, "اختر المساحة"))
+        form.space.choices.insert(0, (0, "-- اختر المساحة --"))
         tool = Tool.query.get(id)
         if request.method == "GET":
             form.name.data = tool.name
@@ -309,6 +309,8 @@ def update_tool(id):
             form.guidelines.data = tool.guidelines
             form.description.data = tool.description
             form.has_operator.data = tool.has_operator
+            print(tool.space)
+            form.space.data = str(tool.space.id) if not tool.space == None else "0" 
             return render_template(
                 'dashboard/tool/form.html',
                 form=form, isUpdate=True, tool=tool
@@ -402,7 +404,9 @@ def create_user():
     roles = Role.query.all()
     form = SignupForm()
     form.category.choices = [(c.id, c.name) for c in categories]
+    form.category.choices.insert(0, (0, "-- اختر تصنيف --"))
     form.role.choices = [(r.id, r.name) for r in roles]
+    form.role.choices.insert(0,(0,"-- اختر صلاحية --")) 
     if request.method == "POST":
         if form.validate_on_submit():
             first_name = form.firstName.data
@@ -421,8 +425,8 @@ def create_user():
                     last_name=last_name,
                     username=username,
                     email=email,
-                    role=Role.query.get(role),
-                    category=Category.query.get(category)
+                    role=Role.query.get(role) if not role == 0 else None,
+                    category=Category.query.get(category) if not category == 0 else None
                 )
 
                 user.make_password(password)
@@ -445,15 +449,17 @@ def update_user(username):
         roles = Role.query.all()
         form = SignupForm()
         form.category.choices = [(c.id, c.name) for c in categories]
+        form.category.choices.insert(0, (0, "-- اختر تصنيف --"))
         form.role.choices = [(r.id, r.name) for r in roles]
+        form.role.choices.insert(0,(0,"-- اختر صلاحية --")) 
         user = User.query.filter_by(username=username).first_or_404()
         if request.method == "GET":
             form.firstName.data = user.first_name
             form.lastName.data = user.last_name
             form.userName.data = user.username
             form.email.data = user.email
-            form.role.data = user.role.name
-            form.category.data = user.category.name
+            form.role.data = str(user.role.id) if not user.role == None else "0"
+            form.category.data = str(user.category.id) if not user.category == None else "0"
             return render_template(
                 'dashboard/user/form.html',
                 form=form, isUpdate=True, user=user
@@ -463,8 +469,8 @@ def update_user(username):
             user.last_name = form.lastName.data
             user.username = form.userName.data
             user.email = form.email.data
-            user.role = Role.query.get(form.role.data)
-            user.category = Category.query.get(form.category.data)
+            user.role = Role.query.get(form.role.data) if not form.role.data == 0 else None
+            user.category = Category.query.get(form.category.data) if not form.category.data == 0 else None
             user.make_password(form.password.data)
             db.session.commit()
             return redirect(url_for("user_list"))
