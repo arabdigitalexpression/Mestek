@@ -34,8 +34,7 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 	<div class="m-5">
 		{% if form.space.errors %} {%for error in form.space.errors %}
 		<span class="form_error">{{ error }}</span>
-		{%endfor%} {% endif%} 
-		{{form.space}}
+		{%endfor%} {% endif%} {{form.space}}
 	</div>
 	<div class="m-5">
 		{% if form.description.errors %} {%for error in form.description.errors %}
@@ -64,14 +63,14 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 		{% endfor %}
 	</div>
 	{% endif %}
-	<div class="float-end m-5">
+	<div class="float-end my-5">
 		<a
 			href="{{url_for('tool_list')}}"
 			type="button"
 			class="btn btn-outline-danger"
 			>الغاء</a
 		>
-		<button type="submit" class="btn btn-secondary col" style="width: 200px">
+		<button type="submit" class="btn btn-dark col" style="width: 200px">
 			{% if isUpdate %} تعديل الأداة {% else %} إضافة أداة {% endif %}
 		</button>
 	</div>
