@@ -1,106 +1,75 @@
-{% extends 'dashboard/base.html' %}
+{% extends 'dashboard/base.html' %} {% block title %} {% if isUpdate %} تعديل
+المساحة {% else %} إنشاء مساحة {% endif %} {% endblock %} {% block content %}
 
-{% block title %}
-{% if isUpdate %}
-تعديل المساحة
-{% else %}
- إنشاء مساحة
-{% endif %}
- {% endblock %}
+<h2>{% if isUpdate %} تعديل المساحة {% else %} إنشاء مساحة {% endif %}</h2>
 
-{% block content %}
-
-<h2>
-    {% if isUpdate %}
-    تعديل المساحة
-    {% else %}
-     إنشاء مساحة
-    {% endif %}
-</h2>
-
-{% if isUpdate %}
-{%
-    set form_action = url_for('update_space', id=space.id)
-%}
-{% else %}
-{%
-    set form_action = url_for('create_space')
-%}
-{% endif %}
-
+{% if isUpdate %} {% set form_action = url_for('update_space', id=space.id) %}
+{% else %} {% set form_action = url_for('create_space') %} {% endif %}
 
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
-    {{ form.csrf_token }}
+	{{ form.csrf_token }}
 
-    <div class="row m-5">
-        <div class="col">
-            {% if form.name.errors %}
-                {%for error in form.name.errors %}
-                <span class="form_error">{{ error }}</span>
-                {%endfor%}
-            {% endif%}
-            {{form.name}}
-            <!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
-        </div>
-        <div class="col">
-            {% if form.price.errors %}
-                {%for error in form.price.errors %}
-                <span class="form_error">{{ error }}</span>
-                {%endfor%}
-            {% endif%}
-            {{form.price}}
-        </div>
-        <div class="col">
-            {% if form.has_operator.errors %}
-                {%for error in form.has_operator.errors %}
-                <span class="form_error">{{ error }}</span>
-                {%endfor%}
-            {% endif%}
-            <div class="form-check form-switch">
-                {{form.has_operator}}
-                {{form.has_operator.label(class_="form-check-label")}}
-            </div>          
-        </div>
-    </div>
-    
-    <div class="m-5">
-        {% if form.description.errors %}
-            {%for error in form.description.errors %}
-            <span class="form_error">{{ error }}</span>
-            {%endfor%}
-        {% endif%}
-        {{form.description}}
-    </div>
+	<div class="row m-5">
+		<div class="col">
+			{% if form.name.errors %} {%for error in form.name.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.name}}
+			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+		</div>
+		<div class="col">
+			{% if form.price.errors %} {%for error in form.price.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.price}}
+		</div>
+		<div class="col">
+			{% if form.has_operator.errors %} {%for error in form.has_operator.errors
+			%}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%}
+			<div class="form-check form-switch">
+				{{form.has_operator}}
+				{{form.has_operator.label(class_="form-check-label")}}
+			</div>
+		</div>
+	</div>
 
-    <div  class="m-5">
-        {% if form.guidelines.errors %}
-            {%for error in form.guidelines.errors %}
-            <span class="form_error">{{ error }}</span>
-            {%endfor%}
-        {% endif%}
-        {{form.guidelines}}
-    </div>
+	<div class="m-5">
+		{% if form.description.errors %} {%for error in form.description.errors %}
+		<span class="form_error">{{ error }}</span>
+		{%endfor%} {% endif%} {{form.description}}
+	</div>
 
-    <div class="m-5">
-        {{ form.images.label(class_="form-label")}}
-        {{ form.images}}
-    </div>
-    {% if isUpdate %}
-    <div class="row m-5">        
-        {% for image in space.images %}
-            <img class="col" width="100" src="{{image.url}}" style="object-fit: cover">
-        {% endfor %}
-    </div>
-    {% endif %}
-    <div class="float-end m-5">
-        <a href="{{url_for('space_list')}}" type="button" class="btn btn-outline-danger" >الغاء</a>
-        <button type="submit" class="btn btn-secondary">
-            {% if isUpdate %}
-            تعديل المساحة
-            {% else %}
-            إضافة مساحة
-            {% endif %}
-        </button>
-    </div>
+	<div class="m-5">
+		{% if form.guidelines.errors %} {%for error in form.guidelines.errors %}
+		<span class="form_error">{{ error }}</span>
+		{%endfor%} {% endif%} {{form.guidelines}}
+	</div>
+
+	<div class="m-5">
+		{{ form.images.label(class_="form-label")}} {{ form.images}}
+	</div>
+	{% if isUpdate %}
+	<div class="row m-5">
+		{% for image in space.images %}
+		<img
+			class="col"
+			width="100"
+			src="{{image.url}}"
+			style="object-fit: cover"
+		/>
+		{% endfor %}
+	</div>
+	{% endif %}
+	<div class="float-end my-5">
+		<a
+			href="{{url_for('space_list')}}"
+			type="button"
+			class="btn btn-outline-danger"
+			>الغاء</a
+		>
+		<button type="submit" class="btn btn-dark">
+			{% if isUpdate %} تعديل المساحة {% else %} إضافة مساحة {% endif %}
+		</button>
+	</div>
 </form>
 {% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'dashboard/base.html' %} {% block title %} {% if isUpdate %} تعديل
+مستخدم {% else %} إنشاء مستخدم {% endif %} {% endblock %} {% block content %}
+<h2>{% if isUpdate %} تعديل مستخدم {% else %} إنشاء مستخدم {% endif %}</h2>
+
+{% if isUpdate %} {% set form_action = url_for('update_user', username=user.username) %} {%
+else %} {% set form_action = url_for('create_user') %} {% endif %}
+
+<form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
+	{{ form.csrf_token }}
+
+	<div class="row mt-3">
+		<div class="col">
+			{% if form.firstName.errors %} {%for error in form.firstName.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.firstName.label}} {{form.firstName}}
+			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+		</div>
+		<div class="col">
+			{% if form.lastName.errors %} {%for error in form.lastName.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.lastName.label}} {{form.lastName}}
+		</div>
+		<div class="col">
+			{% if form.userName.errors %} {%for error in form.userName.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.userName.label}} {{form.userName}}
+		</div>
+	</div>
+	<div class="row mt-3">
+		<div class="col-6">
+			{% if form.email.errors %} {%for error in form.email.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.email.label}} {{form.email}}
+		</div>
+		<div class="col">{% if form.role.errors %} {%for error in form.role.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.role.label}} {{form.role}}</div>
+		<div class="col">{% if form.category.errors %} {%for error in form.category.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.category.label}} {{form.category}}</div>
+	</div>
+	<div class="row mt-3">
+		<div class="col">
+			{% if form.password.errors %} {%for error in form.password.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.password.label}} {{form.password}}
+		</div>
+		<div class="col">
+			{% if form.confirm_password.errors %} {%for error in
+			form.confirm_password.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%} {{form.confirm_password.label}}
+			{{form.confirm_password}}
+		</div>
+	</div>
+
+	<div class="float-end my-5">
+		<a
+			href="{{url_for('user_list')}}"
+			type="button"
+			class="btn btn-outline-danger"
+			>الغاء</a
+		>
+		<button type="submit" class="btn btn-dark col" style="width: 200px">
+			{% if isUpdate %} تعديل مستخدم {% else %} إضافة مستخدم {% endif %}
+		</button>
+	</div>
+</form>
+{% endblock %}
