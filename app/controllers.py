@@ -125,7 +125,7 @@ def delete_space(id):
         db.session.commit()
         return redirect(url_for("space_list"))
     else:
-        return redirect(url_for("main_page"))    
+        return redirect(url_for("main_page"))
 
 
 @app.route("/dashboard/space/create", methods=["GET", "POST"])
@@ -252,6 +252,7 @@ def create_tool():
     spaces = Space.query.all()
     form = ToolForm()
     form.space.choices = [(s.id, s.name) for s in spaces]
+    form.space.choices.insert(0, (0, "اختر المساحة"))
     if current_user.role.name == "admin":
         if form.validate_on_submit():
             tool = Tool(
@@ -260,7 +261,8 @@ def create_tool():
                 has_operator=form.has_operator.data,
                 description=form.description.data,
                 guidelines=form.guidelines.data,
-                space=Space.query.get(form.space.data)
+                space=Space.query.get(
+                    form.space.data) if not form.space.data == 0 else None
             )
             imagesObjs = list()
             for file in form.images.data:
@@ -298,6 +300,7 @@ def update_tool(id):
         spaces = Space.query.all()
         form = ToolForm()
         form.space.choices = [(s.id, s.name) for s in spaces]
+        form.space.choices.insert(0, (0, "اختر المساحة"))
         tool = Tool.query.get(id)
         if request.method == "GET":
             form.name.data = tool.name
@@ -317,7 +320,8 @@ def update_tool(id):
                 tool.has_operator = form.has_operator.data
                 tool.description = form.description.data
                 tool.guidelines = form.guidelines.data
-                tool.space = Space.query.get(form.space.data)
+                tool.space = Space.query.get(
+                    form.space.data) if not form.space.data == 0 else None
                 imagesObjs = list()
                 for file in form.images.data:
                     if file.content_length == 0:
@@ -540,7 +544,7 @@ def update_role(id):
             form.colorCode.data = role.color_code
             return render_template(
                 'dashboard/user/role/index.html',
-                form=form, isUpdate=True, roles=roles, role=role,input=input
+                form=form, isUpdate=True, roles=roles, role=role, input=input
             )
         elif request.method == "POST":
             roles = Role.query.all()
@@ -551,7 +555,7 @@ def update_role(id):
                 return redirect(url_for("get_roles"))
             return render_template(
                 "dashboard/user/role/index.html",
-                form=form, isUpdate=True, roles=roles,input=input
+                form=form, isUpdate=True, roles=roles, input=input
             )
     else:
         return redirect(url_for("main_page"))
@@ -570,7 +574,7 @@ def update_category(id):
             form.colorCode.data = category.color_code
             return render_template(
                 'dashboard/user/category/index.html',
-                form=form, isUpdate=True, categories=categories, category=category,input=input
+                form=form, isUpdate=True, categories=categories, category=category, input=input
             )
         elif request.method == "POST":
             categories = Category.query.all()
@@ -581,7 +585,7 @@ def update_category(id):
                 return redirect(url_for("get_categories"))
             return render_template(
                 "dashboard/user/category/index.html",
-                form=form, isUpdate=True, categories=categories,input=input
+                form=form, isUpdate=True, categories=categories, input=input
             )
     else:
         return redirect(url_for("main_page"))
