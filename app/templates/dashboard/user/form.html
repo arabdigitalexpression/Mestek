@@ -54,14 +54,14 @@ else %} {% set form_action = url_for('create_user') %} {% endif %}
 		</div>
 	</div>
 
-	<div class="float-end my-5">
+	<div class="float-end my-3">
 		<a
 			href="{{url_for('user_list')}}"
 			type="button"
 			class="btn btn-outline-danger"
 			>الغاء</a
 		>
-		<button type="submit" class="btn btn-dark col" style="width: 200px">
+		<button type="submit" class="btn btn-dark col">
 			{% if isUpdate %} تعديل مستخدم {% else %} إضافة مستخدم {% endif %}
 		</button>
 	</div>
