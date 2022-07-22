@@ -39,7 +39,6 @@ def signup_page():
             password = form.password.data
             category = form.category.data
             role = form.role.data
-            # print(f'* Category ------------------------> {category}')
             user = User.query.get(email)
             if user == None:
                 user = User(
@@ -143,7 +142,6 @@ def create_space():
                 guidelines=form.guidelines.data
             )
             imagesObjs = list()
-            # print(dir(form.images.data[0]))
             for file in form.images.data:
                 if file.content_length == 0:
                     continue
