@@ -29,6 +29,7 @@ def signup_page():
     categories = Category.query.all()
     roles = Role.query.all()
     form.category.choices = [(c.id, c.name) for c in categories]
+    form.category.choices.insert(0, ("", "-- اختر تصنيف --"))
     form.role.choices = [(r.id, r.name) for r in roles]
     if request.method == "POST":
         if form.validate_on_submit():
@@ -47,7 +48,7 @@ def signup_page():
                     username=username,
                     email=email,
                     role=Role.query.get(1),
-                    category=Category.query.get(form.category.data)
+                    category=Category.query.get(category)
                 )
                 user.make_password(password)
                 user.save()
