@@ -119,8 +119,11 @@ def delete_space(id):
     if current_user.role.name == "admin":
         space = Space.query.get(id)
         tools = Tool.query.filter_by(space_id=id)
+        images = Image.query.filter_by(space_id=id)
         for tool in tools:
             tool.space_id = None
+        for image in images:
+            db.session.delete(image)   
         db.session.delete(space)
         db.session.commit()
         return redirect(url_for("space_list"))
@@ -143,7 +146,7 @@ def create_space():
             )
             imagesObjs = list()
             for file in form.images.data:
-                if file.content_length == 0:
+                if len(form.images.data) == 0:
                     continue
                 filename = secure_filename(file.filename)
                 # TODO: image is overwritten when there's
@@ -196,7 +199,7 @@ def update_space(id):
                 space.guidelines = form.guidelines.data
                 imagesObjs = list()
                 for file in form.images.data:
-                    if file.content_length == 0:
+                    if len(form.images.data) == 0:
                         continue
                     filename = secure_filename(file.filename)
                     # TODO: image is overwritten when there's
@@ -240,10 +243,16 @@ def tool_list():
 @app.route('/dashboard/tool/<int:id>/delete', methods=['POST'])
 @login_required
 def delete_tool(id):
-    tool = Tool.query.get(id)
-    db.session.delete(tool)
-    db.session.commit()
-    return redirect(url_for("tool_list"))
+    if current_user.role.name == "admin":
+        tool = Tool.query.get(id)
+        images = Image.query.filter_by(tool_id=id)
+        for image in images:
+            db.session.delete(image)
+        db.session.delete(tool)
+        db.session.commit()
+        return redirect(url_for("tool_list"))
+    else:
+        return redirect(url_for("main_page"))
 
 
 @app.route("/dashboard/tool/create", methods=["GET", "POST"])
@@ -266,7 +275,7 @@ def create_tool():
             )
             imagesObjs = list()
             for file in form.images.data:
-                if file.content_length == 0:
+                if len(form.images.data) == 0:
                     continue
                 filename = secure_filename(file.filename)
                 # TODO: image is overwritten when there's
@@ -326,7 +335,7 @@ def update_tool(id):
                     form.space.data) if not form.space.data == 0 else None
                 imagesObjs = list()
                 for file in form.images.data:
-                    if file.content_length == 0:
+                    if len(form.images.data) == 0:
                         continue
                     filename = secure_filename(file.filename)
                     # TODO: image is overwritten when there's
