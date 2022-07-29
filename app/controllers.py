@@ -8,7 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from app import app, db, login
 from app.models import (
-    Category, Role, User, Space, Tool, Image
+    Category, Reservation, Role, User, Space, Tool, Image
 )
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm, LoginForm, SpaceForm, ToolForm
@@ -147,7 +147,7 @@ def create_space():
             )
             imagesObjs = list()
             for file in form.images.data:
-                if len(form.images.data) == 0:
+                if not file:
                     continue
                 filename = secure_filename(file.filename)
                 # TODO: image is overwritten when there's
@@ -200,7 +200,7 @@ def update_space(id):
                 space.guidelines = form.guidelines.data
                 imagesObjs = list()
                 for file in form.images.data:
-                    if len(form.images.data) == 0:
+                    if not file:
                         continue
                     filename = secure_filename(file.filename)
                     # TODO: image is overwritten when there's
@@ -276,7 +276,7 @@ def create_tool():
             )
             imagesObjs = list()
             for file in form.images.data:
-                if len(form.images.data) == 0:
+                if not file:
                     continue
                 filename = secure_filename(file.filename)
                 # TODO: image is overwritten when there's
@@ -336,7 +336,7 @@ def update_tool(id):
                     form.space.data) if not form.space.data == 0 else None
                 imagesObjs = list()
                 for file in form.images.data:
-                    if len(form.images.data) == 0:
+                    if not file:
                         continue
                     filename = secure_filename(file.filename)
                     # TODO: image is overwritten when there's
@@ -639,3 +639,24 @@ def delete_category(id):
             return redirect(url_for("get_categories"))
     else:
         return redirect(url_for("main_page"))
+
+
+@app.route('/dashboard/reservations/')
+@login_required
+def reservation_list():
+    if current_user.role.name == "admin":
+        reservations = Reservation.query.all()
+        return render_template(
+            "dashboard/reservation/index.html",
+            reservations=reservations)
+    return redirect(url_for("main_page"))
+
+
+@app.route('/')
+def change_payment_status():
+    pass
+
+
+@app.route('/')
+def delete_reservation():
+    pass
