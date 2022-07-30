@@ -82,6 +82,7 @@ class Space(db.Model):
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='space', lazy=True)
+    reservations = db.relationship('Reservation', cascade="all", backref='space', lazy=True)
     tools = db.relationship('Tool', backref='space', lazy=True)
 
 
@@ -93,6 +94,7 @@ class Tool(db.Model):
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='tool', lazy=True)
+    reservations = db.relationship('Reservation', cascade="all", backref='tool', lazy=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
 
 
@@ -114,6 +116,13 @@ class PaymentTypes(enum.Enum):
     full_payment = 2
 
 
+reservation_calendar = db.Table(
+    'reservation_calendar', db.Model.metadata,
+    db.Column('reservation_id', db.Integer, db.ForeignKey('reservation.id')),
+    db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id'))
+)
+
+
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.Enum(ReservationTypes), nullable=False)
@@ -123,19 +132,26 @@ class Reservation(db.Model):
         db.DateTime(), default=datetime.utcnow(),
         nullable=False
     )
-    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'), nullable=True)
+    full_price = db.Column(db.Float, nullable=False)
+    space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
+    tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=True)
+    calendars = db.relationship(
+        'Calendar', secondary=reservation_calendar,
+        backref=db.backref('reservations')
+    )
+    intervals = db.relationship('Interval', cascade="all, delete", backref='tool', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
 class Calendar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Date(), nullable=False)
-    intervals = db.relationship('Interval', backref='interval', lazy=True)
-    reservations = db.relationship('Reservation', backref='calendar', lazy=True)
+    intervals = db.relationship('Interval', cascade="all, delete", backref='interval', lazy=True)
 
 
 class Interval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
-    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id'), nullable=True)
+    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id', ondelete="CASCADE"), nullable=True)
+    reservation_id = db.Column(db.Integer, db.ForeignKey('reservation.id', ondelete="CASCADE"), nullable=True)
