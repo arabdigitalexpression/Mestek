@@ -8,7 +8,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from app import app, db, login
 from app.models import (
-    Category, Reservation, Role, User, Space, Tool, Image
+    Category, Reservation, Role,
+    User, Space, Tool, Image, Calendar
 )
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm, LoginForm, SpaceForm, ToolForm
@@ -643,7 +644,7 @@ def delete_category(id):
 
 @app.route('/dashboard/reservations/')
 @login_required
-def reservation_list():
+def get_reservations():
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
         return render_template(
@@ -657,6 +658,19 @@ def change_payment_status():
     pass
 
 
-@app.route('/')
-def delete_reservation():
-    pass
+@app.route('/dashboard/reservation/<int:id>/delete', methods=["POST"])
+@login_required
+def delete_reservation(id):
+    if current_user.role.name == "admin":
+        reservation = Reservation.query.get(id)
+        # for cal in reservation.calendars:
+        #     has_others = any(cal.query.filter(
+        #         Calendar.reservations.any(
+        #             Reservation.id!=reservation.id
+        #     )))
+        #     if not has_others:
+        #         db.session.delete(cal)
+        db.session.delete(reservation)
+        db.session.commit()
+        return redirect(url_for("get_reservations"))
+    return redirect(url_for("main_page"))
