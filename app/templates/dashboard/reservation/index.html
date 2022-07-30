@@ -16,8 +16,8 @@ block heading %} الحجوزات {% endblock %}{% block content %}
 			{% for reservation in reservations %}
 			<tr>
 				<td>{{reservation.id}}</td>
-				<td>{{reservation.type}}</td>
-				<td>{{reservation.payment_status}}</td>
+				<td>{{reservation.type.name}}</td>
+				<td>{{reservation.payment_status.name}}</td>
 				<td>{{reservation.created_at}}</td>
 				<td>{{reservation.user.username}}</td>
 				<td class="d-flex">
