@@ -57,7 +57,7 @@ form_action = url_for('get_roles') %} {% endif %}
 				<td class="d-flex">
 					<a
 						href="{{url_for('update_role', id=role.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1"
+						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
@@ -65,7 +65,7 @@ form_action = url_for('get_roles') %} {% endif %}
 						{{ form.csrf_token }}
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm rounded-end mx-1"
+							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{role.id}}"
 							data-bs-toggle="tooltip"
