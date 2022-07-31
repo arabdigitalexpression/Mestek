@@ -29,19 +29,22 @@ block heading %} اﻷدوات {% endblock %}{% block content %}
 					<span class="text-muted">لا يوجد</span> {% endif %}
 				</td>
 				<td class="d-flex">
-					<button type="button" class="btn btn-info text-white btn-sm mx-1">
+					<button
+						type="button"
+						class="btn btn-info text-white btn-sm mx-1 rounded-circle"
+					>
 						<i class="bi bi-info-circle"></i>
 					</button>
 					<a
 						href="{{url_for('update_tool', id=tool.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1"
+						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
 					<form method="POST" action="{{url_for('delete_tool', id=tool.id)}}">
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm rounded-end mx-1"
+							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{tool.id}}"
 							data-bs-toggle="tooltip"

@@ -25,7 +25,7 @@ block heading %} المساحات {% endblock %}{% block content %}
 				<td class="d-flex">
 					<button
 						type="button"
-						class="btn btn-info text-white btn-sm mx-1"
+						class="btn btn-info text-white btn-sm mx-1 rounded-circle"
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
 						title="تفاصيل"
@@ -34,7 +34,7 @@ block heading %} المساحات {% endblock %}{% block content %}
 					</button>
 					<a
 						href="{{url_for('update_space', id=space.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1"
+						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
 						title="تحديث"
@@ -44,7 +44,7 @@ block heading %} المساحات {% endblock %}{% block content %}
 					<form method="POST" action="{{url_for('delete_space', id=space.id)}}">
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm rounded-end mx-1"
+							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{space.id}}"
 							data-bs-toggle="tooltip"

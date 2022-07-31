@@ -40,13 +40,13 @@
 					<a
 						href="{{url_for('get_user', username=user.username)}}"
 						type="button"
-						class="btn btn-info text-white btn-sm mx-1"
+						class="btn btn-info text-white btn-sm mx-1 rounded-circle"
 					>
 						<i class="bi bi-info-circle"></i>
 					</a>
 					<a
 						href="{{url_for('update_user', username=user.username)}}"
-						class="text-white btn btn-warning btn-sm mx-1"
+						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
@@ -58,7 +58,7 @@
 						{{ form.csrf_token }}
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm rounded-end mx-1"
+							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{user.id}}"
 							data-bs-toggle="tooltip"
