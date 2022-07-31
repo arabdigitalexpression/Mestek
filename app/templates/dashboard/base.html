@@ -93,12 +93,12 @@
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<input
-		class="form-control form-control-dark w-100 rounded-0 border-0"
+		class="form-control form-control-dark w-100 rounded-0 border-0 d-none d-md-block"
 		type="text"
 		placeholder="بحث"
 		aria-label="بحث"
 	/>
-	<div class="navbar-nav">
+	<div class="navbar-nav d-none d-md-block">
 		<div class="nav-item text-nowrap">
 			<a
 				class="nav-link px-3 btn btn-danger btn-sm text-white m-2"
@@ -114,7 +114,7 @@
 	<div class="row">
 		<nav
 			id="sidebarMenu"
-			class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+			class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse overflow-auto"
 		>
 			<div class="position-sticky pt-3">
 				<ul class="nav flex-column">
@@ -132,8 +132,7 @@
 						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
 					>
 						<span>المساحات</span>
-						<a class="link-secondary" href="#">
-						</a>
+						<a class="link-secondary" href="#"> </a>
 					</h6>
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
@@ -156,8 +155,7 @@
 						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
 					>
 						<span>الأدوات</span>
-						<a class="link-secondary" href="#">
-						</a>
+						<a class="link-secondary" href="#"> </a>
 					</h6>
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
@@ -180,8 +178,7 @@
 						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
 					>
 						<span>المستخدمين</span>
-						<a class="link-secondary" href="#">
-						</a>
+						<a class="link-secondary" href="#"> </a>
 					</h6>
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
@@ -204,8 +201,7 @@
 						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
 					>
 						<span>الصلاحيات و التصنيفات</span>
-						<a class="link-secondary" href="#">
-						</a>
+						<a class="link-secondary" href="#"> </a>
 					</h6>
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
@@ -218,6 +214,26 @@
 							<a class="nav-link" href="{{url_for('get_categories')}}">
 								<span data-feather="bookmark" class="align-text-bottom"></span>
 								التصنيفات
+							</a>
+						</li>
+					</ul>
+					<h6
+						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
+					>
+						<span>الحجوزات</span>
+						<a class="link-secondary" href="#"> </a>
+					</h6>
+					<ul class="nav flex-column mb-2">
+						<li class="nav-item">
+							<a class="nav-link" href="{{url_for('get_reservations')}}">
+								<span data-feather="unlock" class="align-text-bottom"></span>
+								عرض الحجوزات
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="#">
+								<span data-feather="bookmark" class="align-text-bottom"></span>
+								إنشاء حجز
 							</a>
 						</li>
 					</ul>
