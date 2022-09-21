@@ -1,4 +1,225 @@
-/* globals Chart:false, feather:false */
+$('.range_HS').hide();
+$('#picker-no-range').hide();
+$("#time2-picker-no-range").prop('disabled', true);
+
+
+
+
+
+function myFunction() {
+  var x = document.getElementById("mySelect").value;
+  if (x == "range"){
+    $('.range_HS').show(500);
+    $('#picker-no-range').hide();
+  }
+  else if(x == "no_range"){
+    $('#picker-no-range').show(500);
+    $('.range_HS').hide();
+  }
+  else { 
+    $('.range_HS').hide(500);
+    $('#picker-no-range').hide(500);
+  }
+}
+
+mobiscroll.setOptions({
+  locale: mobiscroll.localeAr,  
+     theme: 'ios',                 
+     themeVariant: 'light'        
+ });
+
+ var date = new Date();
+ var current_date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
+
+ //        Range selector
+ mobiscroll.datepicker('.date-picker-range', {
+     controls: ['calendar' ],    
+     display: 'anchored' ,
+     selectMultiple: true,  
+     touchUi: true,
+     select: 'range',
+ rangeHighlight: true,
+ showRangeLabels: true, 
+ min: current_date,
+ dateFormat: 'MM/DD/YYYY',
+ invalid: [
+  {
+    recurring: {
+      repeat: 'weekly',
+      weekDays: 'SA,FR'
+    }
+  }
+]
+ });
+
+ function range_date(){
+  x= document.querySelector(".date-picker-range").value;
+  val = x.split (" - ");
+  start = new Date(val[0]);
+  end = new Date(val[1]);
+  var Difference = end.getTime() - start.getTime();
+  var days = (Difference / (1000 * 3600 * 24)) + 1;
+  console.log(days);
+  console.log (val[0]);
+  console.log (val[1]);
+  $(".date-picker-range").val("تم تحديد " + days + " / يوم")
+  $(".date_from_to").val(val[0] + "," + val[1])
+ }
+
+ //     No_range selector
+ mobiscroll.datepicker('#date-picker-no-range', {
+  controls: ['calendar'],
+  dateFormat: 'YYYY-MM-DD',
+  selectMultiple: true,
+  selectCounter: true,
+  min: current_date,
+  invalid: [
+		{
+			recurring: {
+				repeat: 'weekly',
+				weekDays: 'SA,FR'
+			}
+		}
+	]
+});
+function no_range_date(){
+  x= document.getElementById("date-picker-no-range").value;
+  document.getElementById("date_from_to_no_range").value= x
+  val = x.split (", ");
+  days = val.length ;
+  console.log(document.getElementById("date_from_to_no_range").value);
+  $("#date-picker-no-range").val("تم تحديد " + days + " / يوم")
+ }
+mobiscroll.datepicker('#time-picker-no-range', {
+  controls: ['time'],
+  timeFormat: 'hh A',
+  invalid: [
+		{
+			start: '17:00',
+			end: '10:00',
+			recurring: {
+				repeat: 'daily'
+			}
+		}
+	]
+});
+function upto(){
+ time1 = document.getElementById("time-picker-no-range").value.substring(0,2);
+ time2 = parseInt (time1);
+ if (time2 < 9 ) time2 += 12;
+ console.log(time2)
+ $("#time2-picker-no-range").prop('disabled', false)
+
+
+ mobiscroll.datepicker('#time2-picker-no-range', {
+  controls: ['time'],
+  timeFormat: 'hh A',
+  valid: [
+    {
+			start: time2 + ":00",
+			end: '18:00',
+			recurring: {
+				repeat: 'daily'
+			}
+		}
+	]
+});
+}
+
+
+// $(".content").hide();
+// $(document).ready(function () {
+//   $("#show_hide").on("click", function () {
+//     $(this).next('.content').slideToggle(200);
+//   });
+//   $("#selUser").select2();
+// });
+
+
+// $('.select').each(function () {
+//   var $this = $(this), numberOfOptions = $(this).children('option').length;
+
+//   $this.addClass('select-hidden');
+//   $this.wrap('<div class="select"></div>');
+//   $this.after('<div class="select-styled"></div>');
+
+//   var $styledSelect = $this.next('div.select-styled');
+//   $styledSelect.text($this.children('option').eq(0).text());
+
+//   var $list = $('<ul />', {
+//     'class': 'select-options'
+//   }).insertAfter($styledSelect);
+
+//   for (var i = 0; i < numberOfOptions; i++) {
+//     $('<li />', {
+//       text: $this.children('option').eq(i).text(),
+//       rel: $this.children('option').eq(i).val()
+//     }).appendTo($list);
+//     //if ($this.children('option').eq(i).is(':selected')){
+//     //  $('li[rel="' + $this.children('option').eq(i).val() + '"]').addClass('is-selected')
+//     //}
+//   }
+
+//   var $listItems = $list.children('li');
+
+//   $styledSelect.click(function (e) {
+//     e.stopPropagation();
+//     $('div.select-styled.active').not(this).each(function () {
+//       $(this).removeClass('active').next('ul.select-options').hide();
+//     });
+//     $(this).toggleClass('active').next('ul.select-options').toggle();
+//   });
+
+//   $listItems.click(function (e) {
+//     e.stopPropagation();
+//     $styledSelect.text($(this).text()).removeClass('active');
+//     $this.val($(this).attr('rel'));
+//     $list.hide();
+//     //console.log($this.val());
+//   });
+
+
+// });
+
+function space_validate(){
+//   if(document.form.spaceName.value=="hide")
+// {
+// alert ( "برجاء اختيار مساحة");
+// return false;
+// }
+// if(document.form.type.value=="hide")
+// {
+// alert ( "برجاء تحديد نوع الحجز");
+// return false;
+// }
+// else if (document.form.date_from_to.value =="" && document.form.date_from_to_no_range.value ==""){
+//   alert ( "برجاء تحديد ميعاد الحجز");
+//   return false; 
+// }else if (document.form.time_picker_no_range.value =="" && document.form.time2_picker_no_range.value =="" ){
+//   if (document.form.date_from_to_no_range.value !=""){
+//   alert ( "برجاء تحديد توقيت الحجز");
+//   return false;
+// }else if (document.form.date_from_to_no_range.value !=""){
+//   return true;
+// }
+// }
+}
+
+function tool_validate(){
+  if(document.form.toolName.value=="hide")
+  {
+  alert ( "برجاء اختيار الأداة");
+  return false;
+  }else if(document.form.datetimes.value=="")
+  {
+  alert (  "برجاء تحديد ميعاد الحجز");
+  return false;
+  }
+  
+}
+
+
+
 
 (() => {
   'use strict'
@@ -51,3 +272,6 @@
     }
   })
 })()
+
+
+
