@@ -1,12 +1,13 @@
-{% extends 'default/base.html' %} {% block title%} أضف {% endblock%} {% block
+{% extends 'default/base.html' %} {% block title%} أضف {% endblock%} 
+{% block
 content %}
 <div class="card text-center rounded-0" style="width: 18rem">
 	<div class="card-body">
-    <a href="#" class="w-100 btn btn-lg btn-dark rounded-0">حجز مساحة</a>
+    <a href="{{url_for('userReservationSpace')}}" class="w-100 btn btn-lg btn-dark rounded-0">حجز مساحة</a>
 		<div class="card-text my-4 text-dark">
 			أو
     </div>
-		<a href="#" class="w-100 btn btn-lg btn-dark rounded-0">حجز أداة</a>
+		<a href="{{url_for('userReservationTool')}}" class="w-100 btn btn-lg btn-dark rounded-0">حجز أداة</a>
 	</div>
 </div>
 

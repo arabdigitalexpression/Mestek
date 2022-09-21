@@ -1,5 +1,8 @@
 import os
+from pickle import TRUE
 import re
+from tkinter import ON
+from unicodedata import name
 from flask import (
     render_template, request, redirect,
     url_for, send_file
@@ -9,7 +12,7 @@ from werkzeug.utils import secure_filename
 from app import app, db, login
 from app.models import (
     Category, Reservation, Role,
-    User, Space, Tool, Image, Calendar
+    User, Space, Tool, Image, Calendar, Interval
 )
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm, LoginForm, SpaceForm, ToolForm
@@ -674,3 +677,458 @@ def delete_reservation(id):
         db.session.commit()
         return redirect(url_for("get_reservations"))
     return redirect(url_for("main_page"))
+
+
+@app.route ('/dashboard/CreateReservation/' , methods=["GET", "POST"])
+@login_required
+def createReservation():
+    reserve = Space.query.all()
+    tool = Tool.query.all()
+    users = User.query.all()
+    if request.method=="POST":
+        if current_user.role.name == "admin":
+            if request.form.get("confirm") == "confirm":
+                if request.form.get("username") =="noAccount":
+                    user_id = current_user.get_id()
+                else:
+                    user_id = request.form.get("username")
+                payment_status = request.form.get("payment")
+                name = request.form.get("spaceName")
+                val = name.split('&')
+                full_price = val[1]
+                
+                space = Reservation(
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = payment_status,
+                    user_id = user_id,
+                    full_price = full_price
+                )
+                date_range = request.form.get("date_from_to")
+                date_no_range = request.form.get("date_from_to_no_range")
+                ########## Save Range_date ###########################
+                print ( date_range)
+                if date_range != "": 
+                    
+                    dates = date_range.split(",")
+                    start_date = dates[0].split("/")
+                    end_date = dates[1].split("/")
+                    days = int (start_date[1])
+                    counter = int(end_date[1]) - int(start_date[1])
+                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                        for count in range(counter+1):
+                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            days += 1
+                            Dates = Calendar(
+                                day = final_date
+                            )
+                            ##############################################################
+                            db.session.add(Dates)
+                ########## Save no_ Range_date ###########################
+                elif date_no_range !="" :
+                    
+                    dates = date_no_range.split(", ")
+                    
+                    print ( dates )
+                    for final_date in dates:
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                        db.session.add(Dates)
+                    time1 = request.form.get ("time_picker_no_range")
+                    time2 = request.form.get ("time2_picker_no_range")
+                    ftime = time1.split(" ")
+                    etime = time2.split(" ")
+                    Time1 = int(ftime[0])
+                    Time2 = int(etime[0])
+                    if ftime[1] == "م":
+                        Time1 += 12
+                    if etime[1] == "م":
+                        Time2 += 12
+                    finaltime = Interval (
+                        start_time = str(Time1) +":00:00",
+                        end_time = str(Time2) +":00:00",
+                    )
+                    db.session.add (finaltime)
+                    
+                db.session.add(space)
+                db.session.commit()
+                return redirect(url_for("get_reservations"))
+            if request.form.get("chooseTool") == "chooseTool":
+                if request.form.get("spaceName") == 'hide':
+                    return render_template('dashboard/reservation/createReservation/adminReserve.html' , reserve1=reserve , tools=tool )
+                else:
+                    name = request.form.get("spaceName")
+                    val1 = name.split('&')
+                    datetime = request.form.get('datetimes')
+                    return render_template('dashboard/reservation/createReservation/adminSpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1] , users = users)
+            if request.form.get("confirmWithTool") == "confirmWithTool":
+                name = request.form.get("toolName")
+                val = name.split('&')
+                if request.form.get("username") =="noAccount":
+                    user_id = current_user.get_id()
+                else:
+                    user_id = request.form.get("username")
+                payment_status = request.form.get("payment")
+                space = Reservation(
+                    #reservation for Space
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = payment_status,
+                    user_id = user_id,
+                    full_price = val[1],   
+                )
+                db.session.add(space)
+    
+                tools = Reservation(
+                    tool_id = val[2],
+                    type = "tool",
+                    payment_status = payment_status,
+                    user_id = user_id,
+                    full_price = val[3]
+                )
+                db.session.add(tools)
+                date_range = request.form.get("date_from_to")
+                date_no_range = request.form.get("date_from_to_no_range")
+                ########## Save Range_date ###########################
+                print ( date_range)
+                if date_range != "":    
+                    dates = date_range.split(",")
+                    start_date = dates[0].split("/")
+                    end_date = dates[1].split("/")
+                    days = int (start_date[1])
+                    counter = int(end_date[1]) - int(start_date[1])
+                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                        for count in range(counter+1):
+                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            days += 1
+                            Dates = Calendar(
+                                day = final_date
+                            )
+                            ##############################################################
+                            db.session.add(Dates)
+                ########## Save no_ Range_date ###########################
+                elif date_no_range !="" :
+                    dates = date_no_range.split(", ")
+                    for final_date in dates:
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                        db.session.add(Dates)
+
+                    time1 = request.form.get ("time_picker_no_range")
+                    time2 = request.form.get ("time2_picker_no_range")
+                    ftime = time1.split(" ")
+                    etime = time2.split(" ")
+                    Time1 = int(ftime[0])
+                    Time2 = int(etime[0])
+                    if ftime[1] == "م":
+                        Time1 += 12
+                    if etime[1] == "م":
+                        Time2 += 12
+                    finaltime = Interval (
+                        start_time = str(Time1) +":00:00",
+                        end_time = str(Time2) +":00:00",
+                    )
+                    db.session.add (finaltime)
+                db.session.commit()
+                return redirect(url_for("get_reservations"))
+            if request.form.get("cancel") == "cancel":
+                return redirect(url_for("main_page"))        
+
+        else:
+            if request.form.get("confirm") == "confirm":
+                name = request.form.get("spaceName")
+                val = name.split('&')
+                user_id = current_user.get_id()
+                space = Reservation(
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[1]
+                )
+                db.session.add(space)
+                db.session.commit()
+
+                return redirect(url_for("main_page"))
+
+            if request.form.get("chooseTool") == "chooseTool":
+                if request.form.get("spaceName") == 'hide':
+                    if current_user.role.name != "admin":
+                        return render_template('dashboard/reservation/createReservation/userReserve.html' , reserve1=reserve , tools=tool )
+                else:
+                    name = request.form.get("spaceName")
+                    val1 = name.split('&')
+                    datetime = request.form.get('datetimes')
+                    if current_user.role.name != "admin":
+                        return render_template('dashboard/reservation/createReservation/SpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1])
+                    
+            if request.form.get("confirmWithTool") == "confirmWithTool":
+                name = request.form.get("toolName")
+                val = name.split('&')
+                user_id = current_user.get_id()
+                space = Reservation(
+                    #reservation for Space
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[1],   
+                )
+                db.session.add(space)
+                db.session.commit()
+
+                tools = Reservation(
+                    tool_id = val[2],
+                    type = "tool",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[3]
+                )
+                db.session.add(tools)
+                db.session.commit()
+                return redirect(url_for("main_page"))
+            if request.form.get("cancel") == "cancel":
+                return redirect(url_for("main_page"))
+
+    if current_user.role.name == "admin":
+        return render_template('dashboard/reservation/createReservation/adminReserve.html' , reserve1=reserve , tools=tool , users = users)
+
+
+
+
+
+
+@app.route ('/dashboard/CreateReservationTool/' , methods=["GET", "POST"] )
+@login_required
+def createReservationTool():
+    tool = Tool.query.all()
+    users = User.query.all()
+    if request.method == 'POST':
+        if current_user.role.name == "admin":
+            if request.form.get("username") =="noAccount":
+                user_id = current_user.get_id()
+            else:
+                user_id = request.form.get("username")
+            
+            payment_status = request.form.get("payment")
+            value = request.form.get("toolName")
+            val = value.split('&')
+            tool_id = val[0]
+            full_price = val[1]
+            
+            tools = Reservation(
+                tool_id = tool_id,
+                type = "tool",
+                payment_status = payment_status,
+                user_id = user_id,
+                full_price = full_price
+            )
+            date = request.form.get("datetimes")
+            print ( date)
+            dates = date.split(",")
+            start_date = dates[0].split("/")
+            end_date = dates[1].split("/")
+            days = int (start_date[1])
+            counter = int(end_date[1]) - int(start_date[1])
+            if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                for count in range(counter+1):
+                    final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                    days += 1
+                    Dates = Calendar(
+                        day = final_date
+                    )
+                    ##############################################################
+                    db.session.add(Dates)
+            db.session.add(tools)
+            db.session.commit()
+            return redirect(url_for("get_reservations"))
+        
+    if current_user.role.name == "admin":
+        return render_template('dashboard/reservation/createReservation/adminReserveTool.html',tools=tool , users =users)
+    
+
+
+
+@app.route ('/tool/' , methods=["GET", "POST"] )
+@login_required
+def userReservationTool():
+    tool = Tool.query.all()
+    if request.method == 'POST':
+        if current_user.role.name == "user":
+            value = request.form.get("toolName")
+            val = value.split('&')
+            user_id = current_user.get_id()
+            tools = Reservation(
+                tool_id = val[0],
+                type = "tool",
+                payment_status = "no_payment",
+                user_id = user_id,
+                full_price = val[1]
+            )
+            db.session.add(tools)
+
+            date = request.form.get("datetimes")
+            print ( date)
+            dates = date.split(",")
+            start_date = dates[0].split("/")
+            end_date = dates[1].split("/")
+            days = int (start_date[1])
+            counter = int(end_date[1]) - int(start_date[1])
+            if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                for count in range(counter+1):
+                    final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                    days += 1
+                    Dates = Calendar(
+                        day = final_date
+                    )
+                    ##############################################################
+                    db.session.add(Dates)
+            db.session.commit()
+            return redirect(url_for("main_page"))
+    return render_template('/default/tool.html' ,tools=tool)
+
+
+@app.route ('/space/' , methods=["GET", "POST"] )
+@login_required
+def userReservationSpace():
+    reserve = Space.query.all()
+    tool = Tool.query.all()
+    if current_user.role.name == "user":
+        if request.method == 'POST':
+            if request.form.get("confirm") == "confirm":
+                name = request.form.get("spaceName")
+                val = name.split('&')
+                user_id = current_user.get_id()
+                space = Reservation(
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[1]
+                    )
+                db.session.add(space)
+
+                date_range = request.form.get("date_from_to")
+                date_no_range = request.form.get("date_from_to_no_range")
+                ########## Save Range_date ###########################
+                if date_range != "":       
+                    dates = date_range.split(",")
+                    start_date = dates[0].split("/")
+                    end_date = dates[1].split("/")
+                    days = int (start_date[1])
+                    counter = int(end_date[1]) - int(start_date[1])
+                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                        for count in range(counter+1):
+                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            days += 1
+                            Dates = Calendar(
+                                day = final_date
+                            )
+                                ##############################################################
+                            db.session.add(Dates)
+                        db.session.commit()
+                    ########## Save no_ Range_date ###########################
+                elif date_no_range !="" :
+                    dates = date_no_range.split(", ")
+                    for final_date in dates:
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                        db.session.add(Dates)
+                        time1 = request.form.get ("time_picker_no_range")
+                        time2 = request.form.get ("time2_picker_no_range")  
+                        ftime = time1.split(" ")
+                        etime = time2.split(" ")
+                        Time1 = int(ftime[0])
+                        Time2 = int(etime[0])
+                        if ftime[1] == "م":
+                            Time1 += 12
+                        if etime[1] == "م":
+                            Time2 += 12
+                        finaltime = Interval (
+                            start_time = str(Time1) +":00:00",
+                            end_time = str(Time2) +":00:00",
+                        )
+                        db.session.add (finaltime)
+                    db.session.commit()
+                return redirect(url_for("main_page"))
+            elif request.form.get("chooseTool") == "chooseTool":
+                if request.form.get("spaceName") == 'hide': 
+                    return render_template('default/space.html' , reserve1=reserve , tools=tool )
+                else:
+                    name = request.form.get("spaceName")
+                    val1 = name.split('&')
+                    datetime = request.form.get('datetimes')
+                    return render_template('default/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1]) 
+            elif request.form.get("confirmWithTool") == "confirmWithTool":
+                name = request.form.get("toolName")
+                val = name.split('&')
+                user_id = current_user.get_id()
+                space = Reservation(
+                    #reservation for Space
+                    space_id = val[0],
+                    type = "space",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[1],   
+                )
+                db.session.add(space)
+                db.session.commit()
+            date_range = request.form.get("date_from_to")
+            date_no_range = request.form.get("date_from_to_no_range")
+            ########## Save Range_date ###########################
+            if date_range != "":       
+                dates = date_range.split(",")
+                start_date = dates[0].split("/")
+                end_date = dates[1].split("/")
+                days = int (start_date[1])
+                counter = int(end_date[1]) - int(start_date[1])
+                if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                    for count in range(counter+1):
+                        final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                        days += 1
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                            ##############################################################
+                        db.session.add(Dates)
+                    db.session.commit()
+                ########## Save no_ Range_date ###########################
+            elif date_no_range !="" :
+                dates = date_no_range.split(", ")
+                for final_date in dates:
+                    Dates = Calendar(
+                        day = final_date
+                    )
+                    db.session.add(Dates)
+                    time1 = request.form.get ("time_picker_no_range")
+                    time2 = request.form.get ("time2_picker_no_range")  
+                    ftime = time1.split(" ")
+                    etime = time2.split(" ")
+                    Time1 = int(ftime[0])
+                    Time2 = int(etime[0])
+                    if ftime[1] == "م":
+                        Time1 += 12
+                    if etime[1] == "م":
+                        Time2 += 12
+                    finaltime = Interval (
+                        start_time = str(Time1) +":00:00",
+                        end_time = str(Time2) +":00:00",
+                    )
+                    db.session.add (finaltime)
+                
+                tools = Reservation(
+                    tool_id = val[2],
+                    type = "tool",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[3]
+                )
+                db.session.add(tools)
+                db.session.commit()
+                return redirect(url_for("main_page"))
+            if request.form.get("cancel") == "cancel":
+                return redirect(url_for("main_page"))
+        return render_template('/default/space.html' , reserve1=reserve , tools=tool)
