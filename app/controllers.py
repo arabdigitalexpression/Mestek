@@ -1,8 +1,4 @@
 import os
-from pickle import TRUE
-import re
-from tkinter import ON
-from unicodedata import name
 from flask import (
     render_template, request, redirect,
     url_for, send_file
@@ -679,14 +675,14 @@ def delete_reservation(id):
     return redirect(url_for("main_page"))
 
 
-@app.route ('/dashboard/CreateReservation/' , methods=["GET", "POST"])
+@app.route ('/dashboard/Create/space/' , methods=["GET", "POST"])
 @login_required
 def createReservation():
     reserve = Space.query.all()
     tool = Tool.query.all()
     users = User.query.all()
-    if request.method=="POST":
-        if current_user.role.name == "admin":
+    if current_user.role.name == "admin":
+        if request.method=="POST":
             if request.form.get("confirm") == "confirm":
                 if request.form.get("username") =="noAccount":
                     user_id = current_user.get_id()
@@ -835,64 +831,6 @@ def createReservation():
                 return redirect(url_for("get_reservations"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main_page"))        
-
-        else:
-            if request.form.get("confirm") == "confirm":
-                name = request.form.get("spaceName")
-                val = name.split('&')
-                user_id = current_user.get_id()
-                space = Reservation(
-                    space_id = val[0],
-                    type = "space",
-                    payment_status = "no_payment",
-                    user_id = user_id,
-                    full_price = val[1]
-                )
-                db.session.add(space)
-                db.session.commit()
-
-                return redirect(url_for("main_page"))
-
-            if request.form.get("chooseTool") == "chooseTool":
-                if request.form.get("spaceName") == 'hide':
-                    if current_user.role.name != "admin":
-                        return render_template('dashboard/reservation/createReservation/userReserve.html' , reserve1=reserve , tools=tool )
-                else:
-                    name = request.form.get("spaceName")
-                    val1 = name.split('&')
-                    datetime = request.form.get('datetimes')
-                    if current_user.role.name != "admin":
-                        return render_template('dashboard/reservation/createReservation/SpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1])
-                    
-            if request.form.get("confirmWithTool") == "confirmWithTool":
-                name = request.form.get("toolName")
-                val = name.split('&')
-                user_id = current_user.get_id()
-                space = Reservation(
-                    #reservation for Space
-                    space_id = val[0],
-                    type = "space",
-                    payment_status = "no_payment",
-                    user_id = user_id,
-                    full_price = val[1],   
-                )
-                db.session.add(space)
-                db.session.commit()
-
-                tools = Reservation(
-                    tool_id = val[2],
-                    type = "tool",
-                    payment_status = "no_payment",
-                    user_id = user_id,
-                    full_price = val[3]
-                )
-                db.session.add(tools)
-                db.session.commit()
-                return redirect(url_for("main_page"))
-            if request.form.get("cancel") == "cancel":
-                return redirect(url_for("main_page"))
-
-    if current_user.role.name == "admin":
         return render_template('dashboard/reservation/createReservation/adminReserve.html' , reserve1=reserve , tools=tool , users = users)
 
 
@@ -900,13 +838,13 @@ def createReservation():
 
 
 
-@app.route ('/dashboard/CreateReservationTool/' , methods=["GET", "POST"] )
+@app.route ('/dashboard/Create/Tool/' , methods=["GET", "POST"] )
 @login_required
 def createReservationTool():
     tool = Tool.query.all()
     users = User.query.all()
-    if request.method == 'POST':
-        if current_user.role.name == "admin":
+    if current_user.role.name == "admin":
+        if request.method == 'POST':
             if request.form.get("username") =="noAccount":
                 user_id = current_user.get_id()
             else:
@@ -943,9 +881,7 @@ def createReservationTool():
                     db.session.add(Dates)
             db.session.add(tools)
             db.session.commit()
-            return redirect(url_for("get_reservations"))
-        
-    if current_user.role.name == "admin":
+            return redirect(url_for("get_reservations"))  
         return render_template('dashboard/reservation/createReservation/adminReserveTool.html',tools=tool , users =users)
     
 
@@ -955,8 +891,8 @@ def createReservationTool():
 @login_required
 def userReservationTool():
     tool = Tool.query.all()
-    if request.method == 'POST':
-        if current_user.role.name == "user":
+    if current_user.role.name == "user":
+        if request.method == 'POST':
             value = request.form.get("toolName")
             val = value.split('&')
             user_id = current_user.get_id()
@@ -987,7 +923,7 @@ def userReservationTool():
                     db.session.add(Dates)
             db.session.commit()
             return redirect(url_for("main_page"))
-    return render_template('/default/tool.html' ,tools=tool)
+        return render_template('/default/tool.html' ,tools=tool)
 
 
 @app.route ('/space/' , methods=["GET", "POST"] )
