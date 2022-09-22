@@ -4,7 +4,7 @@
 {% block content %}
 
 <div style="position:absolute; width:800px; border: 2px solid rgb(36, 34, 34);">
-    <form name="form" onsubmit="return space_validate()"  action="{{ url_for('userReservationSpace') }}" method="post" >
+    <form name="form"  action="{{ url_for('userReservationSpace') }}" method="post" >
         <div class="row " style="margin:40px 40px 40px 40px;">
             <div class="row col-7">
                 <div class="col-7 ">
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-10">
                         <button type="submit" class="btn btn-success " style=" margin-top: 40px; font-size: 16px;
-        font-weight:600;" name="confirm" value="confirm">تأكيد الحجز</button>
+        font-weight:600;" name="confirm" value="confirm" onclick="return space_validate()">تأكيد الحجز</button>
                     </div>
                 </div>
             </div>
