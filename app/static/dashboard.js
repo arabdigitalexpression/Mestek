@@ -164,9 +164,13 @@ function tool_validate(){
   }
   
 }
+ClassicEditor.create( document.querySelector( '#description' ), {
+  language: 'ar'
+} )
 
-
-
+ClassicEditor.create( document.querySelector( '#guidelines' ), {
+  language: 'ar'
+} )
 
 (() => {
   'use strict'
