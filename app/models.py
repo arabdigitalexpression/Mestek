@@ -78,8 +78,8 @@ class Category(db.Model):
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text(128), nullable=False)
-    guidelines = db.Column( nullable=False)
+    description = db.Column(db.Text(1024), nullable=False)
+    guidelines = db.Column( db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='space', lazy=True)
@@ -90,8 +90,8 @@ class Space(db.Model):
 class Tool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(128), nullable=False)
-    guidelines = db.Column( nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='tool', lazy=True)
