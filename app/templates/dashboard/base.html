@@ -17,6 +17,9 @@
 	rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
 />
+<link 
+	rel="stylesheet"
+	href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}"/>
 <style>
 	body {
 		font-family: "Tajawal", sans-serif;
@@ -231,10 +234,27 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="#">
+							<a href="#" class="nav-link" id="show_hide" data-content="toggle-text" >
 								<span data-feather="bookmark" class="align-text-bottom"></span>
 								إنشاء حجز
 							</a>
+							<div class="content">
+								<ul>
+								<li  class="d-flex align-items-center px-3">
+									<a  href="{{url_for('createReservation')}}" class="nav-link ">
+										<span span data-feather="plus-circle"></span>
+										حجز مساحة
+									</a>
+								</li>
+									
+								<li class=" d-flex align-items-center px-3 ">
+									<a href="{{url_for('createReservationTool')}}" class="nav-link ">
+									<span data-feather="plus-circle" ></span>
+										 حجز أداة
+									</a>
+								</li>
+								</ul>
+							</div>
 						</li>
 					</ul>
 				</ul>
@@ -246,6 +266,8 @@
 		</main>
 	</div>
 </div>
+<script src="{{ url_for('static',filename='mobiscroll.javascript.min.js')}}"
+></script>
 <script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
@@ -257,5 +279,7 @@
 	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
 	crossorigin="anonymous"
 ></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/translations/ar.js"></script>
 <script src="{{ url_for('static',filename='dashboard.js') }}"></script>
 {% endblock %}
