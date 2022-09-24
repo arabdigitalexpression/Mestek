@@ -100,12 +100,12 @@ class SpaceForm(FlaskForm):
                                 )
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5"
+        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     }
     )
-    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
+    guidelines = TextAreaField('قواعد', 
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control", "rows": "5"
+        "placeholder": "قواعد", "rows": "5" , "id":"guidelines"
     }
     )
     images = MultipleFileField('الصور', name="images", validators=[
@@ -132,11 +132,11 @@ class ToolForm(FlaskForm):
                                 })
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5"
+        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     })
-    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
+    guidelines = TextAreaField('قواعد', 
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control", "rows": "5"
+        "placeholder": "قواعد", "class": "form-control", "rows": "5" , "id":"guidelines"
     })
     space = SelectField('المساحة', render_kw={
         "class": "form-select",

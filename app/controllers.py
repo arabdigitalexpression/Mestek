@@ -1012,59 +1012,65 @@ def userReservationSpace():
                 )
                 db.session.add(space)
                 db.session.commit()
-            date_range = request.form.get("date_from_to")
-            date_no_range = request.form.get("date_from_to_no_range")
-            ########## Save Range_date ###########################
-            if date_range != "":       
-                dates = date_range.split(",")
-                start_date = dates[0].split("/")
-                end_date = dates[1].split("/")
-                days = int (start_date[1])
-                counter = int(end_date[1]) - int(start_date[1])
-                if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
-                    for count in range(counter+1):
-                        final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
-                        days += 1
+                date_range = request.form.get("date_from_to")
+                date_no_range = request.form.get("date_from_to_no_range")
+                ########## Save Range_date ###########################
+                if date_range != "":       
+                    dates = date_range.split(",")
+                    start_date = dates[0].split("/")
+                    end_date = dates[1].split("/")
+                    days = int (start_date[1])
+                    counter = int(end_date[1]) - int(start_date[1])
+                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                        for count in range(counter+1):
+                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            days += 1
+                            Dates = Calendar(
+                                day = final_date
+                            )
+                                ##############################################################
+                            db.session.add(Dates)
+                        db.session.commit()
+                    ########## Save no_ Range_date ###########################
+                elif date_no_range !="" :
+                    dates = date_no_range.split(", ")
+                    for final_date in dates:
                         Dates = Calendar(
                             day = final_date
                         )
-                            ##############################################################
                         db.session.add(Dates)
+                        time1 = request.form.get ("time_picker_no_range")
+                        time2 = request.form.get ("time2_picker_no_range")  
+                        ftime = time1.split(" ")
+                        etime = time2.split(" ")
+                        Time1 = int(ftime[0])
+                        Time2 = int(etime[0])
+                        if ftime[1] == "م":
+                            Time1 += 12
+                        if etime[1] == "م":
+                            Time2 += 12
+                        finaltime = Interval (
+                            start_time = str(Time1) +":00:00",
+                            end_time = str(Time2) +":00:00",
+                        )
+                        db.session.add (finaltime)
+
+                    tools = Reservation(
+                        tool_id = val[2],
+                        type = "tool",
+                        payment_status = "no_payment",
+                        user_id = user_id,
+                        full_price = val[3]
+                    )
+                    db.session.add(tools)
                     db.session.commit()
-                ########## Save no_ Range_date ###########################
-            elif date_no_range !="" :
-                dates = date_no_range.split(", ")
-                for final_date in dates:
-                    Dates = Calendar(
-                        day = final_date
-                    )
-                    db.session.add(Dates)
-                    time1 = request.form.get ("time_picker_no_range")
-                    time2 = request.form.get ("time2_picker_no_range")  
-                    ftime = time1.split(" ")
-                    etime = time2.split(" ")
-                    Time1 = int(ftime[0])
-                    Time2 = int(etime[0])
-                    if ftime[1] == "م":
-                        Time1 += 12
-                    if etime[1] == "م":
-                        Time2 += 12
-                    finaltime = Interval (
-                        start_time = str(Time1) +":00:00",
-                        end_time = str(Time2) +":00:00",
-                    )
-                    db.session.add (finaltime)
-                
-                tools = Reservation(
-                    tool_id = val[2],
-                    type = "tool",
-                    payment_status = "no_payment",
-                    user_id = user_id,
-                    full_price = val[3]
-                )
-                db.session.add(tools)
-                db.session.commit()
-                return redirect(url_for("main_page"))
+                    return redirect(url_for("main_page"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main_page"))
         return render_template('/default/space.html' , reserve1=reserve , tools=tool)
+
+
+@app.route ('/guidelines/')
+@login_required
+def guidelines():
+    return render_template('/default/guidelines.html')
