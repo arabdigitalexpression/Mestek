@@ -675,7 +675,7 @@ def delete_reservation(id):
     return redirect(url_for("main_page"))
 
 
-@app.route ('/dashboard/Create/space/' , methods=["GET", "POST"])
+@app.route ('/dashboard/reservation/create/space/' , methods=["GET", "POST"])
 @login_required
 def createReservation():
     reserve = Space.query.all()
@@ -838,7 +838,7 @@ def createReservation():
 
 
 
-@app.route ('/dashboard/Create/Tool/' , methods=["GET", "POST"] )
+@app.route ('/dashboard/reservation/create/tool/' , methods=["GET", "POST"] )
 @login_required
 def createReservationTool():
     tool = Tool.query.all()
@@ -887,7 +887,7 @@ def createReservationTool():
 
 
 
-@app.route ('/tool/' , methods=["GET", "POST"] )
+@app.route ('/reservation/create/tool/' , methods=["GET", "POST"] )
 @login_required
 def userReservationTool():
     tool = Tool.query.all()
@@ -926,7 +926,7 @@ def userReservationTool():
         return render_template('/default/tool.html' ,tools=tool)
 
 
-@app.route ('/space/' , methods=["GET", "POST"] )
+@app.route ('/reservation/create/space/' , methods=["GET", "POST"] )
 @login_required
 def userReservationSpace():
     reserve = Space.query.all()
