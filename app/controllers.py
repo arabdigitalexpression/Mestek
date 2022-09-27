@@ -57,10 +57,10 @@ def signup_page():
             else:
                 # TODO: there's a logic error here, fix it!
                 errors = f"hey, There's a user with this email: {email}"
-                return render_template("default/signup.html", form=form, errors=errors)
+                return render_template("default/auth/signup.html", form=form, errors=errors)
         errors = f"Please check your form data again"
-        return render_template("default/signup.html", form=form, errors=errors)
-    return render_template("default/signup.html", form=form)
+        return render_template("default/auth/signup.html", form=form, errors=errors)
+    return render_template("default/auth/signup.html", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -80,13 +80,16 @@ def login_page():
         if user is None and not user.verify_password(password):
             msg = "Invalid username or password."
             # render_template does autoescaping html form input data
-            return render_template("login.html", form=form, msg=msg)
+            return render_template("default/auth/login.html", form=form, msg=msg)
 
         # remember the user when he visits other pages
         # TODO: add remember me button to the form
         login_user(user, remember=True)
-        return redirect(url_for("main_page"))
-    return render_template("default/login.html", form=form)
+        if current_user.role.name == "admin":
+            return redirect(url_for("dashboard"))
+        else:
+            return redirect(url_for("main_page"))
+    return render_template("default/auth/login.html", form=form)
 
 
 @app.route('/logout')
@@ -923,7 +926,7 @@ def userReservationTool():
                     db.session.add(Dates)
             db.session.commit()
             return redirect(url_for("main_page"))
-        return render_template('/default/tool.html' ,tools=tool)
+        return render_template('/default/reservation/tool.html' ,tools=tool)
 
 
 @app.route ('/reservation/create/space/' , methods=["GET", "POST"] )
@@ -992,12 +995,12 @@ def userReservationSpace():
                 return redirect(url_for("main_page"))
             elif request.form.get("chooseTool") == "chooseTool":
                 if request.form.get("spaceName") == 'hide': 
-                    return render_template('default/space.html' , reserve1=reserve , tools=tool )
+                    return render_template('default/reservation/space.html' , reserve1=reserve , tools=tool )
                 else:
                     name = request.form.get("spaceName")
                     val1 = name.split('&')
                     datetime = request.form.get('datetimes')
-                    return render_template('default/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1]) 
+                    return render_template('default/reservation/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1]) 
             elif request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
                 val = name.split('&')
@@ -1067,13 +1070,8 @@ def userReservationSpace():
                     return redirect(url_for("main_page"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main_page"))
-        return render_template('/default/space.html' , reserve1=reserve , tools=tool)
 
 
-@app.route ('/guidelines/')
-@login_required
-def guidelines():
-    return render_template('/default/guidelines.html')
 
 @app.route('/dashboard/calendar/')
 @login_required
