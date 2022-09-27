@@ -2,20 +2,20 @@
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="{{ url_for('static',filename='bootstrap.min.css') }}"
+	href="{{ url_for('static',filename='styles/bootstrap.min.css') }}"
 />
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="{{ url_for('static',filename='signin.css') }}"
+	href="{{ url_for('static',filename='styles/signin.css') }}"
 />
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="{{ url_for('static',filename='style.css') }}"
+	href="{{ url_for('static',filename='styles/style.css') }}"
 />
-<link href="{{ url_for('static',filename='default.rtl.css') }}" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}" />
+<link href="{{ url_for('static',filename='styles/default.rtl.css') }}" rel="stylesheet" />
+<link rel="stylesheet" href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}" />
 <!-- Custom styles for this template -->
 {% endblock %}{% block body %}
 <header class="position-absolute top-0 start-0">
@@ -36,9 +36,9 @@
 <main class="d-flex justify-content-center align-items-center w-100 vh-100">
 	{% block content %}{% endblock %}
 </main>
-<script src="{{ url_for('static',filename='mobiscroll.javascript.min.js')}}"></script>
-<script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
-<script src="{{ url_for('static',filename='dashboard.js') }}"></script>
+<script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"></script>
+<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
 
 
 
