@@ -1074,3 +1074,19 @@ def userReservationSpace():
 @login_required
 def guidelines():
     return render_template('/default/guidelines.html')
+
+@app.route('/dashboard/calendar/')
+@login_required
+
+def get_Calender():
+    if current_user.role.name == "admin":
+        
+        return render_template(
+            "dashboard/reservation/calendar.html"
+           )
+    return redirect(url_for("main_page"))
+
+@app.route('/dashboard/ccalender')
+@login_required
+def calender_data():
+    cdata = Reservation.query.all()
