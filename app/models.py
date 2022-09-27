@@ -2,7 +2,7 @@ from asyncio.windows_events import NULL
 import enum
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 
 from app import db, login
@@ -49,8 +49,7 @@ class User(UserMixin, db.Model):
 
     
     def verify_password(self, password):
-        hashed_form_password = generate_password_hash(password)
-        return self.password == hashed_form_password
+        return check_password_hash(self.password, password)
 
     def save(self):
         db.session.add(self)
