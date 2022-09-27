@@ -4,13 +4,13 @@
 	href="https://getbootstrap.com/docs/5.2/examples/dashboard-rtl/"
 />
 <link
-	href="{{ url_for('static',filename='bootstrap.rtl.min.css') }}"
+	href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
 	rel="stylesheet"
 />
 
 <!-- Custom styles for this template -->
 <link
-	href="{{ url_for('static',filename='dashboard.rtl.css') }}"
+	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
 	rel="stylesheet"
 />
 <link
@@ -19,7 +19,7 @@
 />
 <link 
 	rel="stylesheet"
-	href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}"/>
+	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"/>
 <style>
 	body {
 		font-family: "Tajawal", sans-serif;
@@ -266,9 +266,9 @@
 		</main>
 	</div>
 </div>
-<script src="{{ url_for('static',filename='mobiscroll.javascript.min.js')}}"
+<script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"
 ></script>
-<script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
 	integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
@@ -281,5 +281,5 @@
 ></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
 <script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/translations/ar.js"></script>
-<script src="{{ url_for('static',filename='dashboard.js') }}"></script>
+<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
 {% endblock %}
