@@ -6,7 +6,7 @@
         <div class="row  " style="margin:40px 40px 40px 40px;">
             <div class="col-8 d-flex  align-items-center">
                 <div class="col-6">
-                    <select id="spacee" name="spaceName" class="form-select">
+                    <select id="spacee" name="spaceName" class="form_select w-100">
                         <option value="hide">-- اختر المساحة --</option>
                         {% for reserve in reserve1 %}
                         <option value="{{reserve.id}}&{{reserve.price}}&{{reserve.name}}">{{ reserve.name }}</option>
