@@ -1,2 +1,27 @@
-{% extends 'profile/base.html' %} {% block tab_title %} حجوزاتى {% endblock %}
-{% block content %} {% endblock %}
+{% extends 'profile/base.html' %} {% block title %} حجوزاتي {% endblock %}
+{% block content %}
+    {% for reservation in current_user.reservations %}
+    <ul>
+        <li>type: {{ reservation.type.name }}</li>
+        <li>created at: {{ reservation.created_at }}</li>
+        <li>payment status: {{ reservation.payment_status.name }}</li>
+        <li>transaction number: {{ reservation.transaction_num }}</li>
+        <li>full price: {{ reservation.full_price }}</li>
+        <li>space: {{ reservation.space.name }}</li>
+        <li>tool: {{ reservation.tool.name }}</li>
+        <li> Calendars:
+            <ul>
+            {% for cal in reservation.calendars %}
+                {% for intrval in cal.intervals %}
+                    <li>
+                        {{ cal.day }}
+                        {{ intrval.start_time }}
+                        {{ intrval.end_time }}
+                    </li>
+                {% endfor %}
+            {% endfor %}
+            </ul>
+        </li>
+    </ul>
+    {% endfor %}
+{% endblock %}

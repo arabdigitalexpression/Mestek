@@ -22,28 +22,29 @@
 		</div>
 	</div>
 	<hr class="border-light m-0" />
-
+<form action="{{ url_for('profile_edit') }}" class="form" method="POST">
+	{{ form.csrf_token }}
 	<div class="card-body">
+        <p class="text-danger">{% if errors%}{{ errors }}{% endif %}</p>
 		<div class="form-group">
-			<label class="form-label">Username</label>
-			<input type="text" class="form-control mb-1" value="nmaxwell" />
+            {{ form.userName.label }}
+            {{ form.userName }}
 		</div>
 		<div class="form-group">
-			<label class="form-label">Name</label>
-			<input type="text" class="form-control" value="Nelle Maxwell" />
+            {{ form.firstName.label }}
+			{{ form.firstName }}
 		</div>
 		<div class="form-group">
-			<label class="form-label">E-mail</label>
-			<input type="text" class="form-control mb-1" value="nmaxwell@mail.com" />
-			<div class="alert alert-warning mt-3">
-				Your email is not confirmed. Please check your inbox.<br />
-				<a href="javascript:void(0)">Resend confirmation</a>
-			</div>
+            {{ form.lastName.label }}
+			{{ form.lastName }}
 		</div>
 		<div class="form-group">
-			<label class="form-label">Company</label>
-			<input type="text" class="form-control" value="Company Ltd." />
+			{{ form.email.label }}
+			{{ form.email }}
 		</div>
+
+    {{ form.submit }}
 	</div>
+</form>
 </div>
 {% endblock %}

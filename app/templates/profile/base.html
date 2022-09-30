@@ -46,14 +46,22 @@
 				</div>
 			</div>
 			<div class="col-md-9">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    <ul class=flashes>
+                    {% for category, message in messages %}
+                        {% if category == "error" %}
+                            <li class="text-danger">{{ message }}</li>
+                        {% elif category == "info" %}
+                            <li class="text-info">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                  {% endif %}
+                {% endwith %}
 				<div class="tab-content">{% block content %} {% endblock %}</div>
 			</div>
 		</div>
-	</div>
-
-	<div class="text-right mt-3">
-		<button type="button" class="btn btn-primary">Save changes</button>&nbsp;
-		<button type="button" class="btn btn-default">Cancel</button>
 	</div>
 </div>
 {% endblock %}
