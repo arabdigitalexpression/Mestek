@@ -9,6 +9,7 @@ from wtforms.validators import (
 from wtforms.fields import MultipleFileField
 from flask_wtf.file import FileAllowed, FileRequired
 
+from app.models import User
 
 images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
@@ -82,6 +83,61 @@ class SignupForm(FlaskForm):
                          })
 
 
+class EditUserForm(FlaskForm):
+    firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
+                            render_kw={
+                                "class": "form-control",
+                            })
+    lastName = StringField('الاسم الأخير', validators=[DataRequired(), Length(min=3, max=20)],
+                           render_kw={
+                               "class": "form-control",
+                           })
+    userName = StringField('إسم المستخدم', validators=[DataRequired(), Length(min=3, max=20)],
+                           render_kw={
+                               "class": "form-control mb-1",
+                           })
+    email = EmailField('البريد الإلكترونى', validators=[DataRequired()],
+                       render_kw={
+                           "class": "form-control mb-1",
+                       })
+    submit = SubmitField('حفظ',
+                         render_kw={
+                             "class": "w-100 btn btn-lg btn-dark rounded-0",
+                         })
+
+    def validate_on_submit(self):
+        super().validate_on_submit()
+
+        if self.userName.data and User.query\
+                .filter(User.username == self.userName.data)\
+                .count() <= 1:
+            return True
+
+        if self.email.data and User.query\
+                .filter(User.email == self.email.data)\
+                .count() <= 1:
+            return True
+
+
+class ChangePasswordForm(FlaskForm):
+    current_password = PasswordField('كلمة المرور الحالية', validators=[DataRequired(), Length(min=6, max=20)],
+                             render_kw={
+                                 "class": "form-control",
+                             })
+    password = PasswordField('كلمة المرور الجديدة', validators=[DataRequired(), Length(min=6, max=20)],
+                             render_kw={
+                                 "class": "form-control",
+                             })
+    confirm_password = PasswordField('تأكيد كلمة المرور', validators=[DataRequired(), EqualTo('password')],
+                                     render_kw={
+                                         "class": "form-control",
+                                     })
+    submit = SubmitField('حفظ',
+                         render_kw={
+                             "class": "w-100 btn btn-lg btn-dark rounded-0",
+                         })
+
+
 class SpaceForm(FlaskForm):
     name = StringField(
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
@@ -100,12 +156,12 @@ class SpaceForm(FlaskForm):
                                 )
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
+        "placeholder": "الوصف", "class": "form-control", "rows": "5"
     }
     )
-    guidelines = TextAreaField('قواعد', 
+    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
                                render_kw={
-        "placeholder": "قواعد", "rows": "5" , "id":"guidelines"
+        "placeholder": "قواعد", "class": "form-control", "rows": "5"
     }
     )
     images = MultipleFileField('الصور', name="images", validators=[
@@ -132,11 +188,11 @@ class ToolForm(FlaskForm):
                                 })
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
+        "placeholder": "الوصف", "class": "form-control", "rows": "5"
     })
-    guidelines = TextAreaField('قواعد', 
+    guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control", "rows": "5" , "id":"guidelines"
+        "placeholder": "قواعد", "class": "form-control", "rows": "5"
     })
     space = SelectField('المساحة', render_kw={
         "class": "form-select",
@@ -159,4 +215,4 @@ class ConfirmForm(FlaskForm):
 
 
 # class reserveTool(FlaskForm):
-#     name = 
+#     name =
