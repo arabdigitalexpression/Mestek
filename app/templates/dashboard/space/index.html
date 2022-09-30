@@ -1,99 +1,86 @@
 {% extends 'dashboard/base.html' %} {% block title %} المساحات {% endblock %} {%
 block heading %} المساحات {% endblock %}{% block content %}
 <div class="table-responsive">
-	<table class="table table-striped table-hover table-sm">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">إسم المساحة</th>
-				<th scope="col">قيمة الحجر</th>
-				<th scope="col">مشرف؟</th>
-				<th scope="col"></th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for space in spaces %}
-			<tr>
-				<td>{{space.id}}</td>
-				<td>{{space.name}}</td>
-				<td>{{space.price}} جم / الساعة</td>
-				<td>
-					{% if space.has_operator %}
-					<i class="bi bi-check2-circle text-success"></i> {% else %}
-					<i class="bi bi-x-circle text-danger"></i> {% endif %}
-				</td>
-				<td class="d-flex">
-					<button
-						type="button"
-						class="btn btn-info text-white btn-sm mx-1 rounded-circle"
-						data-bs-toggle="tooltip"
-						data-bs-placement="top"
-						title="تفاصيل"
-					>
-						<i class="bi bi-info-circle"></i>
-					</button>
-					<a
-						href="{{url_for('update_space', id=space.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
-						data-bs-toggle="tooltip"
-						data-bs-placement="top"
-						title="تحديث"
-					>
-						<i class="bi bi-pencil"></i>
-					</a>
-					<form method="POST" action="{{url_for('delete_space', id=space.id)}}">
-						<button
-							type="button"
-							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
-							data-bs-toggle="modal"
-							data-bs-target="#deleteModal-{{space.id}}"
-							data-bs-toggle="tooltip"
-							data-bs-placement="top"
-							title="حذف"
-						>
-							<i class="bi bi-trash3"></i>
-						</button>
-						<div
-							class="modal fade"
-							id="deleteModal-{{space.id}}"
-							tabindex="-1"
-							aria-labelledby="deleteModalLabel"
-							aria-hidden="true"
-						>
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
-										<button
-											type="button"
-											class="btn-close"
-											data-bs-dismiss="modal"
-											aria-label="Close"
-										></button>
-									</div>
-									<div class="modal-body">
-										هل أنت متأكد من حذف مساحة: {{space.name}}
-									</div>
-									<div class="modal-footer">
-										<button
-											type="button"
-											class="btn btn-outline-secondary"
-											data-bs-dismiss="modal"
-										>
-											رجوع
-										</button>
-										<button type="submit" class="btn btn-danger">
-											تأكيد الحذف
-										</button>
+	<form action="{{ url_for('space_list') }}" method="post">
+		<table class="table table-striped table-hover table-sm">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">إسم المساحة</th>
+					<th scope="col">قيمة الحجر</th>
+					<th scope="col">مشرف؟</th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for space in spaces %}
+				{% if loop.index <= j and loop.index>= i%}
+					<tr>
+						<td>{{loop.index}}</td>
+						<td>{{space.name}}</td>
+						<td>{{space.price}} جم / الساعة</td>
+						<td>
+							{% if space.has_operator %}
+							<i class="bi bi-check2-circle text-success"></i> {% else %}
+							<i class="bi bi-x-circle text-danger"></i> {% endif %}
+						</td>
+						<td class="d-flex">
+							<button type="button" class="btn btn-info text-white btn-sm mx-1 rounded-circle"
+								data-bs-toggle="tooltip" data-bs-placement="top" title="تفاصيل">
+								<i class="bi bi-info-circle"></i>
+							</button>
+							<a href="{{url_for('update_space', id=space.id)}}"
+								class="text-white btn btn-warning btn-sm mx-1 rounded-circle" data-bs-toggle="tooltip"
+								data-bs-placement="top" title="تحديث">
+								<i class="bi bi-pencil"></i>
+							</a>
+							<form method="POST" action="{{url_for('delete_space', id=space.id)}}">
+								<button type="button" class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
+									data-bs-toggle="modal" data-bs-target="#deleteModal-{{space.id}}"
+									data-bs-toggle="tooltip" data-bs-placement="top" title="حذف">
+									<i class="bi bi-trash3"></i>
+								</button>
+								<div class="modal fade" id="deleteModal-{{space.id}}" tabindex="-1"
+									aria-labelledby="deleteModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"
+													aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												هل أنت متأكد من حذف مساحة: {{space.name}}
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-outline-secondary"
+													data-bs-dismiss="modal">
+													رجوع
+												</button>
+												<button type="submit" class="btn btn-danger">
+													تأكيد الحذف
+												</button>
+											</div>
+										</div>
 									</div>
 								</div>
-							</div>
-						</div>
-					</form>
-				</td>
-			</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+							</form>
+						</td>
+					</tr>
+					{% endif %}
+					{% endfor %}
+			</tbody>
+		</table>
+		<nav aria-label="Page navigation example" class="d-flex float-end">
+			<ul class="pagination ">
+				<li class="page-item"><button class="page-link" name="Previous" value="Previous"
+						type="submit">Previous</button></li>
+				{% for page in range(1 , pages+1) %}
+				<li class="page-item"><button class="page-link" name="b" value="{{page}}">{{page}}</button></li>
+				{% endfor %}
+				<li class="page-item"><button class="page-link" name="next" value="next">next</button></li>
+			</ul>
+		</nav>
+	</form>
 </div>
 {% endblock %}
