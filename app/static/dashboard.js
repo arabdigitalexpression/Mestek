@@ -164,6 +164,8 @@ function tool_validate(){
   }
   
 }
+$('.form_select').chosen();
+
 ClassicEditor.create( document.querySelector( '#description' ), {
   language: 'ar'
 } )
@@ -171,6 +173,7 @@ ClassicEditor.create( document.querySelector( '#description' ), {
 ClassicEditor.create( document.querySelector( '#guidelines' ), {
   language: 'ar'
 } )
+
 
 (() => {
   'use strict'

@@ -8,7 +8,7 @@
         <div class="row align-items-center" style="margin:40px 40px 40px 40px;">
             <div class="col-8 d-flex  align-items-center">
                 <div class="col-6">
-                    <select id="spacee" class="form-select" style="width:200px;">
+                    <select id="spacee" class="form_select " style="width:215px">
                         <option value="hide">{{ name }}</option>
                     </select>
                 </div>
@@ -20,7 +20,7 @@
                     
                 </div> -->
             </div>
-            <div class="col-4">
+            <div class="col-4" >
                 <div>
                     <select id="mySelect" class="form-select text-center" onchange="myFunction()">
                         <option value="hide">-- نوع الحجز --</option>
@@ -54,8 +54,8 @@
                     <input type="hidden" name="date_from_to_no_range" id="date_from_to_no_range">
                 </div>
             </div>
-            <div class="col-4">
-                <select id="toools" name="toolName" class="form-control mt-3" style="width:200px;">
+            <div class="col-4 mt-3 mx-1" >
+                <select id="toools" name="toolName" class="form_select w-100" >
                     <option value="hide">-- اختر الأداة --</option>
                     {% for tool in tools %}
                     {% if id == tool.space_id %}
