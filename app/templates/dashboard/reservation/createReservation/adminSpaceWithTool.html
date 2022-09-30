@@ -10,7 +10,7 @@
 
   <div class="row align-items-center " style="margin:60px 80px 50px 0;">
     <div class="col-3">
-      <select id="spacee" name="spaceName" class="form-select text-center w-100">
+      <select id="spacee" name="spaceName" class="form_select text-center w-100">
         <option value="hide">{{ name }}</option>
       </select>
     </div>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="col-2 ">
-      <select id="toools" name="toolName" class="form-select text-center w-100">
+      <select id="toools" name="toolName" class="form_select text-center w-100">
         <option value="hide">-- اختر الأداة --</option>
         {% for tool in tools %}
         {% if id == tool.space_id %}
@@ -72,7 +72,7 @@
 
   <div class="row align-items-center" style="margin:60px 80px 0 0;">
     <div class="col-3 ">
-      <select class='form-select text-center w-100' name="username">
+      <select class='form_select text-center w-100' name="username">
         <option value="hide">-- اسم صاحب الحجز --</option>
         <option value='noAccount'>بدون اسم</option>
         {% for user in users %}

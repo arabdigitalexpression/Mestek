@@ -17,7 +17,7 @@
 
 
   <div class="col-3 mt-3">
-    <select id="toools" name="toolName" class="form-select w-100">
+    <select id="toools" name="toolName" class="form_select w-100">
       <option value="hide">-- اختر الأداة --</option>
       {% for tool in tools %}
       {% if tool.space_id is none %}
@@ -42,7 +42,7 @@
     </select>
   </div>
     <div class="col-3 mt-3">
-      <select id='selUser'  name="username" class="form-select w-100">
+      <select id='selUser'  name="username" class="form_select w-100">
         <option value="hide">-- اسم صاحب الحجز --</option>
         <option value='noAccount'>بدون اسم</option>
         {% for user in users %}
