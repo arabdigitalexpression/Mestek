@@ -1,4 +1,8 @@
 import os
+from jinja2 import Undefined
+import pymysql
+connection = pymysql.connect(host='localhost',user='root',password='',database='srs',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
+import math
 from flask import (
     render_template, request, redirect,
     url_for, send_file
@@ -104,14 +108,48 @@ def dashboard():
         return redirect(url_for('main_page'))
 
 
-@app.route('/dashboard/spaces')
+@app.route('/dashboard/spaces'  , methods=["GET", "POST"])
 @login_required
 def space_list():
-    data = Space.query.all()
+    i=1 
+    j=10
     if current_user.role.name == "admin":
-        return render_template('dashboard/space/index.html', spaces=data)
-    else:
-        return render_template("spaces.html", spaces=data)
+        data = Space.query.all()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM space")
+        data3 = cursor.fetchone()
+        rows = data3['COUNT(*)']
+        if rows%10==0:pages = rows/10
+        else: pages = math.trunc(rows/10)+1
+
+        if request.method == 'POST':
+            if request.form.get("b") != None: 
+                num = int(request.form.get("b"))
+                global x
+                x = int(request.form.get("b")) 
+                i = int(str(num-1) + "1")
+                j = int(str(num) + "0") 
+            elif request.form.get("next") == "next":
+                try:x
+                except NameError:x=1
+                x+=1
+                print (pages)
+                print (x)
+
+                if x >= pages:x = pages
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")  
+                
+            elif request.form.get("Previous") == "Previous":
+                try:x
+                except NameError:x=1
+                x-=1
+                if x <= 0:x = 1
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")
+        
+        return render_template('dashboard/space/index.html', spaces=data , i=i , j=j  , pages=pages)
+    
 
 
 @app.route('/dashboard/space/<int:id>/delete', methods=['POST'])
@@ -231,14 +269,46 @@ def update_space(id):
 
 
 # Tools
-@app.route('/dashboard/tools')
+@app.route('/dashboard/tools'  , methods=["GET", "POST"])
 @login_required
 def tool_list():
-    data = Tool.query.all()
+    i=1 
+    j=10
     if current_user.role.name == "admin":
-        return render_template('dashboard/tool/index.html', tools=data)
-    else:
-        return render_template("tools.html", tools=data)
+        data = Tool.query.all()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM tool")
+        data2 = cursor.fetchone()
+        rows = data2['COUNT(*)']
+        if rows%10==0:pages = rows/10
+        else: pages = math.trunc(rows/10)+1
+        if request.method == 'POST':
+            if request.form.get("b") != None: 
+                num = int(request.form.get("b"))
+                global x
+                x = int(request.form.get("b")) 
+                i = int(str(num-1) + "1")
+                j = int(str(num) + "0") 
+            elif request.form.get("next") == "next":
+                try:x
+                except NameError:x=1
+                x+=1
+                print (pages)
+                print (x)
+
+                if x >= pages:x = pages
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")  
+                
+            elif request.form.get("Previous") == "Previous":
+                try:x
+                except NameError:x=1
+                x-=1
+                if x <= 0:x = 1
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")
+        return render_template('dashboard/tool/index.html', tools=data , i=i , j=j  , pages=pages)
+    
 
 
 @app.route('/dashboard/tool/<int:id>/delete', methods=['POST'])
@@ -641,14 +711,49 @@ def delete_category(id):
         return redirect(url_for("main_page"))
 
 
-@app.route('/dashboard/reservations/')
+@app.route('/dashboard/reservations/' , methods=["GET", "POST"])
 @login_required
 def get_reservations():
+    i=1 
+    j=10
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
+        cursor = connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM reservation")
+        data = cursor.fetchone()
+        rows = data['COUNT(*)']
+        if rows%10==0:pages = rows/10
+        else: pages = math.trunc(rows/10)+1
+        
+         
+        
+        if request.method == 'POST':
+            if request.form.get("b") != None: 
+                num = int(request.form.get("b"))
+                global x
+                x = int(request.form.get("b")) 
+                i = int(str(num-1) + "1")
+                j = int(str(num) + "0") 
+            elif request.form.get("next") == "next":
+                try:x
+                except NameError:x=1
+                x+=1
+                if x >= pages:x = pages
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")  
+                
+            elif request.form.get("Previous") == "Previous":
+                try:x
+                except NameError:x=1
+                x-=1
+                if x <= 0:x = 1
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")  
+                
+                
         return render_template(
             "dashboard/reservation/index.html",
-            reservations=reservations)
+            reservations=reservations , i=i , j=j  , pages=pages)
     return redirect(url_for("main_page"))
 
 
