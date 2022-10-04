@@ -129,8 +129,8 @@
 							aria-current="page"
 							href="{{url_for('dashboard')}}"
 						>
-							<span data-feather="home" class="align-text-bottom"></span>
-							لوحة القيادة
+						<i class="bi bi-graph-down me-1"></i>
+													لوحة التحكم
 						</a>
 					</li>
 					<h6
@@ -142,16 +142,13 @@
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('space_list')}}">
-								<span data-feather="list" class="align-text-bottom"></span>
+								<i class="bi bi-table me-1"></i>
 								عرض المساحات</a
 							>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('create_space')}}">
-								<span
-									data-feather="plus-circle"
-									class="align-text-bottom"
-								></span>
+								<i class="bi bi-plus-circle me-1"></i>
 								إنشاء مساحة</a
 							>
 						</li>
@@ -165,16 +162,13 @@
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('tool_list')}}">
-								<span data-feather="list" class="align-text-bottom"></span>
+								<i class="bi bi-table me-1"></i>
 								عرض الأدوات
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('create_tool')}}">
-								<span
-									data-feather="plus-circle"
-									class="align-text-bottom"
-								></span>
+								<i class="bi bi-plus-circle me-1"></i>
 								إنشاء الأداة
 							</a>
 						</li>
@@ -188,16 +182,13 @@
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('user_list')}}">
-								<span data-feather="list" class="align-text-bottom"></span>
+								<i class="bi bi-people-fill me-1"></i>
 								عرض المستخدمين
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('create_user')}}">
-								<span
-									data-feather="plus-circle"
-									class="align-text-bottom"
-								></span>
+								<i class="bi bi-plus-circle me-1"></i>
 								إنشاء مستخدم
 							</a>
 						</li>
@@ -211,13 +202,13 @@
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_roles')}}">
-								<span data-feather="unlock" class="align-text-bottom"></span>
+								<i class="bi bi-unlock-fill me-1"></i>
 								الصلاحيات
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_categories')}}">
-								<span data-feather="bookmark" class="align-text-bottom"></span>
+								<i class="bi bi-tags-fill me-1"></i>
 								التصنيفات
 							</a>
 						</li>
@@ -231,19 +222,19 @@
 					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_reservations')}}">
-								<span data-feather="unlock" class="align-text-bottom"></span>
+								<i class="bi bi-table me-1"></i>
 								عرض الحجوزات
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="#">
-								<span data-feather="bookmark" class="align-text-bottom"></span>
+								<i class="bi bi-plus-circle me-1"></i>
 								إنشاء حجز
 							</a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_Calender')}}">
-								<span data-feather="calendar" class="align-text-bottom"></span>
+								<i class="bi bi-calendar-date-fill me-1"></i>
 								تقويم
 							</a>
 						</li>
@@ -260,11 +251,7 @@
 <script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"
 ></script>
 <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
-<script
-	src="../../static/js/feather.min.js"
-	integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
-	crossorigin="anonymous"
-></script>
+
 <script
 	src="../../static/js/Chart.min.js"
 	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
