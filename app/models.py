@@ -122,6 +122,11 @@ reservation_calendar = db.Table(
     db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id'))
 )
 
+reservation_tool = db.Table(
+    'reservation_tool', db.Model.metadata,
+    db.Column('reservation_id', db.Integer, db.ForeignKey('reservation.id')),
+    db.Column('tool_id', db.Integer, db.ForeignKey('tool.id'))
+)
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -134,9 +139,12 @@ class Reservation(db.Model):
     )
     full_price = db.Column(db.Float, nullable=False)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
-    tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=True)
     calendars = db.relationship(
         'Calendar', secondary=reservation_calendar,
+        backref=db.backref('reservations')
+    )
+    tools = db.relationship(
+        'Tool', secondary=reservation_tool,
         backref=db.backref('reservations')
     )
     intervals = db.relationship('Interval', cascade="all, delete", backref='tool', lazy=True)
