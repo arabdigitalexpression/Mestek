@@ -1,7 +1,7 @@
 import os
 from flask import (
     render_template, request, redirect,
-    url_for, send_file
+    url_for, send_file, jsonify
 )
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
@@ -1084,7 +1084,13 @@ def get_Calender():
            )
     return redirect(url_for("main_page"))
 
-@app.route('/dashboard/ccalender')
+@app.route('/api/dashboard/reservations/')
 @login_required
-def calender_data():
-    cdata = Reservation.query.all()
+def get_reservations_data():
+    if current_user.role.name == "admin":
+        reservations = Reservation.query.all()
+        result = [{  "type": reservation.type.name,
+                    "calendar":Calendar.day.name,
+                     
+                     } for reservation in reservations]
+        return jsonify(result)
