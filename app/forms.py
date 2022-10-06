@@ -18,13 +18,13 @@ class RoleCategoryForm(FlaskForm):
     name = StringField(
         'الاسم', validators=[DataRequired(), Length(max=50)],
         render_kw={
-            "class": "form-control",
+            "class": "form-control rounded-0",
         }
     )
     colorCode = StringField(
         'اللون', validators=[DataRequired(), Length(max=10)],
         render_kw={
-            "class": "form-control", "title": "Choose your color"
+            "class": "form-control rounded-0", "title": "Choose your color"
         }
     )
 
@@ -86,23 +86,23 @@ class SignupForm(FlaskForm):
 class EditUserForm(FlaskForm):
     firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
                             render_kw={
-                                "class": "form-control",
+                                "class": "form-control rounded-0 my-2",
                             })
     lastName = StringField('الاسم الأخير', validators=[DataRequired(), Length(min=3, max=20)],
                            render_kw={
-                               "class": "form-control",
+                               "class": "form-control rounded-0 my-2",
                            })
     userName = StringField('إسم المستخدم', validators=[DataRequired(), Length(min=3, max=20)],
                            render_kw={
-                               "class": "form-control mb-1",
+                               "class": "form-control rounded-0 my-2",
                            })
     email = EmailField('البريد الإلكترونى', validators=[DataRequired()],
                        render_kw={
-                           "class": "form-control mb-1",
+                           "class": "form-control rounded-0 my-2",
                        })
-    submit = SubmitField('حفظ',
+    submit = SubmitField('تعديل',
                          render_kw={
-                             "class": "w-100 btn btn-lg btn-dark rounded-0",
+                             "class": "btn btn-dark rounded-0 my-3",
                          })
 
     def validate_on_submit(self):
@@ -122,19 +122,19 @@ class EditUserForm(FlaskForm):
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField('كلمة المرور الحالية', validators=[DataRequired(), Length(min=6, max=20)],
                              render_kw={
-                                 "class": "form-control",
+                                 "class": "form-control rounded-0 my-2",
                              })
     password = PasswordField('كلمة المرور الجديدة', validators=[DataRequired(), Length(min=6, max=20)],
                              render_kw={
-                                 "class": "form-control",
+                                 "class": "form-control rounded-0 my-2",
                              })
     confirm_password = PasswordField('تأكيد كلمة المرور', validators=[DataRequired(), EqualTo('password')],
                                      render_kw={
-                                         "class": "form-control",
+                                         "class": "form-control rounded-0 my-2",
                                      })
     submit = SubmitField('حفظ',
                          render_kw={
-                             "class": "w-100 btn btn-lg btn-dark rounded-0",
+                             "class": "btn btn-dark rounded-0 my-3",
                          })
 
 
@@ -142,12 +142,12 @@ class SpaceForm(FlaskForm):
     name = StringField(
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
         render_kw={
-            "placeholder": "أسم المساحة", "class": "form-control",
+            "placeholder": "أسم المساحة", "class": "form-control rounded-0",
         }
     )
     price = FloatField('السعر', validators=[DataRequired()],
                        render_kw={
-        "placeholder": "السعر", "class": "form-control",
+        "placeholder": "السعر", "class": "form-control rounded-0",
     })
     has_operator = BooleanField('مشرف؟',
                                 render_kw={
@@ -156,19 +156,19 @@ class SpaceForm(FlaskForm):
                                 )
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5"
+        "placeholder": "الوصف", "class": "form-control rounded-0", "rows": "5"
     }
     )
     guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control", "rows": "5"
+        "placeholder": "قواعد", "class": "form-control rounded-0", "rows": "5"
     }
     )
     images = MultipleFileField('الصور', name="images", validators=[
         # FileRequired(),
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
     ], render_kw={
-        "class": "form-control"
+        "class": "form-control rounded-0"
     }
     )
 
@@ -176,11 +176,11 @@ class SpaceForm(FlaskForm):
 class ToolForm(FlaskForm):
     name = StringField('أسم اﻹداة', validators=[DataRequired(), Length(max=50)],
                        render_kw={
-        "placeholder": "أسم اﻹداة", "class": "form-control",
+        "placeholder": "أسم اﻹداة", "class": "form-control rounded-0",
     })
     price = FloatField('السعر', validators=[DataRequired()],
                        render_kw={
-        "placeholder": "السعر", "class": "form-control",
+        "placeholder": "السعر", "class": "form-control rounded-0",
     })
     has_operator = BooleanField('مشرف؟',
                                 render_kw={
@@ -188,11 +188,11 @@ class ToolForm(FlaskForm):
                                 })
     description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5"
+        "placeholder": "الوصف", "class": "form-control rounded-0", "rows": "5"
     })
     guidelines = TextAreaField('قواعد', validators=[DataRequired(), Length(max=256)],
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control", "rows": "5"
+        "placeholder": "قواعد", "class": "form-control rounded-0", "rows": "5"
     })
     space = SelectField('المساحة', render_kw={
         "class": "form-select",
@@ -201,7 +201,7 @@ class ToolForm(FlaskForm):
         # FileRequired(),
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
     ], render_kw={
-        "class": "form-control"
+        "class": "form-control rounded-0"
     })
 
 
@@ -209,7 +209,7 @@ class ConfirmForm(FlaskForm):
     value = StringField(
         '', validators=[DataRequired(), Length(max=50)],
         render_kw={
-            "class": "form-control",
+            "class": "form-control rounded-0",
         }
     )
 
