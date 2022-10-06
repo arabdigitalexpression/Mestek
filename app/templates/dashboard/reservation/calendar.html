@@ -1,0 +1,13 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} التقويم {% endblock %}
+{% block heading %} التقويم {% endblock %}
+{% block dashboard_styles %}
+    <link rel="stylesheet" href="{{ url_for('static',filename='cmain.min.css') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static',filename='cstyle.css') }}"/>
+{% endblock %}
+{% block content %} 
+<div id='calendar'></div>
+<script src="{{ url_for('static',filename='cmain.min.js') }}"></script>
+<script src="{{ url_for('static',filename='cstyle.js') }}"></script>
+
+{% endblock %}

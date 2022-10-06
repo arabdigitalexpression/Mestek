@@ -1,7 +1,7 @@
 import os
 from flask import (
     render_template, request, redirect,
-    url_for, send_file, flash
+    url_for, send_file, jsonify, flash
 )
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
@@ -1126,4 +1126,27 @@ def userReservationSpace():
                     return redirect(url_for("main_page"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main_page"))
-        return render_template('/default/reservation/space.html' , reserve1=reserve , tools=tool)
+
+
+
+@app.route('/dashboard/calendar/')
+@login_required
+
+def get_Calender():
+    if current_user.role.name == "admin":
+        
+        return render_template(
+            "dashboard/reservation/calendar.html"
+           )
+    return redirect(url_for("main_page"))
+
+@app.route('/api/dashboard/reservations/')
+@login_required
+def get_reservations_data():
+    if current_user.role.name == "admin":
+        reservations = Reservation.query.all()
+        result = [{  "type": reservation.type.name,
+                    "calendar":Calendar.day.name,
+                     
+                     } for reservation in reservations]
+        return jsonify(result)
