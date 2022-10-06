@@ -3,23 +3,21 @@
 	rel="canonical"
 	href="https://getbootstrap.com/docs/5.2/examples/dashboard-rtl/"
 />
-<link
-	href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
-	rel="stylesheet"
-/>
 
 <!-- Custom styles for this template -->
 <link
 	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
 	rel="stylesheet"
 />
+
 <link
 	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"
+	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
 />
-<link 
+<link
 	rel="stylesheet"
-	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"/>
+	href="{{ url_for('static',filename='styles/dashboard-cards.css')}}"
+/>
 <style>
 	body {
 		font-family: "Tajawal", sans-serif;
@@ -76,9 +74,10 @@
 		-webkit-overflow-scrolling: touch;
 	}
 </style>
-{% endblock %} {% block body %}
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	{% block header %}
+{% endblock %} {% block body %} {% block header %}
+<nav
+	class="navbar navbar-dark sticky-top bg-dark d-flex flex-md-nowrap p-0 shadow"
+>
 	<a
 		class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6"
 		href="{{url_for('dashboard')}}"
@@ -101,17 +100,53 @@
 		placeholder="بحث"
 		aria-label="بحث"
 	/>
-	<div class="navbar-nav d-none d-md-block">
-		<div class="nav-item text-nowrap">
-			<a
-				class="nav-link px-3 btn btn-danger btn-sm text-white m-2"
-				href="{{ url_for('logout') }}"
-				>تسجيل الخروج</a
-			>
-		</div>
-	</div>
-	{% endblock %}
-</header>
+	<li class="nav-item dropstart mx-2">
+		<img
+			src="{{ current_user.avatar_url }}"
+			alt="{{ current_user.first_name }} {{ current_user.last_name }}"
+			class="rounded-circle nav-link dropdown-toggle"
+			style="object-fit: cover"
+			width="35"
+			type="button"
+			data-bs-toggle="dropdown"
+			aria-expanded="false"
+		/>
+		<ul class="dropdown-menu dropdown-menu-dark">
+			<li>
+				<a class="dropdown-item" href="#"
+					><a class="dropdown-item" href="{{ url_for('profile') }}">
+						<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
+					</a></a
+				>
+			</li>
+			<li>
+				<a class="dropdown-item" href="#"
+					><a class="dropdown-item" href="#">
+						<i
+							class="bi bi-bell-fill text-white position-relative me-2"
+							type="button"
+							><span
+								class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
+							>
+								<span class="visually-hidden">New alerts</span>
+							</span></i
+						><span>تنبيهات</span>
+					</a></a
+				>
+			</li>
+			<li><hr class="dropdown-divider" /></li>
+			<li>
+				<a
+					class="dropdown-item text-danger fw-bold"
+					href="{{ url_for('logout') }}"
+				>
+					<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
+				</a>
+			</li>
+		</ul>
+	</li>
+</nav>
+{% endblock %}
 
 <div class="container-fluid">
 	<div class="row">
@@ -234,25 +269,33 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="#" class="nav-link" id="show_hide" data-content="toggle-text" >
+							<a
+								href="#"
+								class="nav-link"
+								id="show_hide"
+								data-content="toggle-text"
+							>
 								<span data-feather="bookmark" class="align-text-bottom"></span>
 								إنشاء حجز
 							</a>
 							<div class="content">
 								<ul>
-								<li  class="d-flex align-items-center px-3">
-									<a  href="{{url_for('createReservation')}}" class="nav-link ">
-										<span span data-feather="plus-circle"></span>
-										حجز مساحة
-									</a>
-								</li>
-									
-								<li class=" d-flex align-items-center px-3 ">
-									<a href="{{url_for('createReservationTool')}}" class="nav-link ">
-									<span data-feather="plus-circle" ></span>
-										 حجز أداة
-									</a>
-								</li>
+									<li class="d-flex align-items-center px-3">
+										<a href="{{url_for('createReservation')}}" class="nav-link">
+											<span span data-feather="plus-circle"></span>
+											حجز مساحة
+										</a>
+									</li>
+
+									<li class="d-flex align-items-center px-3">
+										<a
+											href="{{url_for('createReservationTool')}}"
+											class="nav-link"
+										>
+											<span data-feather="plus-circle"></span>
+											حجز أداة
+										</a>
+									</li>
 								</ul>
 							</div>
 						</li>
@@ -266,8 +309,7 @@
 		</main>
 	</div>
 </div>
-<script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"
-></script>
+<script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"></script>
 <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
 <script
 	src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
