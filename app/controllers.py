@@ -82,12 +82,12 @@ def login_page():
         if user is None:
             msg = "Invalid username or password."
             # render_template does autoescaping html form input data
-            return render_template("default/login.html", form=form, msg=msg)
+            return render_template("default/auth/login.html", form=form, msg=msg)
 
         if not user.verify_password(password):
             msg = "Invalid username or password."
             # render_template does autoescaping html form input data
-            return render_template("default/login.html", form=form, msg=msg)
+            return render_template("default/auth/login.html", form=form, msg=msg)
 
         # remember the user when he visits other pages
         # TODO: add remember me button to the form
