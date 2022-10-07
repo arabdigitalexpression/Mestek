@@ -17,7 +17,7 @@ from app.models import (
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm, LoginForm, SpaceForm, ToolForm
 )
-
+import datetime
 
 @app.route("/")
 @login_required
@@ -805,32 +805,35 @@ def createReservation():
                     user_id = user_id,
                     full_price = full_price
                 )
-                date_range = request.form.get("date_from_to")
+                start_date_range = request.form.get("start_date_range")
+                end_date_range = request.form.get("end_date_range")
                 date_no_range = request.form.get("date_from_to_no_range")
                 ########## Save Range_date ###########################
-                print ( date_range)
-                if date_range != "": 
-                    
-                    dates = date_range.split(",")
-                    start_date = dates[0].split("/")
-                    end_date = dates[1].split("/")
-                    days = int (start_date[1])
-                    counter = int(end_date[1]) - int(start_date[1])
-                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                
+                if start_date_range and end_date_range != "": 
+ 
+                    start_date = start_date_range.split("/")
+                    end_date = end_date_range.split("/")
+                    days = int (start_date[2])
+                    counter = int(end_date[2]) - int(start_date[2])
+                    if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
                         for count in range(counter+1):
-                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                            print(ans.strftime("%A") )
+                            if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                                final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                Dates = Calendar(
+                                    day = final_date
+                                )
+                                ##############################################################
+                                db.session.add(Dates)
                             days += 1
-                            Dates = Calendar(
-                                day = final_date
-                            )
-                            ##############################################################
-                            db.session.add(Dates)
                 ########## Save no_ Range_date ###########################
                 elif date_no_range !="" :
                     
-                    dates = date_no_range.split(", ")
+                    dates = date_no_range.split(",")
                     
-                    print ( dates )
+                    
                     for final_date in dates:
                         Dates = Calendar(
                             day = final_date
@@ -842,10 +845,6 @@ def createReservation():
                     etime = time2.split(" ")
                     Time1 = int(ftime[0])
                     Time2 = int(etime[0])
-                    if ftime[1] == "م":
-                        Time1 += 12
-                    if etime[1] == "م":
-                        Time2 += 12
                     finaltime = Interval (
                         start_time = str(Time1) +":00:00",
                         end_time = str(Time2) +":00:00",
@@ -861,8 +860,8 @@ def createReservation():
                 else:
                     name = request.form.get("spaceName")
                     val1 = name.split('&')
-                    datetime = request.form.get('datetimes')
-                    return render_template('dashboard/reservation/createReservation/adminSpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1] , users = users)
+                    datetime1 = request.form.get('datetimes')
+                    return render_template('dashboard/reservation/createReservation/adminSpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1] , users = users)
             if request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
                 val = name.split('&')
@@ -889,28 +888,31 @@ def createReservation():
                     full_price = val[3]
                 )
                 db.session.add(tools)
-                date_range = request.form.get("date_from_to")
+                start_date_range = request.form.get("start_date_range")
+                end_date_range = request.form.get("end_date_range")
                 date_no_range = request.form.get("date_from_to_no_range")
                 ########## Save Range_date ###########################
-                print ( date_range)
-                if date_range != "":    
-                    dates = date_range.split(",")
-                    start_date = dates[0].split("/")
-                    end_date = dates[1].split("/")
-                    days = int (start_date[1])
-                    counter = int(end_date[1]) - int(start_date[1])
-                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                if start_date_range and end_date_range != "": 
+ 
+                    start_date = start_date_range.split("/")
+                    end_date = end_date_range.split("/")
+                    days = int (start_date[2])
+                    counter = int(end_date[2]) - int(start_date[2])
+                    if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
                         for count in range(counter+1):
-                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
+                            ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                            print(ans.strftime("%A") )
+                            if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                                final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                Dates = Calendar(
+                                    day = final_date
+                                )
+                                ##############################################################
+                                db.session.add(Dates)
                             days += 1
-                            Dates = Calendar(
-                                day = final_date
-                            )
-                            ##############################################################
-                            db.session.add(Dates)
                 ########## Save no_ Range_date ###########################
                 elif date_no_range !="" :
-                    dates = date_no_range.split(", ")
+                    dates = date_no_range.split(",")
                     for final_date in dates:
                         Dates = Calendar(
                             day = final_date
@@ -923,15 +925,12 @@ def createReservation():
                     etime = time2.split(" ")
                     Time1 = int(ftime[0])
                     Time2 = int(etime[0])
-                    if ftime[1] == "م":
-                        Time1 += 12
-                    if etime[1] == "م":
-                        Time2 += 12
                     finaltime = Interval (
                         start_time = str(Time1) +":00:00",
                         end_time = str(Time2) +":00:00",
                     )
                     db.session.add (finaltime)
+                    
                 db.session.commit()
                 return redirect(url_for("get_reservations"))
             if request.form.get("cancel") == "cancel":
@@ -968,22 +967,27 @@ def createReservationTool():
                 user_id = user_id,
                 full_price = full_price
             )
-            date = request.form.get("datetimes")
-            print ( date)
-            dates = date.split(",")
-            start_date = dates[0].split("/")
-            end_date = dates[1].split("/")
-            days = int (start_date[1])
-            counter = int(end_date[1]) - int(start_date[1])
-            if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
-                for count in range(counter+1):
-                    final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
-                    days += 1
-                    Dates = Calendar(
-                        day = final_date
-                    )
-                    ##############################################################
-                    db.session.add(Dates)
+            start_date_range = request.form.get("start_date_range")
+            end_date_range = request.form.get("end_date_range")   
+            
+            if start_date_range and end_date_range != "": 
+ 
+                start_date = start_date_range.split("/")
+                end_date = end_date_range.split("/")
+                days = int (start_date[2])
+                counter = int(end_date[2]) - int(start_date[2])
+                if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
+                    for count in range(counter+1):
+                        ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                        print(ans.strftime("%A") )
+                        if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                            final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                            Dates = Calendar(
+                                day = final_date
+                            )
+                            ##############################################################
+                            db.session.add(Dates)
+                        days += 1
             db.session.add(tools)
             db.session.commit()
             return redirect(url_for("get_reservations"))  
@@ -998,36 +1002,44 @@ def userReservationTool():
     tool = Tool.query.all()
     if current_user.role.name == "user":
         if request.method == 'POST':
-            value = request.form.get("toolName")
-            val = value.split('&')
-            user_id = current_user.get_id()
-            tools = Reservation(
-                tool_id = val[0],
-                type = "tool",
-                payment_status = "no_payment",
-                user_id = user_id,
-                full_price = val[1]
-            )
-            db.session.add(tools)
+            if request.form.get("confirm") == "confirm":
+                value = request.form.get("toolName")
+                val = value.split('&')
+                user_id = current_user.get_id()
+                tools = Reservation(
+                    tool_id = val[0],
+                    type = "tool",
+                    payment_status = "no_payment",
+                    user_id = user_id,
+                    full_price = val[1]
+                )
+                db.session.add(tools)
 
-            date = request.form.get("datetimes")
-            print ( date)
-            dates = date.split(",")
-            start_date = dates[0].split("/")
-            end_date = dates[1].split("/")
-            days = int (start_date[1])
-            counter = int(end_date[1]) - int(start_date[1])
-            if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
-                for count in range(counter+1):
-                    final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
-                    days += 1
-                    Dates = Calendar(
-                        day = final_date
-                    )
-                    ##############################################################
-                    db.session.add(Dates)
-            db.session.commit()
-            return redirect(url_for("main_page"))
+                start_date_range = request.form.get("start_date_range")
+                end_date_range = request.form.get("end_date_range")   
+                
+                if start_date_range and end_date_range != "": 
+                
+                    start_date = start_date_range.split("/")
+                    end_date = end_date_range.split("/")
+                    days = int (start_date[2])
+                    counter = int(end_date[2]) - int(start_date[2])
+                    if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
+                        for count in range(counter+1):
+                            ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                            print(ans.strftime("%A") )
+                            if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                                final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                Dates = Calendar(
+                                    day = final_date
+                                )
+                                ##############################################################
+                                db.session.add(Dates)
+                            days += 1
+                db.session.commit()
+                return redirect(url_for("main_page"))
+            elif request.form.get("cancel") == "cancel":
+                return redirect(url_for("main_page"))
         return render_template('/default/tool.html' ,tools=tool)
 
 
@@ -1051,24 +1063,29 @@ def userReservationSpace():
                     )
                 db.session.add(space)
 
-                date_range = request.form.get("date_from_to")
+                start_date_range = request.form.get("start_date_range")
+                end_date_range = request.form.get("end_date_range")
                 date_no_range = request.form.get("date_from_to_no_range")
                 ########## Save Range_date ###########################
-                if date_range != "":       
-                    dates = date_range.split(",")
-                    start_date = dates[0].split("/")
-                    end_date = dates[1].split("/")
-                    days = int (start_date[1])
-                    counter = int(end_date[1]) - int(start_date[1])
-                    if start_date[0] == end_date[0] and start_date[2] == end_date[2] :
+                
+                if start_date_range and end_date_range != "": 
+ 
+                    start_date = start_date_range.split("/")
+                    end_date = end_date_range.split("/")
+                    days = int (start_date[2])
+                    counter = int(end_date[2]) - int(start_date[2])
+                    if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
                         for count in range(counter+1):
-                            final_date = start_date[2] + "-" + start_date[0] + "-" + str(days)
-                            days += 1
-                            Dates = Calendar(
-                                day = final_date
-                            )
+                            ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                            print(ans.strftime("%A") )
+                            if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                                final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                Dates = Calendar(
+                                    day = final_date
+                                )
                                 ##############################################################
-                            db.session.add(Dates)
+                                db.session.add(Dates)
+                            days += 1
                         db.session.commit()
                     ########## Save no_ Range_date ###########################
                 elif date_no_range !="" :
@@ -1082,15 +1099,11 @@ def userReservationSpace():
                         time2 = request.form.get ("time2_picker_no_range")  
                         ftime = time1.split(" ")
                         etime = time2.split(" ")
-                        Time1 = int(ftime[0])
-                        Time2 = int(etime[0])
-                        if ftime[1] == "م":
-                            Time1 += 12
-                        if etime[1] == "م":
-                            Time2 += 12
+                        Time1 = ftime[0]
+                        Time2 = etime[0]
                         finaltime = Interval (
-                            start_time = str(Time1) +":00:00",
-                            end_time = str(Time2) +":00:00",
+                            start_time = str(Time1) +":00",
+                            end_time = str(Time2) +":00",
                         )
                         db.session.add (finaltime)
                     db.session.commit()
@@ -1101,8 +1114,8 @@ def userReservationSpace():
                 else:
                     name = request.form.get("spaceName")
                     val1 = name.split('&')
-                    datetime = request.form.get('datetimes')
-                    return render_template('default/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime ,price=val1[1]) 
+                    datetime1 = request.form.get('datetimes')
+                    return render_template('default/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1]) 
             elif request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
                 val = name.split('&')
