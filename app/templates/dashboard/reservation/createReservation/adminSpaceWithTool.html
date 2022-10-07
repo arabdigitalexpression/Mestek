@@ -46,9 +46,12 @@
 
     <div class="col-7 mx-5">
       <div class="col-4">
-        <input type="text" class="form-control text-center date-picker-range range_HS w-100" placeholder="-- ميعاد الحجز --"
-          name="datetime" onchange="range_date()" />
-        <input type="hidden" name="date_from_to" class="date_from_to">
+        <div class="input-daterange input-group">
+          <input type="text" class=" form-control text-center date-picker-range-1 range_HS " name="start_date_range"
+            placeholder="من" />
+          <input type="text" class="form-control text-center date-picker-range-2 range_HS " name="end_date_range"
+            placeholder="الي" />
+        </div>
       </div>
       <div id="picker-no-range" class="row align-items-center">
         <div class="col-4">
@@ -56,13 +59,22 @@
             placeholder="-- ميعاد الحجز --" onchange="no_range_date()">
         </div>
         <div class="col-3 ms-5">
-          
-          <input type="text" name="time_picker_no_range" id="time-picker-no-range" class="form-select text-center w-100"
-             placeholder="من الساعة" onchange="upto()">
+          <select name="time_picker_no_range" id="time-picker-no-range" class="form-select text-center w-100" onchange="upto()">
+            <option value="hide">من الساعة</option>
+            <option value="10">10 ص</option>
+            <option value="12">12 م</option>
+            <option value="14">2 م</option>
+            <option value="16">4 م</option>
+            </select>
         </div>
         <div class="col-2">
-          <input type="text" name="time2_picker_no_range" placeholder="الي" id="time2-picker-no-range" class="form-select text-center w-100"
-            >
+          <select name="time2_picker_no_range" id="time2-picker-no-range" class="form-select text-center w-100">
+            <option value="hide">الي</option> 
+            <option value="12">12 م</option>
+            <option value="14">2 م</option>
+            <option value="16">4 م</option>
+            <option value="18">6 م</option>
+            </select>
         </div>
         <input type="hidden" name="date_from_to_no_range" id="date_from_to_no_range">
       </div>
