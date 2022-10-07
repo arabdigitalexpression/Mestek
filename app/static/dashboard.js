@@ -1,7 +1,8 @@
-$('.range_HS').hide();
-$('#picker-no-range').hide();
-$("#time2-picker-no-range").prop('disabled', true);
-
+document.addEventListener("DOMContentLoaded", function() {
+  $('.range_HS').hide();
+  $('#picker-no-range').hide();
+  $("#time2-picker-no-range").prop('disabled', true);
+});
 
 
 
@@ -22,108 +23,122 @@ function myFunction() {
   }
 }
 
-mobiscroll.setOptions({
-  locale: mobiscroll.localeAr,  
-     theme: 'ios',                 
-     themeVariant: 'light'        
- });
+
 
  var date = new Date();
- var current_date = date.getFullYear()+"-"+(date.getMonth()+1)+"-"+ date.getDate();
+ current_date = date.getFullYear()+ (date.getMonth()+1)+"/"+date.getDate()+"/";
+ last_month = date.getMonth() + 3;
+ console.log(last_month)
+ if (last_month > 12) last_month -= 12;
+ last_date = date.getFullYear() + "/" + (last_month) + "/" + date.getDate(); 
 
  //        Range selector
- mobiscroll.datepicker('.date-picker-range', {
-     controls: ['calendar' ],    
-     display: 'anchored' ,
-     selectMultiple: true,  
-     touchUi: true,
-     select: 'range',
- rangeHighlight: true,
- showRangeLabels: true, 
- min: current_date,
- dateFormat: 'MM/DD/YYYY',
- invalid: [
-  {
-    recurring: {
-      repeat: 'weekly',
-      weekDays: 'SA,FR'
-    }
-  }
-]
- });
-
+ $('.input-daterange').datepicker({
+  startDate: current_date,
+  endDate: last_date,
+  daysOfWeekDisabled: "5,6",
+  todayHighlight: true,
+  format: "yyyy/mm/dd",
+  multidateSeparator: " "
+});
  function range_date(){
-  x= document.querySelector(".date-picker-range").value;
-  val = x.split (" - ");
+  x = document.querySelector(".date-picker-range").value;
+  val = x.split(" - ");
   start = new Date(val[0]);
   end = new Date(val[1]);
   var Difference = end.getTime() - start.getTime();
   var days = (Difference / (1000 * 3600 * 24)) + 1;
   console.log(days);
-  console.log (val[0]);
-  console.log (val[1]);
+  console.log(val[0]);
+  console.log(val[1]);
   $(".date-picker-range").val("تم تحديد " + days + " / يوم")
   $(".date_from_to").val(val[0] + "," + val[1])
  }
 
  //     No_range selector
- mobiscroll.datepicker('#date-picker-no-range', {
-  controls: ['calendar'],
-  dateFormat: 'YYYY-MM-DD',
-  selectMultiple: true,
-  selectCounter: true,
-  min: current_date,
-  invalid: [
-		{
-			recurring: {
-				repeat: 'weekly',
-				weekDays: 'SA,FR'
-			}
-		}
-	]
+ $('#date-picker-no-range').datepicker({
+  startDate: current_date,
+  endDate: last_date,
+  multidate: true,
+  daysOfWeekDisabled: "5,6",
+  todayHighlight: true,
+  format: "yyyy/mm/dd",
 });
 function no_range_date(){
   x= document.getElementById("date-picker-no-range").value;
   document.getElementById("date_from_to_no_range").value= x
-  val = x.split (", ");
+  val = x.split (",");
   days = val.length ;
   console.log(document.getElementById("date_from_to_no_range").value);
   $("#date-picker-no-range").val("تم تحديد " + days + " / يوم")
  }
-mobiscroll.datepicker('#time-picker-no-range', {
-  controls: ['time'],
-  timeFormat: 'hh A',
-  invalid: [
-		{
-			start: '17:00',
-			end: '10:00',
-			recurring: {
-				repeat: 'daily'
-			}
-		}
-	]
-});
+
+
+
+ //    time
+for (i = 9; i <= 15; i++) {
+  val = i;
+  option = i;
+  pm_am = " ص"
+  if (i > 12) {
+      option -= 12;
+      pm_am = " م"
+  }
+  else if (i == 12) {
+      pm_am = " م"
+  }
+  $('#time-picker-no-range').append($('<option>', {
+      value: val,
+      text: option + pm_am,
+  }));
+  $('#time-picker-no-range').append($('<option>', {
+      value: val + ":30",
+      text: option + ":30" + pm_am,
+  }));
+}
 function upto(){
- time1 = document.getElementById("time-picker-no-range").value.substring(0,2);
- time2 = parseInt (time1);
- if (time2 < 9 ) time2 += 12;
- console.log(time2)
- $("#time2-picker-no-range").prop('disabled', false)
+  max_res =6;
+    res = 0;
+    value = document.getElementById("time-picker-no-range").value
+    // console.log (value )
 
+    $('#time2-picker-no-range')
+    .find('option')
+    .remove()
+    .end()
+    .append('<option value="hide">الي</option>')
+    .val('hide');
 
- mobiscroll.datepicker('#time2-picker-no-range', {
-  controls: ['time'],
-  timeFormat: 'hh A',
-  valid: [
-    {
-			start: time2 + ":00",
-			end: '18:00',
-			recurring: {
-				repeat: 'daily'
-			}
-		}
-	]
-});
+    if (value == "hide") {
+        $("#time2-picker-no-range").prop('disabled', true)
+    }
+    else {
+        $("#time2-picker-no-range").prop('disabled', false);
+        time = value.split(":")
+        hours = parseInt(time[0]) + 2;
+        if (time[1] == undefined) minutes = null;
+        else minutes = ":" + time[1];
+        // console.log(hours);
+        for (hours; hours <= 18; hours = hours + 2) {
+            res += 2;
+            if (res <= max_res) {
+                Hours = hours;
+                pm_am = " ص"
+                if (Hours > 12) {
+                    Hours -= 12;
+                    pm_am = " م"
+                }
+                else if (Hours == 12) {
+                    pm_am = " م"
+                }
+                $('#time2-picker-no-range').append($('<option>', {
+                    value: hours + minutes,
+                    text: Hours + minutes + pm_am,
+                }));
+
+            }
+        }
+    }
 }
 
 
@@ -175,57 +190,57 @@ ClassicEditor.create( document.querySelector( '#guidelines' ), {
 } )
 
 
-(() => {
-  'use strict'
+// (() => {
+//   'use strict'
 
-  feather.replace({ 'aria-hidden': 'true' })
+//   feather.replace({ 'aria-hidden': 'true' })
 
-  // Graphs
-  const ctx = document.getElementById('myChart')
-  // eslint-disable-next-line no-unused-vars
-  const myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: [
-        'الأحد',
-        'الإثنين',
-        'الثلاثاء',
-        'الأربعاء',
-        'الخميس',
-        'الجمعة',
-        'السبت'
-      ],
-      datasets: [{
-        data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
-        ],
-        lineTension: 0,
-        backgroundColor: 'transparent',
-        borderColor: '#007bff',
-        borderWidth: 4,
-        pointBackgroundColor: '#007bff'
-      }]
-    },
-    options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: false
-          }
-        }]
-      },
-      legend: {
-        display: false
-      }
-    }
-  })
-})()
+//   // Graphs
+//   const ctx = document.getElementById('myChart')
+//   // eslint-disable-next-line no-unused-vars
+//   const myChart = new Chart(ctx, {
+//     type: 'line',
+//     data: {
+//       labels: [
+//         'الأحد',
+//         'الإثنين',
+//         'الثلاثاء',
+//         'الأربعاء',
+//         'الخميس',
+//         'الجمعة',
+//         'السبت'
+//       ],
+//       datasets: [{
+//         data: [
+//           15339,
+//           21345,
+//           18483,
+//           24003,
+//           23489,
+//           24092,
+//           12034
+//         ],
+//         lineTension: 0,
+//         backgroundColor: 'transparent',
+//         borderColor: '#007bff',
+//         borderWidth: 4,
+//         pointBackgroundColor: '#007bff'
+//       }]
+//     },
+//     options: {
+//       scales: {
+//         yAxes: [{
+//           ticks: {
+//             beginAtZero: false
+//           }
+//         }]
+//       },
+//       legend: {
+//         display: false
+//       }
+//     }
+//   })
+// })()
 
 
 
