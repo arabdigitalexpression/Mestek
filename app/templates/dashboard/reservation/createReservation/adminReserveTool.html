@@ -26,11 +26,13 @@
       {% endfor %}
     </select>
   </div>
-  <div class="col-3 mt-3">
-    <input type="text" class="form-control  date-picker-range" name="datetime" placeholder="-- ميعاد الحجز --"
-      onchange="range_date()">
-    <input type="hidden" class="date_from_to" name="datetimes">
-    <p id="cost" style="color:red;"></p>
+  <div class="col-3 mt-3 ">
+    <div class="input-daterange input-group">
+      <input type="text" class=" form-control text-center date-picker-range-1 " name="start_date_range"
+        placeholder="من" />
+      <input type="text" class="form-control text-center date-picker-range-2 " name="end_date_range"
+        placeholder="الي" />
+    </div>
   </div>
 
   <div class="col-3 mt-3">
