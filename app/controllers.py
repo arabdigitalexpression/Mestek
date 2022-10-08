@@ -1000,6 +1000,8 @@ def createReservationTool():
 @login_required
 def userReservationTool():
     tool = Tool.query.all()
+    res = Reservation()
+    cal = Calendar()
     if current_user.role.name == "user":
         if request.method == 'POST':
             if request.form.get("confirm") == "confirm":
@@ -1036,6 +1038,8 @@ def userReservationTool():
                                 ##############################################################
                                 db.session.add(Dates)
                             days += 1
+                    # res.calendars.append(cal)
+                    # db.session.add(res)
                 db.session.commit()
                 return redirect(url_for("main_page"))
             elif request.form.get("cancel") == "cancel":

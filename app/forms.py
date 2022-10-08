@@ -98,7 +98,7 @@ class SpaceForm(FlaskForm):
                                     "class": "form-check-input"
                                 }
                                 )
-    description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
+    description = TextAreaField('الوصف', validators=[ Length(max=128)],
                                 render_kw={
         "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     }
@@ -130,7 +130,7 @@ class ToolForm(FlaskForm):
                                 render_kw={
                                     "class": "form-check-input"
                                 })
-    description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
+    description = TextAreaField('الوصف', validators=[ Length(max=128)],
                                 render_kw={
         "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     })

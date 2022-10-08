@@ -83,9 +83,8 @@
     <div class="col-3 ">
       <select class='form_select text-center w-100' name="username">
         <option value="hide">-- اسم صاحب الحجز --</option>
-        <option value='noAccount'>بدون اسم</option>
         {% for user in users %}
-        <option value="{{user.id}}">{{user.first_name}}&nbsp;{{user.last_name}}</option>
+        <option value="{{user.id}}">{{user.email}}</option>
         {% endfor %}
       </select>
     </div>
