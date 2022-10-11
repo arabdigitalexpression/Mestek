@@ -16,8 +16,6 @@ def load_user(id):
     return User.query.get(int(id))
 
 
- 
-
 # The UserMixin adds stuff for us like is_authenticated property
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +25,8 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=True)
     password = db.Column(db.String(128), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        'category.id'), nullable=False)
 
     # created at date when user registered
     # Date is year-month-day
@@ -42,11 +41,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
-    
     def make_password(self, password):
         self.password = generate_password_hash(password)
 
-    
     def verify_password(self, password):
         return check_password_hash(self.password, password)
 
@@ -62,26 +59,27 @@ class User(UserMixin, db.Model):
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    color_code=db.Column(db.String(10), unique=True, nullable=False)
+    color_code = db.Column(db.String(10), unique=True, nullable=False)
     users = db.relationship('User', backref='role', lazy=True)
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    color_code=db.Column(db.String(10), unique=True, nullable=False)
-    users = db.relationship('User', backref='category', lazy=True)   
+    color_code = db.Column(db.String(10), unique=True, nullable=False)
+    users = db.relationship('User', backref='category', lazy=True)
 
 
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text(1024), nullable=False)
-    guidelines = db.Column( db.String(1024), nullable=False)
+    guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='space', lazy=True)
-    reservations = db.relationship('Reservation', cascade="all", backref='space', lazy=True)
+    reservations = db.relationship(
+        'Reservation', cascade="all", backref='space', lazy=True)
     tools = db.relationship('Tool', backref='space', lazy=True)
 
 
@@ -93,7 +91,8 @@ class Tool(db.Model):
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     images = db.relationship('Image', backref='tool', lazy=True)
-    reservations = db.relationship('Reservation', cascade="all", backref='tool', lazy=True)
+    reservations = db.relationship(
+        'Reservation', cascade="all", backref='tool', lazy=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
 
 
@@ -153,12 +152,15 @@ class Reservation(db.Model):
 class Calendar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Date(), nullable=False)
-    intervals = db.relationship('Interval', cascade="all, delete", backref='interval', lazy=True)
+    intervals = db.relationship(
+        'Interval', cascade="all, delete", backref='interval', lazy=True)
 
 
 class Interval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
-    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id', ondelete="CASCADE"), nullable=True)
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservation.id', ondelete="CASCADE"), nullable=True)
+    calendar_id = db.Column(db.Integer, db.ForeignKey(
+        'calendar.id', ondelete="CASCADE"), nullable=True)
+    reservation_id = db.Column(db.Integer, db.ForeignKey(
+        'reservation.id', ondelete="CASCADE"), nullable=True)
