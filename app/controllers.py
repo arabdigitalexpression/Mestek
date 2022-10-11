@@ -1089,8 +1089,13 @@ def get_Calender():
 def get_reservations_data():
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
-        result = [{  "type": reservation.type.name,
-                    "calendar":Calendar.day.name,
-                     
-                     } for reservation in reservations]
+        result=[]
+        for reservation in reservations:
+            dates=[]
+            for cal in reservation.calendars:
+                dates.append(cal.day.strftime("%d/%m/%Y, %H:%M:%S"))
+            result.append({
+                "title": str(reservation.space.name) if reservation.type.name == 'space' else str(reservation.tool.name),
+                "dates": dates
+                }) 
         return jsonify(result)
