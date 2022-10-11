@@ -1,0 +1,254 @@
+{% extends 'dashboard/base.html' %} {% block title %} حجز مساحة {% endblock %}
+{% block content %}
+
+<h2 class="m-3">حجز مساحة</h2>
+
+<form action="{{ url_for('createReservation') }}" method="post">
+	<div class="row align-items-center" style="margin: 60px 80px 50px 0">
+		<div class="col-3">
+			<select
+				id="spacee"
+				name="spaceName"
+				class="form-select text-center w-100"
+			>
+				<option value="hide">{{ name }}</option>
+			</select>
+		</div>
+
+		<div class="col-2">
+			<button
+				type="submit"
+				class="btn rounded-0 btn-danger btn-sm"
+				name="back"
+				value="back"
+			>
+				اختيار المساحة
+			</button>
+		</div>
+
+		<div class="col-2">
+			<select id="toools" name="toolName" class="form-select text-center w-100">
+				<option value="hide">-- اختر الأداة --</option>
+				{% for tool in tools %} {% if id == tool.space_id %}
+				<option value="{{id}}&{{price}}&{{tool.id}}&{{tool.price}}">
+					{{ tool.name }}
+				</option>
+				{% endif %} {% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div class="row align-items-center" style="margin: 60px 80px 0 0">
+		<div class="col-3">
+			<select
+				id="mySelect"
+				class="form-select text-center w-100"
+				onchange="myFunction()"
+			>
+				<option value="hide">-- نوع الحجز --</option>
+				<option value="no_range">حجز ايام منفصلة</option>
+				<option value="range">حجز فترة متصلة</option>
+				<!-- <option value="weekly">حجز اسبوعي لفتره</option> -->
+			</select>
+		</div>
+
+		<div class="col-7 mx-5">
+			<div class="col-4">
+				<input
+					type="text"
+					class="form-control text-center date-picker-range range_HS w-100"
+					placeholder="-- ميعاد الحجز --"
+					name="datetime"
+					onchange="range_date()"
+				/>
+				<input type="hidden" name="date_from_to" class="date_from_to" />
+			</div>
+			<div id="picker-no-range" class="row align-items-center">
+				<div class="col-4">
+					<input
+						class="form-select text-center w-100"
+						type="text"
+						name="date-picker-no-range"
+						id="date-picker-no-range"
+						placeholder="-- ميعاد الحجز --"
+						onchange="no_range_date()"
+					/>
+				</div>
+				<div class="col-3 ms-5">
+					<input
+						type="text"
+						name="time_picker_no_range"
+						id="time-picker-no-range"
+						class="form-select text-center w-100"
+						placeholder="من الساعة"
+						onchange="upto()"
+					/>
+				</div>
+				<div class="col-2">
+					<input
+						type="text"
+						name="time2_picker_no_range"
+						placeholder="الي"
+						id="time2-picker-no-range"
+						class="form-select text-center w-100"
+					/>
+				</div>
+				<input
+					type="hidden"
+					name="date_from_to_no_range"
+					id="date_from_to_no_range"
+				/>
+			</div>
+		</div>
+	</div>
+
+	<div class="row align-items-center" style="margin: 60px 80px 0 0">
+		<div class="col-3">
+			<select class="form-select text-center w-100" name="username">
+				<option value="hide">-- اسم صاحب الحجز --</option>
+				<option value="noAccount">بدون اسم</option>
+				{% for user in users %}
+				<option value="{{user.id}}">
+					{{user.first_name}}&nbsp;{{user.last_name}}
+				</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="col-3 mx-5">
+			<select
+				class="form-select text-center w-100"
+				style="width: 200px"
+				name="payment"
+			>
+				<option value="hide">الحساب</option>
+				<option value="no_payment">لم يتم الدفع</option>
+				<option value="down_payment">تم دفع مبلغ من الحجز</option>
+				<option value="full_payment">تم دفع المبلغ بالكامل</option>
+			</select>
+		</div>
+	</div>
+
+	<div style="margin: 50px 90px 100px 0">
+		<div class="table-responsive">
+			<table class="table table-light table-striped table-hover table-sm">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">الأسم</th>
+						<th scope="col">السعر</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for space in reserve1 %}
+					<tr>
+						<td>{{space.id}}</td>
+						<td>{{space.name}}</td>
+						<td>{{space.price}} جم / الساعة</td>
+						<td>
+							{% if space.has_operator %}
+							<i class="bi bi-check2-circle text-success"></i> {% else %}
+							<i class="bi bi-x-circle text-danger"></i> {% endif %}
+						</td>
+						<td class="d-flex">
+							<button
+								type="button"
+								class="btn btn-info text-white btn-sm mx-1 rounded-0"
+								data-bs-toggle="tooltip"
+								data-bs-placement="top"
+								title="تفاصيل"
+							>
+								<i class="bi bi-info-circle"></i>
+							</button>
+							<a
+								href="{{url_for('update_space', id=space.id)}}"
+								class="text-white btn btn-warning btn-sm mx-1 rounded-0"
+								data-bs-toggle="tooltip"
+								data-bs-placement="top"
+								title="تحديث"
+							>
+								<i class="bi bi-pencil"></i>
+							</a>
+							<form
+								method="POST"
+								action="{{url_for('delete_space', id=space.id)}}"
+							>
+								<button
+									type="button"
+									class="text-white btn btn-danger btn-sm mx-1 rounded-0"
+									data-bs-toggle="modal"
+									data-bs-target="#deleteModal-{{space.id}}"
+									data-bs-toggle="tooltip"
+									data-bs-placement="top"
+									title="حذف"
+								>
+									<i class="bi bi-trash3"></i>
+								</button>
+								<div
+									class="modal fade"
+									id="deleteModal-{{space.id}}"
+									tabindex="-1"
+									aria-labelledby="deleteModalLabel"
+									aria-hidden="true"
+								>
+									<div class="modal-dialog">
+										<div class="modal-content rounded-0">
+											<div class="modal-header">
+												<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+												<button
+													type="button"
+													class="btn-close"
+													data-bs-dismiss="modal"
+													aria-label="Close"
+												></button>
+											</div>
+											<div class="modal-body">
+												هل أنت متأكد من حذف مساحة: {{space.name}}
+											</div>
+											<div class="modal-footer">
+												<button
+													type="button"
+													class="btn rounded-0 btn-outline-secondary"
+													data-bs-dismiss="modal"
+												>
+													رجوع
+												</button>
+												<button type="submit" class="btn rounded-0 btn-danger">
+													تأكيد الحذف
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="float-end ml-5">
+		<button
+			type="submit"
+			class="btn rounded-0 btn-outline-danger"
+			style="margin-left: 10px"
+			name="cancel"
+			value="cancel"
+		>
+			الغاء
+		</button>
+		<button
+			type="submit"
+			class="btn rounded-0 btn-dark"
+			style="margin-left: 10px"
+			name="confirmWithTool"
+			value="confirmWithTool"
+		>
+			تأكيد الحجز
+		</button>
+	</div>
+</form>
+
+{% endblock %}

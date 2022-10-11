@@ -9,12 +9,12 @@
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
 	{{ form.csrf_token }}
 
-	<div class="row m-5">
+	<div class="row my-5">
 		<div class="col">
 			{% if form.name.errors %} {%for error in form.name.errors %}
 			<span class="form_error">{{ error }}</span>
 			{%endfor%} {% endif%} {{form.name}}
-			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control rounded-0" placeholder="" aria-label=""> -->
 		</div>
 		<div class="col">
 			{% if form.price.errors %} {%for error in form.price.errors %}
@@ -22,7 +22,18 @@
 			{%endfor%} {% endif%}
 			<div class="input-group mb-3">
 				{{form.price}}
-				<span class="input-group-text">جم / الساعة</span>
+				<span class="input-group-text bg-dark text-white rounded-0"
+					>جم / الساعة</span
+				>
+			</div>
+		</div>
+		<div class="col">
+			{% if form.capacity.errors %} {%for error in form.capacity.errors %}
+			<span class="form_error">{{ error }}</span>
+			{%endfor%} {% endif%}
+			<div class="input-group mb-3">
+				{{form.capacity}}
+				<span class="input-group-text bg-dark text-white rounded-0">فرد</span>
 			</div>
 		</div>
 		<div class="col">
@@ -53,14 +64,21 @@
 		{{ form.images.label(class_="form-label")}} {{ form.images}}
 	</div>
 	{% if isUpdate %}
-	<div class="row p-5" data-masonry='{"percentPosition": true, "transitionDuration": "0.8s"}'>
+	<div
+		class="row p-5"
+		data-masonry='{"percentPosition": true, "transitionDuration": "0.8s"}'
+	>
 		{% for image in space.images %}
 		<div class="col" style="width: 250px">
 			<i
 				class="bi bi-x-circle-fill text-danger position-absolute"
 				style="top: 10px; left: 20px; font-size: 1.2rem; cursor: pointer"
 			></i>
-			<img class="img-fluid pb-4" src="{{image.url}}" style="object-fit: cover" />
+			<img
+				class="img-fluid pb-4"
+				src="{{image.url}}"
+				style="object-fit: cover"
+			/>
 		</div>
 		{% endfor %}
 	</div>
@@ -69,10 +87,10 @@
 		<a
 			href="{{url_for('space_list')}}"
 			type="button"
-			class="btn btn-outline-danger"
+			class="btn rounded-0 btn-outline-danger"
 			>الغاء</a
 		>
-		<button type="submit" class="btn btn-dark">
+		<button type="submit" class="btn rounded-0 btn-dark">
 			{% if isUpdate %} تعديل المساحة {% else %} إضافة مساحة {% endif %}
 		</button>
 	</div>

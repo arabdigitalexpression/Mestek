@@ -1,27 +1,92 @@
-{% extends 'profile/base.html' %} {% block title %} حجوزاتي {% endblock %}
-{% block content %}
-    {% for reservation in current_user.reservations %}
-    <ul>
-        <li>type: {{ reservation.type.name }}</li>
-        <li>created at: {{ reservation.created_at }}</li>
-        <li>payment status: {{ reservation.payment_status.name }}</li>
-        <li>transaction number: {{ reservation.transaction_num }}</li>
-        <li>full price: {{ reservation.full_price }}</li>
-        <li>space: {{ reservation.space.name }}</li>
-        <li>tool: {{ reservation.tool.name }}</li>
-        <li> Calendars:
-            <ul>
-            {% for cal in reservation.calendars %}
-                {% for intrval in cal.intervals %}
-                    <li>
-                        {{ cal.day }}
-                        {{ intrval.start_time }}
-                        {{ intrval.end_time }}
-                    </li>
-                {% endfor %}
-            {% endfor %}
-            </ul>
-        </li>
-    </ul>
-    {% endfor %}
+{% extends 'profile/base.html' %} {% block title %} حجوزاتي {% endblock %} {%
+block content %}
+<div class="container my-3">
+	<div class="row">
+		{% for reservation in current_user.reservations %}
+		<div class="col-md-12 mb-3">
+			<div
+				class="card widget-user border-secondary rounded-0"
+				style="border-style: dashed"
+			>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-6">
+							<h3 class="text-dark">
+								{% if reservation.type.name == 'tool' %}
+								{{reservation.tool.name}} {% else %} {{reservation.space.name}}
+								{% endif %}
+							</h3>
+						</div>
+						<div class="col-md-6">
+							<p class="h3 text-dark">
+								{{ reservation.full_price }}
+								<span class="h5"> جنيه مصرى </span>
+							</p>
+						</div>
+					</div>
+					<div class="mb-4">
+						{% for tool in reservation.tools %}
+						<span class="badge rounded-0 text-bg-secondary"
+							>{{ tool.name }}</span
+						>
+						{% endfor %}
+					</div>
+					<div class="d-flex align-items-center flex-row">
+						<div class="me-3">
+							{% if reservation.payment_status.name == 'no_payment' %}<span
+								class="badge rounded-0 text-bg-danger"
+								>حجز غير مدفوع</span
+							>
+							{% elif reservation.payment_status.name == 'down_payment' %}
+							<span class="badge rounded-0 text-bg-warning"
+								>حجز مدفوع جزئيا</span
+							>
+							{% else %}
+							<span class="badge rounded-0 text-bg-success">حجز مدفوع</span>
+							{% endif %}
+						</div>
+						{% if reservation.payment_status.name == 'no_payment' %}
+						<div class="w-50">
+							<form>
+								<div class="d-flex align-items-stretch">
+									<input
+										type="text"
+										class="form-control rounded-0"
+										placeholder="ادخل رقم المعاملة البنكية"
+										value="{% if reservation.transaction_num %} {{ reservation.transaction_num }} {% endif %}"
+									/>
+									<button
+										type="submit"
+										class="btn btn-success btn-sm rounded-0"
+									>
+										<i class="bi bi-check2"></i>
+									</button>
+								</div>
+							</form>
+						</div>
+						{% endif %}
+					</div>
+					<div class="wid-u-info mt-2">
+						<p class="text-muted mb-0">
+							<i class="bi bi-clock me-2"></i>{{ reservation.created_at }}
+						</p>
+						<div
+							class="user-position {% if reservation.type.name == 'tool' %} bg-success {% else %} bg-primary {% endif %}"
+						>
+							<span class="text-white font-upper"
+								>{% if reservation.type.name == 'tool' %} أداة {% else %} مساحة
+								{% endif %}</span
+							>
+						</div>
+					</div>
+					<div class="d-flex justify-content-end">
+						<button class="btn btn-sm btn-danger rounded-0 me-5">إلغاء الحجز</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{% endfor %}
+	</div>
+</div>
 {% endblock %}

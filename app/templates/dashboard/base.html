@@ -1,19 +1,13 @@
 {% extends 'base.html' %} {% block styles %}
 <link
-	rel="canonical"
-	href="https://getbootstrap.com/docs/5.2/examples/dashboard-rtl/"
-/>
-<link
 	href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
 	rel="stylesheet"
 />
 
-<!-- Custom styles for this template -->
 <link
 	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
 	rel="stylesheet"
 />
-
 <link
 	rel="stylesheet"
 	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
@@ -25,9 +19,6 @@
 {% block dashboard_styles %}{% endblock %}
 
 <style>
-	body {
-		font-family: "Tajawal", sans-serif;
-	}
 	.bd-placeholder-img {
 		font-size: 1.125rem;
 		text-anchor: middle;
@@ -81,8 +72,8 @@
 	}
 </style>
 {% endblock %} {% block body %}
+{% block header %}
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	{% block header %}
 	<a
 		class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6"
 		href="{{url_for('dashboard')}}"
@@ -95,49 +86,61 @@
 		data-bs-target="#sidebarMenu"
 		aria-controls="sidebarMenu"
 		aria-expanded="false"
-		aria-label="عرض/إخفاء لوحة التنقل"
+		aria-label="/إخفاء لوحة التنقل"
 	>
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<input
-		class="form-control form-control-dark w-100 rounded-0 border-0 d-none d-md-block"
+		class="form-control form-control-dark w-25 rounded-0 border-0 d-none d-md-block"
 		type="text"
 		placeholder="بحث"
 		aria-label="بحث"
 	/>
 	<li class="nav-item dropstart mx-2">
+		{% if current_user.avatar_url %}
 		<img
 			src="{{ current_user.avatar_url }}"
-			alt="{{ current_user.first_name }} {{ current_user.last_name }}"
-			class="rounded-circle nav-link dropdown-toggle"
+			alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+			class="rounded-circle"
 			style="object-fit: cover"
 			width="35"
+			height="35"
 			type="button"
 			data-bs-toggle="dropdown"
 			aria-expanded="false"
 		/>
-		<ul class="dropdown-menu dropdown-menu-dark">
+		{% else %}
+		<img
+			src="{{ url_for('static',filename='images/default_avatar.png') }}"
+			alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+			class="rounded-circle"
+			style="object-fit: cover"
+			width="35"
+			height="35"
+			type="button"
+			data-bs-toggle="dropdown"
+			aria-expanded="false"
+		/>
+		{% endif %}
+
+		<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
 			<li>
-				<a class="dropdown-item" href="#"
-					><a class="dropdown-item" href="{{ url_for('profile') }}">
-						<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
-					</a></a
-				>
+				<a class="dropdown-item" href="{{ url_for('profile') }}">
+					<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
+				</a>
 			</li>
 			<li>
-				<a class="dropdown-item" href="#"
-					><a class="dropdown-item" href="#">
-						<i
-							class="bi bi-bell-fill text-white position-relative me-2"
-							type="button"
-							><span
-								class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
-							>
-								<span class="visually-hidden">New alerts</span>
-							</span></i
-						><span>تنبيهات</span>
-					</a></a
-				>
+				<a class="dropdown-item" href="#">
+					<i
+						class="bi bi-bell-fill text-white position-relative me-2"
+						type="button"
+						><span
+							class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
+						>
+							<span class="visually-hidden">New alerts</span>
+						</span></i
+					><span>التنبيهات</span>
+				</a>
 			</li>
 			<li><hr class="dropdown-divider" /></li>
 			<li>
@@ -151,6 +154,7 @@
 		</ul>
 	</li>
 </nav>
+</header>
 {% endblock %}
 
 <div class="container-fluid">
@@ -159,7 +163,7 @@
 			id="sidebarMenu"
 			class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse overflow-auto"
 		>
-			<div class="position-sticky pt-3">
+			<div class="position-sticky pt-3 ps-">
 				<ul class="nav flex-column">
 					<li class="nav-item">
 						<a
@@ -177,17 +181,11 @@
 						<span>المساحات</span>
 						<a class="link-secondary" href="#"> </a>
 					</h6>
-					<ul class="nav flex-column mb-2">
+					<ul class="nav flex-column">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('space_list')}}">
-								<i class="bi bi-table me-1"></i>
-								عرض المساحات</a
-							>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('create_space')}}">
-								<i class="bi bi-plus-circle me-1"></i>
-								إنشاء مساحة</a
+								<i class="bi bi-boxes me-1"></i>
+								 المساحات</a
 							>
 						</li>
 					</ul>
@@ -197,17 +195,11 @@
 						<span>الأدوات</span>
 						<a class="link-secondary" href="#"> </a>
 					</h6>
-					<ul class="nav flex-column mb-2">
+					<ul class="nav flex-column">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('tool_list')}}">
-								<i class="bi bi-table me-1"></i>
-								عرض الأدوات
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('create_tool')}}">
-								<i class="bi bi-plus-circle me-1"></i>
-								إنشاء الأداة
+								<i class="bi bi-tools me-1"></i>
+								 الأدوات
 							</a>
 						</li>
 					</ul>
@@ -217,27 +209,13 @@
 						<span>المستخدمين</span>
 						<a class="link-secondary" href="#"> </a>
 					</h6>
-					<ul class="nav flex-column mb-2">
+					<ul class="nav flex-column">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('user_list')}}">
 								<i class="bi bi-people-fill me-1"></i>
-								عرض المستخدمين
+								 المستخدمين
 							</a>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('create_user')}}">
-								<i class="bi bi-plus-circle me-1"></i>
-								إنشاء مستخدم
-							</a>
-						</li>
-					</ul>
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
-					>
-						<span>الصلاحيات و التصنيفات</span>
-						<a class="link-secondary" href="#"> </a>
-					</h6>
-					<ul class="nav flex-column mb-2">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_roles')}}">
 								<i class="bi bi-unlock-fill me-1"></i>
@@ -257,38 +235,12 @@
 						<span>الحجوزات</span>
 						<a class="link-secondary" href="#"> </a>
 					</h6>
-					<ul class="nav flex-column mb-2">
+					<ul class="nav flex-column">
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_reservations')}}">
 								<i class="bi bi-table me-1"></i>
-								عرض الحجوزات
+								 الحجوزات
 							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="#">
-								<i class="bi bi-plus-circle me-1"></i>
-								إنشاء حجز
-							</a>
-							<div class="content">
-								<ul>
-									<li class="d-flex align-items-center px-3">
-										<a href="{{url_for('createReservation')}}" class="nav-link">
-											<span span data-feather="plus-circle"></span>
-											حجز مساحة
-										</a>
-									</li>
-
-									<li class="d-flex align-items-center px-3">
-										<a
-											href="{{url_for('createReservationTool')}}"
-											class="nav-link"
-										>
-											<span data-feather="plus-circle"></span>
-											حجز أداة
-										</a>
-									</li>
-								</ul>
-							</div>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="{{url_for('get_Calender')}}">
@@ -301,7 +253,10 @@
 			</div>
 		</nav>
 		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-			<h2 class="my-3">{% block heading %} {% endblock %}</h2>
+			<div class="my-3 d-flex justify-content-between">
+				<h2 class="">{% block heading %} {% endblock %}</h2>
+				{% block actions %} {% endblock %}
+			</div>
 			{% block content %} {% endblock %}
 		</main>
 	</div>
@@ -311,12 +266,12 @@
 
 
 <script
-	src="{{ url_for('static',filename='js/Chart.min.js}}"
+	src="{{ url_for('static',filename='js/Chart.min.js')}}"
 	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
 	crossorigin="anonymous"
 ></script>
-<script src="{{ url_for('static',filename='js/ckeditor.js') }}"></script>
-<script src="{{ url_for('static',filename='js/ar.js') }}"></script>
+<script src="{{ url_for('static',filename='js/ckeditor/ckeditor.js')}}"></script>
+<script src="{{ url_for('static',filename='js/ckeditor/ar.js')}}"></script>
 <script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
 
 {% endblock %}

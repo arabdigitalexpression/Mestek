@@ -4,25 +4,43 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="shortcut icon"href="{{ url_for('static',filename='images/Adef_logo.svg}}"type="image/x-icon"/>
+		<link
+			rel="shortcut icon"
+			href="{{ url_for('static',filename='images/Adef_logo.svg') }}"
+			type="image/x-icon"
+		/>
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link href="{{ url_for('static',filename='styles/css2.css}}"rel="stylesheet"/>
-		<script src="{{ url_for('static',filename='js/jquery.min.js}}"></script> 
- 		<script src=".{{ url_for('static',filename='js/mobiscroll.javascript.min.js}}"></script>
-		<script src="{{ url_for('static',filename='js/moment.min.js}}"></script>
-		<script src=".{{ url_for('static',filename='js/daterangepicker.min.js}}"></script>
-		<link rel="stylesheet"  href="{{ url_for('static',filename='styles/daterangepicker.css}}" /> 
-		<script src="{{ url_for('static',filename='js/select2.min.js}}"></script> 
-		<link rel="stylesheet"href="{{ url_for('static',filename='styles/bootstrap-icons.css}}"/>
+		<link
+			href="{{ url_for('static',filename='styles/css2.css') }}"
+			rel="stylesheet"
+		/>
+		<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+		<script src=".{{ url_for('static',filename='js/mobiscroll.javascript.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+		<script src=".{{ url_for('static',filename='js/daterangepicker.min.js') }}"></script>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/daterangepicker.css') }}"
+		/>
+		<script src="{{ url_for('static',filename='js/select2.min.js') }}"></script>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/bootstrap-icons.css') }}"
+		/>
 
 		{% block styles %} {% endblock %}
 	</head>
 
 	<body>
 		{% block body %} {% endblock %}
-		<script src="{{ url_for('static',filename='styles/js/masonry.pkgd.min.js}}"integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D"crossorigin="anonymous" async></script>
+		<script
+			src="{{ url_for('static',filename='styles/js/masonry.pkgd.min.js') }}"
+			integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D"
+			crossorigin="anonymous"
+			async
+		></script>
 		<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
 	</body>
 </html>
