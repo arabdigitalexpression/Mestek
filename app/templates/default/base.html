@@ -2,20 +2,16 @@
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="{{ url_for('static',filename='styles/bootstrap.min.css') }}"
-/>
-<link
-	rel="stylesheet"
-	type="text/css"
 	href="{{ url_for('static',filename='styles/signin.css') }}"
 />
 <link
+	href="{{ url_for('static',filename='styles/default.rtl.css') }}"
 	rel="stylesheet"
-	type="text/css"
-	href="{{ url_for('static',filename='styles/style.css') }}"
 />
-<link href="{{ url_for('static',filename='styles/default.rtl.css') }}" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}" />
+<link
+	rel="stylesheet"
+	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
+/>
 <!-- Custom styles for this template -->
 {% endblock %}{% block body %}
 <header class="position-absolute top-0 start-0">
@@ -26,7 +22,13 @@
 			<li><a href="{{ url_for('login_page') }}">Login</a></li>
 			{% else %}
 			<li>مرحبا, {{ current_user.username }} !</li>
-			<li><a href="{{ url_for('logout') }}" class="btn btn-danger btn-sm mx-2">Logout</a></li>
+			<li>
+				<a
+					href="{{ url_for('logout') }}"
+					class="btn rounded-0 btn-danger btn-sm mx-2"
+					>Logout</a
+				>
+			</li>
 			{% endif %}
 		</ul>
 	</div>
@@ -39,7 +41,5 @@
 <script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"></script>
 <script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
-
-
 
 {% endblock %}

@@ -13,7 +13,7 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 			{% if form.name.errors %} {%for error in form.name.errors %}
 			<span class="form_error">{{ error }}</span>
 			{%endfor%} {% endif%} {{form.name}}
-			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control rounded-0" placeholder="" aria-label=""> -->
 		</div>
 		<div class="col">
 			{% if form.price.errors %} {%for error in form.price.errors %}
@@ -21,7 +21,9 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 			{%endfor%} {% endif%}
 			<div class="input-group mb-3">
 				{{form.price}}
-				<span class="input-group-text">جم / اليوم</span>
+				<span class="input-group-text bg-dark text-white rounded-0"
+					>جم / اليوم</span
+				>
 			</div>
 		</div>
 		<div class="col">
@@ -65,7 +67,11 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 				class="bi bi-x-circle-fill text-danger position-absolute"
 				style="top: 10px; left: 20px; font-size: 1.2rem; cursor: pointer"
 			></i>
-			<img class="img-fluid pb-4" src="{{image.url}}" style="object-fit: cover" />
+			<img
+				class="img-fluid pb-4"
+				src="{{image.url}}"
+				style="object-fit: cover"
+			/>
 		</div>
 		{% endfor %}
 	</div>
@@ -74,10 +80,10 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 		<a
 			href="{{url_for('tool_list')}}"
 			type="button"
-			class="btn btn-outline-danger"
+			class="btn rounded-0 btn-outline-danger"
 			>الغاء</a
 		>
-		<button type="submit" class="btn btn-dark col">
+		<button type="submit" class="btn rounded-0 btn-dark col">
 			{% if isUpdate %} تعديل الأداة {% else %} إضافة أداة {% endif %}
 		</button>
 	</div>
