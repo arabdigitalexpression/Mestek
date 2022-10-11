@@ -1,3 +1,17 @@
+let events = []
+
+myData()
+
+async function myData(){
+
+   const res = await fetch('http://127.0.0.1:5000/api/dashboard/reservations/')
+   const data = await res.json()
+   for (let i = 0; i < data.length; i++) {
+       events
+        
+    }
+}
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
