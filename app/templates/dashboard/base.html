@@ -10,10 +10,7 @@
 	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
 	rel="stylesheet"
 />
-<link
-	rel="stylesheet"
-	href="../../static/styles/bootstrap-icons.css"
-/>
+
 <link 
 	rel="stylesheet"
 	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"/>
@@ -250,10 +247,10 @@
 </div>
 <script src="{{ url_for('static',filename='js/mobiscroll.javascript.min.js')}}"
 ></script>
-<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+
 
 <script
-	src="../../static/js/Chart.min.js"
+	src="{{ url_for('static',filename='js/Chart.min.js}}"
 	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
 	crossorigin="anonymous"
 ></script>
