@@ -7,6 +7,7 @@ from flask import (
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from app import app, db, login
+from app.enums import Unit
 from app.models import (
     Category, Reservation, Role,
     User, Space, Tool, Image, Calendar, Interval
@@ -234,6 +235,17 @@ def create_space():
             db.session.add(space)
             db.session.commit()
             return redirect(url_for("space_list"))
+        cat_prices = [
+            {"category_id": cat.id}
+            for cat in Category.query.all()
+        ]
+        form.process(data={
+            "category_prices": [
+                {
+                    "price_list": cat_prices
+                }
+            ]
+        })
         return render_template("dashboard/space/form.html", form=form)
     else:
         return redirect(url_for("main_page"))
