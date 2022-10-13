@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField, PasswordField, EmailField, SubmitField,
-    FloatField, BooleanField, TextAreaField, SelectField
+    FloatField, BooleanField, TextAreaField, SelectField,
+    Form, HiddenField, FieldList, FormField
 )
 from wtforms.validators import (
     DataRequired, Length, EqualTo, email
@@ -9,6 +10,7 @@ from wtforms.validators import (
 from wtforms.fields import MultipleFileField
 from flask_wtf.file import FileAllowed, FileRequired
 
+from app.enums import Unit, PriceUnit
 
 images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
@@ -82,6 +84,39 @@ class SignupForm(FlaskForm):
                          })
 
 
+class PriceListForm(Form):
+    category_id = HiddenField()
+    price = FloatField(
+        'السعر', render_kw={
+           "placeholder": "السعر", "class": "form-control",
+        }
+    )
+    price_unit = SelectField(
+        'العملة', render_kw={"class": "form-select"},
+        choices=[
+            (PriceUnit.egp, PriceUnit.egp.description),
+            (PriceUnit.usd, PriceUnit.usd.description)
+        ]
+    )
+
+
+class CategoryPriceForm(Form):
+    unit_value = FloatField(
+        'القيمة', validators=[DataRequired()], render_kw={
+            "placeholder": "القيمة", "class": "form-control",
+        }
+    )
+    unit = SelectField(
+        'الوحدة', validators=[DataRequired()],
+        render_kw={"class": "form-select"},
+        choices=[
+            (Unit.hour, Unit.hour.description),
+            (Unit.day, Unit.day.description)
+        ]
+    )
+    price_list = FieldList(FormField(PriceListForm))
+
+
 class SpaceForm(FlaskForm):
     name = StringField(
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
@@ -108,6 +143,7 @@ class SpaceForm(FlaskForm):
         "placeholder": "قواعد", "rows": "5" , "id":"guidelines"
     }
     )
+    category_prices = FieldList(FormField(CategoryPriceForm))
     images = MultipleFileField('الصور', name="images", validators=[
         # FileRequired(),
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
