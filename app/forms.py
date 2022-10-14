@@ -133,7 +133,7 @@ class SpaceForm(FlaskForm):
                                     "class": "form-check-input"
                                 }
                                 )
-    description = TextAreaField('الوصف', validators=[DataRequired(), Length(max=128)],
+    description = TextAreaField('الوصف', validators=[Length(max=128)],
                                 render_kw={
         "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     }
@@ -144,13 +144,12 @@ class SpaceForm(FlaskForm):
     }
     )
     category_prices = FieldList(FormField(CategoryPriceForm))
-    images = MultipleFileField('الصور', name="images", validators=[
-        # FileRequired(),
-        FileAllowed(images, 'الرجاء إدخال صور فقط!')
-    ], render_kw={
-        "class": "form-control"
-    }
+    images = MultipleFileField(
+        'الصور', name="images", validators=[  # FileRequired(),
+            FileAllowed(images, 'الرجاء إدخال صور فقط!')
+        ], render_kw={"class": "form-control"}
     )
+    add_new_price = SubmitField('إضافة تسعيرة جديدة')
 
 
 class ToolForm(FlaskForm):
