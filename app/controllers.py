@@ -7,10 +7,10 @@ from flask import (
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from app import app, db, login
-from app.enums import Unit
+from app.enums import Unit, PriceUnit
 from app.models import (
     Category, Reservation, Role,
-    User, Space, Tool, Image, Calendar, Interval
+    User, Space, Tool, Image, Calendar, Interval, CategorySpace
 )
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm,
@@ -200,8 +200,9 @@ def delete_space(id):
 @login_required
 def create_space():
     form = SpaceForm()
+    categories = Category.query.all()
     if current_user.role.name == "admin":
-        if form.validate_on_submit():
+        if form.validate_on_submit() and not form.add_new_price.data:
             space = Space(
                 name=form.name.data,
                 price=form.price.data,
@@ -211,6 +212,19 @@ def create_space():
                 capacity = form.capacity.data,
                 cover_img_url = form.images.data[0].filename if form.images.data[0] else None
             )
+            for cat_price in form.category_prices.data:
+                for price in cat_price["price_list"]:
+                    category = next(filter(
+                        lambda cat: cat.id == int(price["category_id"]),
+                        categories
+                    ), None)
+                    space.category_prices.append(CategorySpace(
+                        unit_value=float(cat_price["unit_value"]),
+                        unit=Unit[cat_price["unit"].split('.')[1]],
+                        price=float(price["price"]),
+                        price_unit=PriceUnit[price["price_unit"].split('.')[1]],
+                        category=category
+                    ))
             imagesObjs = list()
             for file in form.images.data:
                 if not file:
@@ -237,8 +251,11 @@ def create_space():
             return redirect(url_for("space_list"))
         cat_prices = [
             {"category_id": cat.id}
-            for cat in Category.query.all()
+            for cat in categories
         ]
+        if request.method == "POST" and form.add_new_price.data:
+            form.category_prices.append_entry({"price_list": cat_prices})
+            return render_template("dashboard/space/form.html", form=form)
         form.process(data={
             "category_prices": [
                 {
