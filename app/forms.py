@@ -253,13 +253,12 @@ class SpaceForm(FlaskForm):
     }
     )
     category_prices = FieldList(FormField(CategoryPriceForm))
-    images = MultipleFileField('الصور', name="images", validators=[
-        # FileRequired(),
-        FileAllowed(images, 'الرجاء إدخال صور فقط!')
-    ], render_kw={
-        "class": "form-control rounded-0"
-    }
+    images = MultipleFileField(
+        'الصور', name="images", validators=[  # FileRequired(),
+            FileAllowed(images, 'الرجاء إدخال صور فقط!')
+        ], render_kw={"class": "form-control rounded-0"}
     )
+    add_new_price = SubmitField('إضافة تسعيرة جديدة')
 
 
 class ToolForm(FlaskForm):

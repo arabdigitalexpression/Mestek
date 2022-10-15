@@ -60,6 +60,27 @@
 		{%endfor%} {% endif%} {{form.guidelines}}
 	</div>
 
+    {% for cp in form.category_prices %}
+    <div class="row my-5">
+        <div class="col">
+        {{ cp.unit_value }}
+        {{ cp.unit }}
+        </div>
+        <div class="col">
+            <div class="row">
+        {% for pl in cp.price_list %}
+                <div class="col">
+            {{ pl.category_id }}
+            {{ pl.price }}
+            {{ pl.price_unit }}
+                </div>
+        {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {{ form.add_new_price }}
+
 	<div class="mx-5">
 		{{ form.images.label(class_="form-label")}} {{ form.images}}
 	</div>
