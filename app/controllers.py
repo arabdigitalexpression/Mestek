@@ -209,8 +209,8 @@ def create_space():
                 has_operator=form.has_operator.data,
                 description=form.description.data,
                 guidelines=form.guidelines.data,
-                capacity = form.capacity.data,
-                cover_img_url = form.images.data[0].filename if form.images.data[0] else None
+                capacity=form.capacity.data,
+                cover_img_url=form.images.data[0].filename if form.images.data[0] else None
             )
             for cat_price in form.category_prices.data:
                 for price in cat_price["price_list"]:
@@ -222,14 +222,15 @@ def create_space():
                         unit_value=float(cat_price["unit_value"]),
                         unit=Unit[cat_price["unit"].split('.')[1]],
                         price=float(price["price"]),
-                        price_unit=PriceUnit[price["price_unit"].split('.')[1]],
+                        price_unit=PriceUnit[price["price_unit"].split('.')[
+                            1]],
                         category=category
                     ))
             imagesObjs = list()
             for file in form.images.data:
                 if not file:
                     continue
-                filename = str(uuid1() )+ "-" + secure_filename(file.filename)
+                filename = str(uuid1()) + "-" + secure_filename(file.filename)
                 # TODO: image is overwritten when there's
                 # an existing image with the same name
                 file.save(os.path.join(
@@ -255,7 +256,7 @@ def create_space():
         ]
         if request.method == "POST" and form.add_new_price.data:
             form.category_prices.append_entry({"price_list": cat_prices})
-            return render_template("dashboard/space/form.html", form=form)
+            return render_template("dashboard/space/form.html", form=form, categories=categories)
         form.process(data={
             "category_prices": [
                 {
@@ -263,7 +264,7 @@ def create_space():
                 }
             ]
         })
-        return render_template("dashboard/space/form.html", form=form)
+        return render_template("dashboard/space/form.html", form=form, categories=categories)
     else:
         return redirect(url_for("main_page"))
 
@@ -274,6 +275,7 @@ def update_space(id):
     if current_user.role.name == "admin":
         form = SpaceForm()
         space = Space.query.get(id)
+        categories = Category.query.all()
         if request.method == "GET":
             form.name.data = space.name
             form.price.data = space.price
@@ -283,7 +285,7 @@ def update_space(id):
             form.has_operator.data = space.has_operator
             return render_template(
                 'dashboard/space/form.html',
-                form=form, isUpdate=True, space=space
+                form=form, isUpdate=True, space=space, categories=categories
             )
         elif request.method == "POST":
             if form.validate_on_submit():
@@ -298,7 +300,8 @@ def update_space(id):
                 for file in form.images.data:
                     if not file:
                         continue
-                    filename = str(uuid1() )+ "-" + secure_filename(file.filename)
+                    filename = str(uuid1()) + "-" + \
+                        secure_filename(file.filename)
                     # TODO: image is overwritten when there's
                     # an existing image with the same name
                     file.save(os.path.join(
@@ -320,7 +323,7 @@ def update_space(id):
                 return redirect(url_for("space_list"))
             return render_template(
                 "dashboard/space/form.html",
-                form=form, isUpdate=True, space=space
+                form=form, isUpdate=True, space=space, categories=categories
             )
     else:
         return redirect(url_for("main_page"))
@@ -374,7 +377,7 @@ def create_tool():
             for file in form.images.data:
                 if not file:
                     continue
-                filename = str(uuid1() )+ "-" + secure_filename(file.filename)
+                filename = str(uuid1()) + "-" + secure_filename(file.filename)
                 # TODO: image is overwritten when there's
                 # an existing image with the same name
                 file.save(os.path.join(
@@ -435,7 +438,8 @@ def update_tool(id):
                 for file in form.images.data:
                     if not file:
                         continue
-                    filename = str(uuid1() )+ "-" + secure_filename(file.filename)
+                    filename = str(uuid1()) + "-" + \
+                        secure_filename(file.filename)
                     uuid1
                     # TODO: image is overwritten when there's
                     # an existing image with the same name
@@ -631,12 +635,14 @@ def get_categories():
         if request.method == "POST":
             if form.validate_on_submit():
                 name = form.name.data
+                description = form.desc.data
                 color_code = form.colorCode.data
                 is_organization = form.isOrganization.data
                 category = Category.query.get(name)
                 if category == None:
                     category = Category(
                         name=name,
+                        description=description,
                         color_code=color_code,
                         is_organization=is_organization,
                     )
@@ -694,6 +700,7 @@ def update_category(id):
         if request.method == "GET":
             categories = Category.query.all()
             form.name.data = category.name
+            form.desc.data = category.description
             form.colorCode.data = category.color_code
             form.isOrganization.data = category.is_organization
             return render_template(
@@ -704,6 +711,7 @@ def update_category(id):
             categories = Category.query.all()
             if form.validate_on_submit():
                 category.name = form.name.data
+                category.description = form.desc.data
                 category.color_code = form.colorCode.data
                 category.is_organization = form.isOrganization.data
                 db.session.commit()
@@ -1179,30 +1187,29 @@ def userReservationSpace():
         return render_template('/default/reservation/space.html', reserve1=reserve, tools=tool)
 
 
-
 @app.route('/dashboard/calendar/')
 @login_required
-
 def get_Calender():
     if current_user.role.name == "admin":
-        
+
         return render_template(
             "dashboard/reservation/calendar.html"
-           )
+        )
     return redirect(url_for("main_page"))
+
 
 @app.route('/api/dashboard/reservations/')
 @login_required
 def get_reservations_data():
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
-        result=[]
+        result = []
         for reservation in reservations:
-            dates=[]
+            dates = []
             for cal in reservation.calendars:
                 dates.append(cal.day.strftime("%d/%m/%Y, %H:%M:%S"))
             result.append({
                 "title": str(reservation.space.name) if reservation.type.name == 'space' else str(reservation.tool.name),
                 "dates": dates
-                }) 
+            })
         return jsonify(result)
