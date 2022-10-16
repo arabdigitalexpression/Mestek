@@ -2,7 +2,8 @@ from email.policy import default
 from flask_wtf import FlaskForm
 from wtforms import (
     StringField, PasswordField, EmailField, SubmitField,
-    FloatField, BooleanField, TextAreaField, SelectField, IntegerField, DateField, RadioField,
+    FloatField, BooleanField, TextAreaField, SelectField,
+    Form, HiddenField, FieldList, FormField, IntegerField, DateField, RadioField
 )
 from wtforms.widgets import ColorInput
 from wtforms.validators import (
@@ -24,7 +25,13 @@ class ColorField(StringField):
 
 class RoleCategoryForm(FlaskForm):
     name = StringField(
-        'الاسم', validators=[DataRequired(), Length(max=50)],
+        'الاسم', validators=[DataRequired(), Length(max=32)],
+        render_kw={
+            "class": "form-control rounded-0",
+        }
+    )
+    desc = StringField(
+        'الوصف', validators=[Length(max=128)],
         render_kw={
             "class": "form-control rounded-0",
         }
@@ -193,11 +200,11 @@ class PriceListForm(Form):
     category_id = HiddenField()
     price = FloatField(
         'السعر', render_kw={
-            "placeholder": "السعر", "class": "form-control",
+            "placeholder": "السعر", "class": "form-control form-control-sm rounded-0",
         }
     )
     price_unit = SelectField(
-        'العملة', render_kw={"class": "form-select"},
+        'العملة', render_kw={"class": "form-select form-control-sm rounded-0"},
         choices=[
             (PriceUnit.egp, PriceUnit.egp.description),
             (PriceUnit.usd, PriceUnit.usd.description)
@@ -208,12 +215,12 @@ class PriceListForm(Form):
 class CategoryPriceForm(Form):
     unit_value = FloatField(
         'القيمة', validators=[DataRequired()], render_kw={
-            "placeholder": "القيمة", "class": "form-control",
+            "placeholder": "القيمة", "class": "form-control form-control-sm rounded-0",
         }
     )
     unit = SelectField(
         'الوحدة', validators=[DataRequired()],
-        render_kw={"class": "form-select"},
+        render_kw={"class": "form-select form-control-sm rounded-0"},
         choices=[
             (Unit.hour, Unit.hour.description),
             (Unit.day, Unit.day.description)
@@ -258,7 +265,8 @@ class SpaceForm(FlaskForm):
             FileAllowed(images, 'الرجاء إدخال صور فقط!')
         ], render_kw={"class": "form-control rounded-0"}
     )
-    add_new_price = SubmitField('إضافة تسعيرة جديدة')
+    add_new_price = SubmitField('إضافة تسعيرة جديدة', render_kw={
+                                "class": "btn btn-dark btn-sm rounded-0"})
 
 
 class ToolForm(FlaskForm):
