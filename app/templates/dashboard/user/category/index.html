@@ -11,6 +11,7 @@
 	{{ form.csrf_token }}
 
 	<div>{{ form.name.label }}{{ form.name }}</div>
+	<div>{{ form.desc.label }}{{ form.desc }}</div>
 	<div>{{ form.colorCode.label }}{{ form.colorCode }}</div>
 	<div>{{ form.isOrganization.label }} {{ form.isOrganization }}</div>
 	<button type="submit" class="btn rounded-0 btn-dark">
@@ -33,6 +34,7 @@
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">الاسم</th>
+				<th scope="col" class="text-center">الوصف</th>
 				<th scope="col" class="text-center">اللون</th>
 				<th scope="col" class="text-center">مؤسسة</th>
 				<th scope="col"></th>
@@ -43,6 +45,10 @@
 			<tr>
 				<td>{{category.id}}</td>
 				<td>{{category.name}}</td>
+				<td class="text-center">
+					{% if category.description %} {{category.description}} {% else %}
+					<i class="bi bi-x-circle text-danger"></i> {% endif %}
+				</td>
 				<td class="text-center">
 					<span
 						class="badge rounded-0 font-monospace"

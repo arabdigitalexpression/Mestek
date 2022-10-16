@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import enum
 from flask_sqlalchemy import SQLAlchemy
-=======
->>>>>>> cc1d3a28736b2b464ed5094c9ff1257fc8d1904f
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -141,18 +138,15 @@ class CategoryTool(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(32), unique=True, nullable=False)
+    description = db.Column(db.String(128), nullable=True)
     color_code = db.Column(db.String(10), unique=True, nullable=False)
-<<<<<<< HEAD
     is_organization = db.Column(db.Boolean, default=False, nullable=False)
-    users = db.relationship('User', backref='category', lazy=True)
     organizations = db.relationship(
         'Organization', backref='category', lazy=True)
-=======
     users = db.relationship('User', backref='category', lazy=True)
     space_prices = db.relationship("CategorySpace", back_populates="category")
     tool_prices = db.relationship("CategoryTool", back_populates="category")
->>>>>>> cc1d3a28736b2b464ed5094c9ff1257fc8d1904f
 
 
 class Space(db.Model):
@@ -161,17 +155,12 @@ class Space(db.Model):
     description = db.Column(db.Text(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-<<<<<<< HEAD
     cover_img_url = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
-=======
-    price = db.Column(db.Float, nullable=True)
-    capacity = db.Column(db.Integer, nullable=True)
     category_prices = db.relationship(
         'CategorySpace', back_populates='space', lazy='subquery'
     )
->>>>>>> cc1d3a28736b2b464ed5094c9ff1257fc8d1904f
     images = db.relationship('Image', backref='space', lazy=True)
     reservations = db.relationship(
         'Reservation', cascade="all", backref='space', lazy=True)
@@ -184,17 +173,12 @@ class Tool(db.Model):
     description = db.Column(db.String(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-<<<<<<< HEAD
     cover_img_url = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     count = db.Column(db.Integer, default=1, nullable=True)
-=======
-    price = db.Column(db.Float, nullable=True)
-    count = db.Column(db.Integer, nullable=True)
     category_prices = db.relationship(
         'CategoryTool', back_populates='tool', lazy='subquery'
     )
->>>>>>> cc1d3a28736b2b464ed5094c9ff1257fc8d1904f
     images = db.relationship('Image', backref='tool', lazy=True)
     reservations = db.relationship(
         'Reservation', cascade="all", backref='tool', lazy=True)

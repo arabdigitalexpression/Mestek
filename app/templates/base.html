@@ -26,10 +26,17 @@
 		/>
 		<script src="{{ url_for('static',filename='js/select2.min.js') }}"></script>
 		<link
+			href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
+			rel="stylesheet"
+		/>
+		<link
 			rel="stylesheet"
 			href="{{ url_for('static',filename='styles/bootstrap-icons.css') }}"
 		/>
-
+		<link
+			href="{{ url_for('static',filename='styles/style.css') }}"
+			rel="stylesheet"
+		/>
 		{% block styles %} {% endblock %}
 	</head>
 
