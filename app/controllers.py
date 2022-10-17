@@ -1,9 +1,6 @@
 import math
 from uuid import uuid1
 import os
-from jinja2 import Undefined
-import pymysql
-connection = pymysql.connect(host='localhost',user='root',password='',database='srs',charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
 from flask import (
     render_template, request, redirect,
     url_for, send_file, jsonify, flash

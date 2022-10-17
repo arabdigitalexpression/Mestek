@@ -1,136 +1,80 @@
-{% extends 'default/base.html' %} {% block title %}حجز مساحة{% endblock %} {%
-block content %}
+{% extends 'default/base.html' %} {% block title %}حجز مساحة{% endblock %}
 
-<div
-	style="position: absolute; width: 800px; border: 2px solid rgb(36, 34, 34)"
->
-	<form action="{{ url_for('userReservationSpace') }}" method="post">
-		<div class="row align-items-center" style="margin: 40px 40px 40px 40px">
-			<div class="col-8 d-flex align-items-center">
-				<div class="col-6">
-					<select id="spacee" class="form-select" style="width: 200px">
-						<option value="hide">{{ name }}</option>
-					</select>
-				</div>
 
-				<div class="col-3">
-					<button
-						type="submit"
-						class="btn rounded-0 btn-danger btn-sm"
-						name="back"
-						value="back"
-					>
-						تغيير المساحة
-					</button>
-				</div>
-				<!-- <div style="margin:15px -60px 0 0 ">
+{% block content %}
+
+<div style="position:absolute; width:800px; border: 2px solid rgb(36, 34, 34);">
+    <form action="{{ url_for('userReservationSpace') }}" method="post">
+        <div class="row align-items-center" style="margin:40px 40px 40px 40px;">
+            <div class="col-8 d-flex  align-items-center">
+                <div class="col-6">
+                    <select id="spacee" class="form_select " style="width:215px">
+                        <option value="hide">{{ name }}</option>
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <button type="submit" class="btn btn-danger btn-sm" name="back" value="back">تغيير المساحة</button>
+                </div>
+                <!-- <div style="margin:15px -60px 0 0 ">
                     
                 </div> -->
-			</div>
-			<div class="col-4">
-				<div>
-					<select
-						id="mySelect"
-						class="form-select text-center"
-						onchange="myFunction()"
-					>
-						<option value="hide">-- نوع الحجز --</option>
-						<option value="no_range">حجز ايام منفصلة</option>
-						<option value="range">حجز فترة متصلة</option>
-						<!-- <option value="weekly">حجز اسبوعي لفتره</option> -->
-					</select>
-				</div>
-				<div>
-					<input
-						type="text"
-						class="form-control rounded-0 my-5 text-center date-picker-range range_HS"
-						placeholder="-- ميعاد الحجز --"
-						name="datetime"
-						onchange="range_date()"
-					/>
-					<input type="hidden" name="date_from_to" class="date_from_to" />
-				</div>
-				<div id="picker-no-range" class="my-3">
-					<div>
-						<input
-							class="form-control rounded-0 text-center"
-							type="text"
-							name="date-picker-no-range"
-							id="date-picker-no-range"
-							placeholder="-- ميعاد الحجز --"
-							onchange="no_range_date()"
-						/>
-					</div>
-					<div class="row my-3 mx-3">
-						<div class="col-8">
-							من الساعة
-							<input
-								type="text"
-								name="time_picker_no_range"
-								id="time-picker-no-range"
-								class="form-select text-center"
-								style="width: 60px"
-								onchange="upto()"
-							/>
-						</div>
-						<div class="col-4">
-							الي
-							<input
-								type="text"
-								name="time2_picker_no_range"
-								id="time2-picker-no-range"
-								class="form-select text-center"
-								style="width: 60px"
-							/>
-						</div>
-					</div>
-					<input
-						type="hidden"
-						name="date_from_to_no_range"
-						id="date_from_to_no_range"
-					/>
-				</div>
-			</div>
-			<div class="col-4">
-				<select
-					id="toools"
-					name="toolName"
-					class="form-control rounded-0 mt-3"
-					style="width: 200px"
-				>
-					<option value="hide">-- اختر الأداة --</option>
-					{% for tool in tools %} {% if id == tool.space_id %}
-					<option value="{{id}}&{{price}}&{{tool.id}}&{{tool.price}}">
-						{{ tool.name }}
-					</option>
-					{% endif %} {% endfor %}
-				</select>
-			</div>
-		</div>
-		<div class="row float-start mb-4" style="margin-left: 25px">
-			<div class="col-3">
-				<button
-					type="submit"
-					class="btn rounded-0 btn-outline-danger"
-					name="cancel"
-					value="cancel"
-				>
-					الغاء
-				</button>
-			</div>
-			<div class="col-9">
-				<button
-					type="submit"
-					class="btn rounded-0 btn-dark"
-					style="font-size: 16px; font-weight: 600"
-					name="confirmWithTool"
-					value="confirmWithTool"
-				>
-					تأكيد الحجز
-				</button>
-			</div>
-		</div>
-	</form>
+            </div>
+            <div class="col-4" >
+                <div>
+                    <select id="mySelect" class="form-select text-center" onchange="myFunction()">
+                        <option value="hide">-- نوع الحجز --</option>
+                        <option value="no_range">حجز ايام منفصلة</option>
+                        <option value="range">حجز فترة متصلة</option>
+                        <!-- <option value="weekly">حجز اسبوعي لفتره</option> -->
+                    </select>
+                </div>
+                <div>
+                    <input type="text" class="form-control my-5 text-center date-picker-range range_HS"
+                        placeholder="-- ميعاد الحجز --" name="datetime" onchange="range_date()" />
+                    <input type="hidden" name="date_from_to" class="date_from_to">
+                </div>
+                <div id="picker-no-range" class="my-3">
+                    <div>
+                        <input class="form-control text-center" type="text" name="date-picker-no-range"
+                            id="date-picker-no-range" placeholder="-- ميعاد الحجز --" onchange="no_range_date()">
+                    </div>
+                    <div class="row my-3 mx-3">
+                        <div class="col-8">
+                            من الساعة
+                            <input type="text" name="time_picker_no_range" id="time-picker-no-range"
+                                class="form-select text-center" style="width:60px;" onchange="upto()">
+                        </div>
+                        <div class="col-4">
+                            الي
+                            <input type="text" name="time2_picker_no_range" id="time2-picker-no-range"
+                                class="form-select text-center" style="width:60px;">
+                        </div>
+                    </div>
+                    <input type="hidden" name="date_from_to_no_range" id="date_from_to_no_range">
+                </div>
+            </div>
+            <div class="col-4 mt-3 mx-1" >
+                <select id="toools" name="toolName" class="form_select w-100" >
+                    <option value="hide">-- اختر الأداة --</option>
+                    {% for tool in tools %}
+                    {% if id == tool.space_id %}
+                    <option value="{{id}}&{{price}}&{{tool.id}}&{{tool.price}}">{{ tool.name }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="row float-start mb-4" style="margin-left:25px;">
+            <div class="col-3 ">
+                <button type="submit" class="btn btn-outline-danger " name="cancel" value="cancel">الغاء</button>
+            </div>
+            <div class="col-9">
+                <button type="submit" class="btn btn-dark " style=" font-size: 16px;
+font-weight:600;" name="confirmWithTool" value="confirmWithTool">تأكيد الحجز</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 {% endblock %}
