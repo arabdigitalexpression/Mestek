@@ -12,9 +12,18 @@
 	rel="stylesheet"
 	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
 />
-<link href="{{ url_for('static',filename='default.rtl.css') }}" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}" />
-<link rel="stylesheet" href="{{ url_for('static',filename='chosen.css') }}"/>
+<link
+	href="{{ url_for('static',filename='default.rtl.css') }}"
+	rel="stylesheet"
+/>
+<link
+	rel="stylesheet"
+	href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}"
+/>
+<link
+	rel="stylesheet"
+	href="{{ url_for('static',filename='styles/chosen.css') }}"
+/>
 <!-- Custom styles for this template -->
 {% endblock %}{% block body %}
 <header class="position-absolute top-0 start-0">
