@@ -37,9 +37,11 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 			</tr>
 		</thead>
 		<tbody>
+			
 			{% for reservation in reservations %}
+			{% if loop.index <= j and loop.index >= i%}
 			<tr>
-				<td>{{reservation.id}}</td>
+				<td>{{loop.index }}</td>
 				<td>
 					{% if reservation.type.name == 'tool' %} أداة {% else %} مساحة {%
 					endif %}
@@ -269,8 +271,20 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 					</form>
 				</td>
 			</tr>
+			
+			{% endif %}
 			{% endfor %}
 		</tbody>
 	</table>
+	<nav aria-label="Page navigation example" class="d-flex float-end">
+		<ul class="pagination ">
+		  <li class="page-item"><button class="page-link" name="Previous" value="Previous" type="submit">Previous</button></li>
+		  {% for page in range(1 , pages+1) %}
+		  <li class="page-item"><button class="page-link" name="b" value="{{page}}">{{page}}</button></li>
+		  {% endfor %}
+		  <li class="page-item"><button class="page-link" name="next" value="next" >next</button></li>
+		</ul>
+	  </nav>
+	</form>
 </div>
 {% endblock %}
