@@ -1,24 +1,27 @@
-import math
-from uuid import uuid1
-import os
-from flask import (
-    render_template, request, redirect,
-    url_for, send_file, jsonify, flash
-)
-from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.utils import secure_filename
-from app import app, db, login
-from app.enums import Unit, PriceUnit
-from app.models import (
-    Category, Reservation, Role,
-    User, Space, Tool, Image, Calendar, Interval, CategorySpace
-)
+from app.random_color import generate_color
 from app.forms import (
     ConfirmForm, RoleCategoryForm, SignupForm,
     LoginForm, SpaceForm, ToolForm, EditUserForm,
     ChangePasswordForm
 )
-from app.random_color import generate_color
+from app.models import (
+    Category, Reservation, Role,
+    User, Space, Tool, Image, Calendar, Interval, CategorySpace
+)
+from app.enums import Unit, PriceUnit
+from app import app, db, login
+from werkzeug.utils import secure_filename
+from flask_login import current_user, login_user, logout_user, login_required
+from flask import (
+    render_template, request, redirect,
+    url_for, send_file, jsonify, flash
+)
+import math
+from uuid import uuid1
+import os
+import pymysql
+connection = pymysql.connect(host='localhost', user='root', password='toor',
+                             database='adef_srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
 
 @app.route("/")
@@ -169,48 +172,55 @@ def dashboard():
         return redirect(url_for('main_page'))
 
 
-@app.route('/dashboard/spaces'  , methods=["GET", "POST"])
+@app.route('/dashboard/spaces', methods=["GET", "POST"])
 @login_required
 def space_list():
-    i=1 
-    j=10
+    i = 1
+    j = 10
     if current_user.role.name == "admin":
         data = Space.query.all()
         cursor = connection.cursor()
         cursor.execute("SELECT COUNT(*) FROM space")
         data3 = cursor.fetchone()
         rows = data3['COUNT(*)']
-        if rows%10==0:pages = rows/10
-        else: pages = math.trunc(rows/10)+1
+        if rows % 10 == 0:
+            pages = rows/10
+        else:
+            pages = math.trunc(rows/10)+1
 
         if request.method == 'POST':
-            if request.form.get("b") != None: 
+            if request.form.get("b") != None:
                 num = int(request.form.get("b"))
                 global x
-                x = int(request.form.get("b")) 
+                x = int(request.form.get("b"))
                 i = int(str(num-1) + "1")
-                j = int(str(num) + "0") 
+                j = int(str(num) + "0")
             elif request.form.get("next") == "next":
-                try:x
-                except NameError:x=1
-                x+=1
-                print (pages)
-                print (x)
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x += 1
+                print(pages)
+                print(x)
 
-                if x >= pages:x = pages
-                i = int(str(x-1) + "1")
-                j = int(str(x) + "0")  
-                
-            elif request.form.get("Previous") == "Previous":
-                try:x
-                except NameError:x=1
-                x-=1
-                if x <= 0:x = 1
+                if x >= pages:
+                    x = pages
                 i = int(str(x-1) + "1")
                 j = int(str(x) + "0")
-        
-        return render_template('dashboard/space/index.html', spaces=data , i=i , j=j  , pages=pages)
-    
+
+            elif request.form.get("Previous") == "Previous":
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x -= 1
+                if x <= 0:
+                    x = 1
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")
+
+        return render_template('dashboard/space/index.html', spaces=data, i=i, j=j, pages=pages)
 
 
 @app.route('/dashboard/space/<int:id>/delete', methods=['POST'])
@@ -245,7 +255,6 @@ def create_space():
                 description=form.description.data,
                 guidelines=form.guidelines.data,
                 capacity=form.capacity.data,
-                cover_img_url=form.images.data[0].filename if form.images.data[0] else None
             )
             for cat_price in form.category_prices.data:
                 for price in cat_price["price_list"]:
@@ -281,6 +290,12 @@ def create_space():
                         filename=filename
                     )
                 ))
+            space.cover_img_url = url_for(
+                "download_file",
+                dir="space",
+                filename=form.images.data[0].filename
+            )
+
             space.images = imagesObjs
             db.session.add(space)
             db.session.commit()
@@ -365,46 +380,53 @@ def update_space(id):
 
 
 # Tools
-@app.route('/dashboard/tools'  , methods=["GET", "POST"])
+@app.route('/dashboard/tools', methods=["GET", "POST"])
 @login_required
 def tool_list():
-    i=1 
-    j=10
+    i = 1
+    j = 10
     if current_user.role.name == "admin":
         data = Tool.query.all()
         cursor = connection.cursor()
         cursor.execute("SELECT COUNT(*) FROM tool")
         data2 = cursor.fetchone()
         rows = data2['COUNT(*)']
-        if rows%10==0:pages = rows/10
-        else: pages = math.trunc(rows/10)+1
+        if rows % 10 == 0:
+            pages = rows/10
+        else:
+            pages = math.trunc(rows/10)+1
         if request.method == 'POST':
-            if request.form.get("b") != None: 
+            if request.form.get("b") != None:
                 num = int(request.form.get("b"))
                 global x
-                x = int(request.form.get("b")) 
+                x = int(request.form.get("b"))
                 i = int(str(num-1) + "1")
-                j = int(str(num) + "0") 
+                j = int(str(num) + "0")
             elif request.form.get("next") == "next":
-                try:x
-                except NameError:x=1
-                x+=1
-                print (pages)
-                print (x)
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x += 1
+                print(pages)
+                print(x)
 
-                if x >= pages:x = pages
-                i = int(str(x-1) + "1")
-                j = int(str(x) + "0")  
-                
-            elif request.form.get("Previous") == "Previous":
-                try:x
-                except NameError:x=1
-                x-=1
-                if x <= 0:x = 1
+                if x >= pages:
+                    x = pages
                 i = int(str(x-1) + "1")
                 j = int(str(x) + "0")
-        return render_template('dashboard/tool/index.html', tools=data , i=i , j=j  , pages=pages)
-    
+
+            elif request.form.get("Previous") == "Previous":
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x -= 1
+                if x <= 0:
+                    x = 1
+                i = int(str(x-1) + "1")
+                j = int(str(x) + "0")
+        return render_template('dashboard/tool/index.html', tools=data, i=i, j=j, pages=pages)
 
 
 @app.route('/dashboard/tool/<int:id>/delete', methods=['POST'])
@@ -460,6 +482,11 @@ def create_tool():
                         filename=filename
                     )
                 ))
+            tool.cover_img_url = url_for(
+            "download_file",
+            dir="tool",
+            filename=form.images.data[0].filename
+            )
             tool.images = imagesObjs
             db.session.add(tool)
             db.session.commit()
@@ -825,49 +852,54 @@ def delete_category(id):
         return redirect(url_for("main_page"))
 
 
-@app.route('/dashboard/reservations/' , methods=["GET", "POST"])
+@app.route('/dashboard/reservations/', methods=["GET", "POST"])
 @login_required
 def get_reservations():
-    i=1 
-    j=10
+    i = 1
+    j = 10
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
         cursor = connection.cursor()
         cursor.execute("SELECT COUNT(*) FROM reservation")
         data = cursor.fetchone()
         rows = data['COUNT(*)']
-        if rows%10==0:pages = rows/10
-        else: pages = math.trunc(rows/10)+1
-        
-         
-        
+        if rows % 10 == 0:
+            pages = rows/10
+        else:
+            pages = math.trunc(rows/10)+1
+
         if request.method == 'POST':
-            if request.form.get("b") != None: 
+            if request.form.get("b") != None:
                 num = int(request.form.get("b"))
                 global x
-                x = int(request.form.get("b")) 
+                x = int(request.form.get("b"))
                 i = int(str(num-1) + "1")
-                j = int(str(num) + "0") 
+                j = int(str(num) + "0")
             elif request.form.get("next") == "next":
-                try:x
-                except NameError:x=1
-                x+=1
-                if x >= pages:x = pages
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x += 1
+                if x >= pages:
+                    x = pages
                 i = int(str(x-1) + "1")
-                j = int(str(x) + "0")  
-                
+                j = int(str(x) + "0")
+
             elif request.form.get("Previous") == "Previous":
-                try:x
-                except NameError:x=1
-                x-=1
-                if x <= 0:x = 1
+                try:
+                    x
+                except NameError:
+                    x = 1
+                x -= 1
+                if x <= 0:
+                    x = 1
                 i = int(str(x-1) + "1")
-                j = int(str(x) + "0")  
-                
-                
+                j = int(str(x) + "0")
+
         return render_template(
             "dashboard/reservation/index.html",
-            reservations=reservations , i=i , j=j  , pages=pages)
+            reservations=reservations, i=i, j=j, pages=pages)
     return redirect(url_for("main_page"))
 
 
