@@ -290,12 +290,6 @@ def create_space():
                         filename=filename
                     )
                 ))
-            space.cover_img_url = url_for(
-                "download_file",
-                dir="space",
-                filename=form.images.data[0].filename
-            )
-
             space.images = imagesObjs
             db.session.add(space)
             db.session.commit()
@@ -482,11 +476,6 @@ def create_tool():
                         filename=filename
                     )
                 ))
-            tool.cover_img_url = url_for(
-            "download_file",
-            dir="tool",
-            filename=form.images.data[0].filename
-            )
             tool.images = imagesObjs
             db.session.add(tool)
             db.session.commit()

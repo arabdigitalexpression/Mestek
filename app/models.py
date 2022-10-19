@@ -155,7 +155,6 @@ class Space(db.Model):
     description = db.Column(db.Text(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    cover_img_url = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     category_prices = db.relationship(
@@ -173,7 +172,6 @@ class Tool(db.Model):
     description = db.Column(db.String(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    cover_img_url = db.Column(db.Boolean, default=False, nullable=False)
     price = db.Column(db.Float, nullable=False)
     count = db.Column(db.Integer, default=1, nullable=True)
     category_prices = db.relationship(
