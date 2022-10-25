@@ -724,7 +724,7 @@ def get_reservations():
         rows = data['COUNT(*)']
         if rows%10==0:pages = rows/10
         else: pages = math.trunc(rows/10)+1
-        
+        print (pages)
          
         
         if request.method == 'POST':
@@ -805,6 +805,7 @@ def createReservation():
                     user_id = user_id,
                     full_price = full_price
                 )
+                db.session.add(space)
                 start_date_range = request.form.get("start_date_range")
                 end_date_range = request.form.get("end_date_range")
                 date_no_range = request.form.get("date_from_to_no_range")
@@ -817,17 +818,59 @@ def createReservation():
                     days = int (start_date[2])
                     counter = int(end_date[2]) - int(start_date[2])
                     if start_date[0] == end_date[0] and start_date[1] == end_date[1] :
-                        for count in range(counter+1):
-                            ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
-                            print(ans.strftime("%A") )
-                            if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                        if request.form.get ("check-sa") == "on" and request.form.get ("check-fr") == "on":
+                            for count in range(counter+1):
+                                ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
                                 final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day = final_date
                                 )
+                                Dates.reservations.append(space)
                                 ##############################################################
                                 db.session.add(Dates)
-                            days += 1
+                                days += 1
+
+                        elif request.form.get ("check-sa") == None and request.form.get ("check-fr") == "on":
+                            for count in range(counter+1):
+                                ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                                print( request.form.get ("check-sa"))
+                                if ans.strftime("%A") != "Saturday":
+                                    final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                    Dates = Calendar(
+                                        day = final_date
+                                    )
+                                    Dates.reservations.append(space)
+                                    ##############################################################
+                                    db.session.add(Dates)
+                                days += 1
+
+                        elif request.form.get ("check-sa") == "on" and request.form.get ("check-fr") == None:
+                            for count in range(counter+1):
+                                ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                                print( request.form.get ("check-sa"))
+                                if ans.strftime("%A") != "Friday":
+                                    final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                    Dates = Calendar(
+                                        day = final_date
+                                    )
+                                    Dates.reservations.append(space)
+                                    ##############################################################
+                                    db.session.add(Dates)
+                                days += 1
+
+                        elif request.form.get ("check-sa") == None and request.form.get ("check-fr") == None:
+                            for count in range(counter+1):
+                                ans = datetime.date(int(start_date[0]),int(start_date[1]), int(days))
+                                print( request.form.get ("check-sa"))
+                                if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
+                                    final_date = start_date[0] + "-" + start_date[1] + "-" + str(days)
+                                    Dates = Calendar(
+                                        day = final_date
+                                    )
+                                    Dates.reservations.append(space)
+                                ##############################################################
+                                db.session.add(Dates)
+                                days += 1
                 ########## Save no_ Range_date ###########################
                 elif date_no_range !="" :
                     
@@ -838,20 +881,20 @@ def createReservation():
                         Dates = Calendar(
                             day = final_date
                         )
+                        Dates.reservations.append(space)
                         db.session.add(Dates)
-                    time1 = request.form.get ("time_picker_no_range")
-                    time2 = request.form.get ("time2_picker_no_range")
-                    ftime = time1.split(" ")
-                    etime = time2.split(" ")
-                    Time1 = int(ftime[0])
-                    Time2 = int(etime[0])
-                    finaltime = Interval (
-                        start_time = str(Time1) +":00:00",
-                        end_time = str(Time2) +":00:00",
-                    )
-                    db.session.add (finaltime)
-                    
-                db.session.add(space)
+                        time1 = request.form.get ("time_picker_no_range")
+                        time2 = request.form.get ("time2_picker_no_range")
+                        ftime = time1.split(" ")
+                        etime = time2.split(" ")
+                        Time1 = int(ftime[0])
+                        Time2 = int(etime[0])
+                        finaltime = Interval (
+                            start_time = str(Time1) +":00",
+                            end_time = str(Time2) +":00",
+                        )
+                        db.session.add (finaltime)
+
                 db.session.commit()
                 return redirect(url_for("get_reservations"))
             if request.form.get("chooseTool") == "chooseTool":
@@ -907,6 +950,7 @@ def createReservation():
                                 Dates = Calendar(
                                     day = final_date
                                 )
+                                Dates.reservations.append(space)
                                 ##############################################################
                                 db.session.add(Dates)
                             days += 1
@@ -917,6 +961,7 @@ def createReservation():
                         Dates = Calendar(
                             day = final_date
                         )
+                        Dates.reservations.append(space)
                         db.session.add(Dates)
 
                     time1 = request.form.get ("time_picker_no_range")
@@ -985,6 +1030,7 @@ def createReservationTool():
                             Dates = Calendar(
                                 day = final_date
                             )
+                            Dates.reservations.append(tools)
                             ##############################################################
                             db.session.add(Dates)
                         days += 1
@@ -1035,6 +1081,7 @@ def userReservationTool():
                                 Dates = Calendar(
                                     day = final_date
                                 )
+                                Dates.reservations.append(tools)
                                 ##############################################################
                                 db.session.add(Dates)
                             days += 1
