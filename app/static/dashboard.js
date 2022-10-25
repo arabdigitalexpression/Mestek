@@ -1,7 +1,8 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   $('.range_HS').hide();
   $('#picker-no-range').hide();
   $("#time2-picker-no-range").prop('disabled', true);
+  $(".check").hide();
 });
 
 
@@ -9,39 +10,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function myFunction() {
   var x = document.getElementById("mySelect").value;
-  if (x == "range"){
+  if (x == "range") {
     $('.range_HS').show(500);
+    $(".check").show();
     $('#picker-no-range').hide();
   }
-  else if(x == "no_range"){
+  else if (x == "no_range") {
     $('#picker-no-range').show(500);
+    $(".check").hide();
     $('.range_HS').hide();
   }
-  else { 
+  else {
     $('.range_HS').hide(500);
     $('#picker-no-range').hide(500);
+    $(".check").hide();
   }
 }
 
 
 
- var date = new Date();
- current_date = date.getFullYear()+ (date.getMonth()+1)+"/"+date.getDate()+"/";
- last_month = date.getMonth() + 3;
- console.log(last_month)
- if (last_month > 12) last_month -= 12;
- last_date = date.getFullYear() + "/" + (last_month) + "/" + date.getDate(); 
+var date = new Date();
+current_date = date.getFullYear() + (date.getMonth() + 1) + "/" + date.getDate() + "/";
+last_month = date.getMonth() + 3;
+if (last_month > 12) last_month -= 12;
+last_date_admin = (date.getFullYear() + 10) + "/" + (last_month) + "/" + date.getDate();
 
- //        Range selector
- $('.input-daterange').datepicker({
+$('.input-daterange').datepicker({
   startDate: current_date,
-  endDate: last_date,
+  endDate: last_date_admin,
   daysOfWeekDisabled: "5,6",
   todayHighlight: true,
   format: "yyyy/mm/dd",
   multidateSeparator: " "
 });
- function range_date(){
+function range_date() {
   x = document.querySelector(".date-picker-range").value;
   val = x.split(" - ");
   start = new Date(val[0]);
@@ -53,194 +55,188 @@ function myFunction() {
   console.log(val[1]);
   $(".date-picker-range").val("تم تحديد " + days + " / يوم")
   $(".date_from_to").val(val[0] + "," + val[1])
- }
+}
 
- //     No_range selector
- $('#date-picker-no-range').datepicker({
+//     No_range selector
+$('#date-picker-no-range').datepicker({
   startDate: current_date,
-  endDate: last_date,
+  endDate: last_date_admin,
   multidate: true,
-  daysOfWeekDisabled: "5,6",
+  daysOfWeekDisabled: "",
   todayHighlight: true,
   format: "yyyy/mm/dd",
 });
-function no_range_date(){
-  x= document.getElementById("date-picker-no-range").value;
-  document.getElementById("date_from_to_no_range").value= x
-  val = x.split (",");
-  days = val.length ;
+function no_range_date() {
+  x = document.getElementById("date-picker-no-range").value;
+  document.getElementById("date_from_to_no_range").value = x
+  val = x.split(",");
+  days = val.length;
   console.log(document.getElementById("date_from_to_no_range").value);
   $("#date-picker-no-range").val("تم تحديد " + days + " / يوم")
- }
+}
 
-
-
- //    time
-for (i = 9; i <= 15; i++) {
+//    time
+for (i = 7; i <= 16; i++) {
   val = i;
   option = i;
   pm_am = " ص"
   if (i > 12) {
-      option -= 12;
-      pm_am = " م"
+    option -= 12;
+    pm_am = " م"
   }
   else if (i == 12) {
-      pm_am = " م"
+    pm_am = " م"
   }
   $('#time-picker-no-range').append($('<option>', {
-      value: val,
-      text: option + pm_am,
+    value: val,
+    text: option + pm_am,
   }));
   $('#time-picker-no-range').append($('<option>', {
-      value: val + ":30",
-      text: option + ":30" + pm_am,
+    value: val + ":30",
+    text: option + ":30" + pm_am,
   }));
 }
-function upto(){
-  max_res =6;
-    res = 0;
-    value = document.getElementById("time-picker-no-range").value
-    // console.log (value )
+function upto() {
+  max_res = 6;
+  res = 0;
+  value = document.getElementById("time-picker-no-range").value
+  // console.log (value )
 
-    $('#time2-picker-no-range')
+  $('#time2-picker-no-range')
     .find('option')
     .remove()
     .end()
     .append('<option value="hide">الي</option>')
     .val('hide');
 
-    if (value == "hide") {
-        $("#time2-picker-no-range").prop('disabled', true)
-    }
-    else {
-        $("#time2-picker-no-range").prop('disabled', false);
-        time = value.split(":")
-        hours = parseInt(time[0]) + 2;
-        if (time[1] == undefined) minutes = null;
-        else minutes = ":" + time[1];
-        // console.log(hours);
-        for (hours; hours <= 18; hours = hours + 2) {
-            res += 2;
-            if (res <= max_res) {
-                Hours = hours;
-                pm_am = " ص"
-                if (Hours > 12) {
-                    Hours -= 12;
-                    pm_am = " م"
-                }
-                else if (Hours == 12) {
-                    pm_am = " م"
-                }
-                $('#time2-picker-no-range').append($('<option>', {
-                    value: hours + minutes,
-                    text: Hours + minutes + pm_am,
-                }));
-
-            }
-        }
-    }
-}
-
-
-function space_validate(){
-  
-  if(document.form.spaceName.value=="hide")
-{
-alert ( "برجاء اختيار مساحة");
-return false;
-}
-if(document.form.type.value=="hide")
-{
-alert ( "برجاء تحديد نوع الحجز");
-return false;
-}
-else if (document.form.date_from_to.value =="" && document.form.date_from_to_no_range.value ==""){
-  alert ( "برجاء تحديد ميعاد الحجز");
-  return false; 
-}else if (document.form.time_picker_no_range.value =="" && document.form.time2_picker_no_range.value =="" ){
-  if (document.form.date_from_to_no_range.value !=""){
-  alert ( "برجاء تحديد توقيت الحجز");
-  return false;
-}else if (document.form.date_from_to_no_range.value !=""){
-  return true;
-}
-}
-}
-
-function tool_validate(){
-  if(document.form.toolName.value=="hide")
-  {
-  alert ( "برجاء اختيار الأداة");
-  return false;
-  }else if(document.form.datetimes.value=="")
-  {
-  alert (  "برجاء تحديد ميعاد الحجز");
-  return false;
+  if (value == "hide") {
+    $("#time2-picker-no-range").prop('disabled', true)
   }
-  
+  else {
+    $("#time2-picker-no-range").prop('disabled', false);
+    time = value.split(":")
+    hours = parseInt(time[0]) + 2;
+    if (time[1] == undefined) minutes = null;
+    else minutes = ":" + time[1];
+    // console.log(hours);
+    for (hours; hours <= 22; hours = hours + 2) {
+      res += 2;
+      if (res <= max_res) {
+        Hours = hours;
+        pm_am = " ص"
+        if (Hours > 12) {
+          Hours -= 12;
+          pm_am = " م"
+        }
+        else if (Hours == 12) {
+          pm_am = " م"
+        }
+        $('#time2-picker-no-range').append($('<option>', {
+          value: hours + minutes,
+          text: Hours + minutes + pm_am,
+        }));
+
+      }
+    }
+  }
+}
+
+
+function space_validate() {
+
+  if (document.form.spaceName.value == "hide") {
+    alert("برجاء اختيار مساحة");
+    return false;
+  }
+  if (document.form.type.value == "hide") {
+    alert("برجاء تحديد نوع الحجز");
+    return false;
+  }
+  else if (document.form.date_from_to.value == "" && document.form.date_from_to_no_range.value == "") {
+    alert("برجاء تحديد ميعاد الحجز");
+    return false;
+  } else if (document.form.time_picker_no_range.value == "" && document.form.time2_picker_no_range.value == "") {
+    if (document.form.date_from_to_no_range.value != "") {
+      alert("برجاء تحديد توقيت الحجز");
+      return false;
+    } else if (document.form.date_from_to_no_range.value != "") {
+      return true;
+    }
+  }
+}
+
+function tool_validate() {
+  if (document.form.toolName.value == "hide") {
+    alert("برجاء اختيار الأداة");
+    return false;
+  } else if (document.form.datetimes.value == "") {
+    alert("برجاء تحديد ميعاد الحجز");
+    return false;
+  }
+
 }
 $('.form_select').chosen();
 
-ClassicEditor.create( document.querySelector( '#description' ), {
+ClassicEditor.create(document.querySelector('#description'), {
   language: 'ar'
-} )
+})
 
-ClassicEditor.create( document.querySelector( '#guidelines' ), {
+ClassicEditor.create(document.querySelector('#guidelines'), {
   language: 'ar'
-} )
+})
 
 
-// (() => {
-//   'use strict'
+(() => {
+  'use strict'
 
-//   feather.replace({ 'aria-hidden': 'true' })
+  feather.replace({ 'aria-hidden': 'true' })
 
-//   // Graphs
-//   const ctx = document.getElementById('myChart')
-//   // eslint-disable-next-line no-unused-vars
-//   const myChart = new Chart(ctx, {
-//     type: 'line',
-//     data: {
-//       labels: [
-//         'الأحد',
-//         'الإثنين',
-//         'الثلاثاء',
-//         'الأربعاء',
-//         'الخميس',
-//         'الجمعة',
-//         'السبت'
-//       ],
-//       datasets: [{
-//         data: [
-//           15339,
-//           21345,
-//           18483,
-//           24003,
-//           23489,
-//           24092,
-//           12034
-//         ],
-//         lineTension: 0,
-//         backgroundColor: 'transparent',
-//         borderColor: '#007bff',
-//         borderWidth: 4,
-//         pointBackgroundColor: '#007bff'
-//       }]
-//     },
-//     options: {
-//       scales: {
-//         yAxes: [{
-//           ticks: {
-//             beginAtZero: false
-//           }
-//         }]
-//       },
-//       legend: {
-//         display: false
-//       }
-//     }
-//   })
-// })()
+  // Graphs
+  const ctx = document.getElementById('myChart')
+  // eslint-disable-next-line no-unused-vars
+  const myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [
+        'الأحد',
+        'الإثنين',
+        'الثلاثاء',
+        'الأربعاء',
+        'الخميس',
+        'الجمعة',
+        'السبت'
+      ],
+      datasets: [{
+        data: [
+          15339,
+          21345,
+          18483,
+          24003,
+          23489,
+          24092,
+          12034
+        ],
+        lineTension: 0,
+        backgroundColor: 'transparent',
+        borderColor: '#007bff',
+        borderWidth: 4,
+        pointBackgroundColor: '#007bff'
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: false
+          }
+        }]
+      },
+      legend: {
+        display: false
+      }
+    }
+  })
+})()
 
 
 
