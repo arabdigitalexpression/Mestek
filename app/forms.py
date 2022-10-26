@@ -40,6 +40,9 @@ class RoleCategoryForm(FlaskForm):
             "class": "form-control form-control-color form-control-sm rounded-0", "title": "Choose your color"
         }
     )
+    isOrganization = BooleanField ("منظمة" ,default = False , render_kw={
+        "class": "form-check-input ms-2"
+    })
 
 
 class LoginForm(FlaskForm):
@@ -238,7 +241,7 @@ class SpaceForm(FlaskForm):
                                 render_kw={
                                     "class": "form-check-input"
                                 }
-                                ),
+                                )
 
 
     description = TextAreaField('الوصف', validators=[Length(max=1024)],
