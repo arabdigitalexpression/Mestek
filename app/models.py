@@ -1,3 +1,5 @@
+import enum
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -19,16 +21,41 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-# The UserMixin adds stuff for us like is_authenticated property
+class ReservationTypes(enum.Enum):
+    space = 0
+    tool = 1
+
+
+class PaymentTypes(enum.Enum):
+    no_payment = 0
+    down_payment = 1
+    full_payment = 2
+
+
+class Gender(enum.Enum):
+    male = 0
+    female = 1
+    prefer_not_answer = 2
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=False)
     username = db.Column(db.String(80), unique=True, nullable=False)
+    gender = db.Column(db.Enum(Gender), nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=True)
+    phone = db.Column(db.String(50), nullable=False)
+    birthday = db.Column(db.Date(), nullable=True)
+    activated = db.Column(db.Boolean, default=False, nullable=False)
+    website_url = db.Column(db.String(120),  nullable=True)
+    avatar_url = db.Column(db.String(120),  nullable=True)
+    address = db.Column(db.String(200), nullable=True)
     password = db.Column(db.String(128), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        'category.id'), nullable=False)
+    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
 
     # created at date when user registered
     # Date is year-month-day
@@ -56,6 +83,16 @@ class User(UserMixin, db.Model):
     # TODO: Revisit this code
     # def update(self):
     #     pass
+
+
+class Organization(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), unique=True, nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    address = db.Column(db.String(200), nullable=True)
+    users = db.relationship('User', backref='organization', lazy=True)
+    category_id = db.Column(
+        db.Integer, db.ForeignKey('category.id'), nullable=True)
 
 
 class Role(db.Model):
@@ -101,8 +138,12 @@ class CategoryTool(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(32), unique=True, nullable=False)
+    description = db.Column(db.String(128), nullable=True)
     color_code = db.Column(db.String(10), unique=True, nullable=False)
+    is_organization = db.Column(db.Boolean, default=False, nullable=False)
+    organizations = db.relationship(
+        'Organization', backref='category', lazy=True)
     users = db.relationship('User', backref='category', lazy=True)
     space_prices = db.relationship("CategorySpace", back_populates="category")
     tool_prices = db.relationship("CategoryTool", back_populates="category")
@@ -114,13 +155,14 @@ class Space(db.Model):
     description = db.Column(db.Text(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    price = db.Column(db.Float, nullable=True)
-    capacity = db.Column(db.Integer, nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    capacity = db.Column(db.Integer, nullable=False)
     category_prices = db.relationship(
         'CategorySpace', back_populates='space', lazy='subquery'
     )
     images = db.relationship('Image', backref='space', lazy=True)
-    reservations = db.relationship('Reservation', cascade="all", backref='space', lazy=True)
+    reservations = db.relationship(
+        'Reservation', cascade="all", backref='space', lazy=True)
     tools = db.relationship('Tool', backref='space', lazy=True)
 
 
@@ -130,13 +172,14 @@ class Tool(db.Model):
     description = db.Column(db.String(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    price = db.Column(db.Float, nullable=True)
-    count = db.Column(db.Integer, nullable=True)
+    price = db.Column(db.Float, nullable=False)
+    count = db.Column(db.Integer, default=1, nullable=True)
     category_prices = db.relationship(
         'CategoryTool', back_populates='tool', lazy='subquery'
     )
     images = db.relationship('Image', backref='tool', lazy=True)
-    reservations = db.relationship('Reservation', cascade="all", backref='tool', lazy=True)
+    reservations = db.relationship(
+        'Reservation', cascade="all", backref='tool', lazy=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
 
 
@@ -153,6 +196,12 @@ reservation_calendar = db.Table(
     db.Column('calendar_id', db.Integer, db.ForeignKey('calendar.id'))
 )
 
+reservation_tool = db.Table(
+    'reservation_tool', db.Model.metadata,
+    db.Column('reservation_id', db.Integer, db.ForeignKey('reservation.id')),
+    db.Column('tool_id', db.Integer, db.ForeignKey('tool.id'))
+)
+
 
 class Reservation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -164,25 +213,37 @@ class Reservation(db.Model):
         nullable=False
     )
     full_price = db.Column(db.Float, nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    attendance_num = db.Column(db.Integer, nullable=True)
+    min_age = db.Column(db.Integer, nullable=True)
+    max_age = db.Column(db.Integer, nullable=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
     tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=True)
     calendars = db.relationship(
         'Calendar', secondary=reservation_calendar,
         backref=db.backref('reservations')
     )
-    intervals = db.relationship('Interval', cascade="all, delete", backref='tool', lazy=True)
+    tools = db.relationship(
+        'Tool', secondary=reservation_tool,
+        backref=db.backref('tools')
+    )
+    intervals = db.relationship(
+        'Interval', cascade="all, delete", backref='tool', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
 class Calendar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Date(), nullable=False)
-    intervals = db.relationship('Interval', cascade="all, delete", backref='interval', lazy=True)
+    intervals = db.relationship(
+        'Interval', cascade="all, delete", backref='interval', lazy=True)
 
 
 class Interval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
-    calendar_id = db.Column(db.Integer, db.ForeignKey('calendar.id', ondelete="CASCADE"), nullable=True)
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservation.id', ondelete="CASCADE"), nullable=True)
+    calendar_id = db.Column(db.Integer, db.ForeignKey(
+        'calendar.id', ondelete="CASCADE"), nullable=True)
+    reservation_id = db.Column(db.Integer, db.ForeignKey(
+        'reservation.id', ondelete="CASCADE"), nullable=True)

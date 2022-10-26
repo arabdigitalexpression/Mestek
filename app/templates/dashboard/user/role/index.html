@@ -19,21 +19,23 @@ form_action = url_for('get_roles') %} {% endif %}
 		<span class="form_error">{{ error }}</span>
 		{%endfor%} {% endif%}{{ form.colorCode.label }}{{ form.colorCode }}
 	</div>
-	<button type="submit" class="btn btn-dark">
+	<button type="submit" class="btn rounded-0 btn-dark">
 		{% if isUpdate %} تعديل صلاحية {% else %} إضافة صلاحية {% endif %}
 	</button>
 	{% if isUpdate %}
 	<a
 		href="{{ url_for('get_roles') }}"
 		type="button"
-		class="btn btn-outline-danger"
+		class="btn rounded-0 btn-outline-danger"
 		>إلغاء</a
 	>
 	{% endif %}
 </form>
 
 <div class="table-responsive my-3">
-	<table class="table table-striped table-hover table-sm">
+	<table
+		class="table align-middle table-light table-striped table-hover table-sm"
+	>
 		<thead>
 			<tr>
 				<th scope="col">#</th>
@@ -49,7 +51,7 @@ form_action = url_for('get_roles') %} {% endif %}
 				<td>{{role.name}}</td>
 				<td>
 					<span
-						class="badge font-monospace"
+						class="badge rounded-0 font-monospace"
 						style="background-color: {{role.color_code}};"
 						>{{ role.color_code }}</span
 					>
@@ -57,7 +59,7 @@ form_action = url_for('get_roles') %} {% endif %}
 				<td class="d-flex">
 					<a
 						href="{{url_for('update_role', id=role.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-circle"
+						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
@@ -65,7 +67,7 @@ form_action = url_for('get_roles') %} {% endif %}
 						{{ form.csrf_token }}
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm mx-1 rounded-circle"
+							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{role.id}}"
 							data-bs-toggle="tooltip"
@@ -82,7 +84,7 @@ form_action = url_for('get_roles') %} {% endif %}
 							aria-hidden="true"
 						>
 							<div class="modal-dialog">
-								<div class="modal-content">
+								<div class="modal-content rounded-0">
 									<div class="modal-header">
 										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
 										<button
@@ -97,19 +99,21 @@ form_action = url_for('get_roles') %} {% endif %}
 										<br />
 										اعد كتابة إسم التصنيف فى المربع أدناه:
 										<p class="lead d-inline-block">
-											<mark class="badge text-muted h2">{{role.name}}</mark>
+											<mark class="badge rounded-0 text-muted h2"
+												>{{role.name}}</mark
+											>
 										</p>
 										{{ input.value}}
 									</div>
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn btn-outline-secondary"
+											class="btn rounded-0 btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
-										<button type="submit" class="btn btn-danger">
+										<button type="submit" class="btn rounded-0 btn-danger">
 											تأكيد الحذف
 										</button>
 									</div>
