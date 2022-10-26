@@ -1,11 +1,145 @@
-{% extends 'dashboard/base.html' %}
-
-{% block title %} dashboard {% endblock %}
-
+{% extends 'dashboard/base.html' %} {% block title %} dashboard {% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">لوحة القيادة</h1>
-  </div>
+<h1 class="h2">لوحة التحكم</h1>
+<div class="container">
+	<div class="row">
+		<div class="col-md-4 col-xl-3">
+			<div class="card bg-c-blue order-card">
+				<div class="card-block">
+					<h4 class="m-b-20">المساحات</h4>
+					<h2 class="text-right">
+						<i class="bi bi-boxes f-left"></i><span>486</span>
+					</h2>
+					<p class="m-b-0 h6">
+						Completed Orders<span class="f-left">351</span>
+					</p>
+				</div>
+			</div>
+		</div>
 
-  <canvas class="my-4 w-100 h-100" id="myChart"></canvas>  
+		<div class="col-md-4 col-xl-3">
+			<div class="card bg-c-green order-card">
+				<div class="card-block">
+					<h4 class="m-b-20">اﻷدوات</h4>
+					<h2 class="text-right">
+						<i class="bi bi-tools f-left"></i><span>486</span>
+					</h2>
+					<p class="m-b-0 h6">
+						Completed Orders<span class="f-left">351</span>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-xl-3">
+			<div class="card bg-c-yellow order-card">
+				<div class="card-block">
+					<h4 class="m-b-20">الحجوزات</h4>
+					<h2 class="text-right">
+						<i class="bi bi-receipt f-left"></i><span>486</span>
+					</h2>
+					<p class="m-b-0 h6">
+						Completed Orders<span class="f-left">351</span>
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 col-xl-3">
+			<div class="card bg-c-pink order-card">
+				<div class="card-block">
+					<h4 class="m-b-20">المستخدمين</h4>
+					<h2 class="text-right">
+						<i class="bi bi-people-fill f-left"></i><span>486</span>
+					</h2>
+					<p class="m-b-0 h6">
+						Completed Orders<span class="f-left">351</span>
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="my-1 py-1 px-2 border border-light rounded card">
+				<div class="media text-muted pt-3 d-flex justify-content-around">
+					<img
+						src="https://bootdey.com/img/Content/avatar/avatar7.png"
+						alt=""
+						class="me-2 rounded"
+						width="32"
+						height="32"
+					/>
+					<p
+						class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
+					>
+						<strong class="d-block text-gray-dark">@username</strong>
+						Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+						tellus ac cursus commodo.
+					</p>
+				</div>
+				<div class="media text-muted pt-3 d-flex justify-content-around">
+					<img
+						src="https://bootdey.com/img/Content/avatar/avatar6.png"
+						alt=""
+						class="me-2 rounded"
+						width="32"
+						height="32"
+					/>
+					<p
+						class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
+					>
+						<strong class="d-block text-gray-dark">@username</strong>
+						Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+						tellus ac cursus commodo.
+					</p>
+				</div>
+				<div class="media text-muted pt-3 d-flex justify-content-around">
+					<img
+						src="https://bootdey.com/img/Content/avatar/avatar5.png"
+						alt=""
+						class="me-2 rounded"
+						width="32"
+						height="32"
+					/>
+					<p
+						class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
+					>
+						<strong class="d-block text-gray-dark">@username</strong>
+						Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+						tellus ac cursus commodo.
+					</p>
+				</div>
+				<div class="media text-muted pt-3 d-flex justify-content-around">
+					<img
+						src="https://bootdey.com/img/Content/avatar/avatar4.png"
+						alt=""
+						class="me-2 rounded"
+						width="32"
+						height="32"
+					/>
+					<p
+						class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray"
+					>
+						<strong class="d-block text-gray-dark">@username</strong>
+						Donec id elit non mi porta gravida at eget metus. Fusce dapibus,
+						tellus ac cursus commodo.
+					</p>
+				</div>
+				<span class="d-block text-right mt-3">
+					<a href="#" class="text-decoration-none text-muted fw-bold">
+						عرض الكل</a
+					>
+				</span>
+			</div>
+		</div>
+		<div class="col-md-6"></div>
+	</div>
+</div>
+<!-- <div
+	class="d-flex justify-content-around flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+></div> -->
+
+<!-- <canvas class="my-4 w-100 h-100" id="myChart"></canvas> -->
+
 {% endblock %}

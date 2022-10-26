@@ -1,0 +1,119 @@
+
+.select-hidden {
+    display: none;
+    visibility: hidden;
+    padding-right: 10px;
+}
+.select {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    font-size: 16px;
+    color: #fff;
+    width: 250px;
+    height: 40px;
+}
+.select-styled {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #4d4746;
+    padding: 8px 15px;
+}
+.select-styled:after {
+    content: "";
+    width: 0;
+    height: 0;
+    border: 7px solid transparent;
+    border-color: #fff transparent transparent transparent;
+    position: absolute;
+    top: 16px;
+    right: 190px;
+}
+.select-styled:hover {
+    background-color: #4d4746;
+}
+.select-styled:active, .select-styled.active {
+    background-color: #4d4746;
+}
+.select-styled:active:after, .select-styled.active:after {
+    top: 9px;
+    border-color: transparent transparent #fff transparent;
+}
+.select-options {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 999;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: #4d4746;
+}
+.select-options li {
+    margin: 0;
+    padding: 12px 0;
+    text-indent: 5px;
+    border-top: 1px solid #4d4746;
+}
+.select-options li:hover, .select-options li.is-selected {
+    color: #4d4746;
+    background: #fff;
+}
+.select-options li[rel="hide"] {
+    display: none;
+}
+
+.date{
+ cursor: pointer;
+ display: inline-block;
+ position: relative;
+ font-size: 20px;
+ color: #fff;
+ width: 250px;
+   height: 40px;
+ background-color: #4d4746;
+ padding-left:10px;
+
+}
+::-webkit-input-placeholder { /* Edge */
+    color: #fff;
+    font-size: 16px;
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #fff;
+    font-size: 16px;
+    
+  }
+  
+  ::placeholder {
+    color: #fff;
+    font-size: 16px;
+  }
+
+
+::-webkit-calendar-picker-indicator{
+ background-color: #fff;
+ margin-right: 7px;
+ cursor:pointer;
+ border-radius: 3px;
+}
+
+
+table {
+ border-collapse: collapse;
+ width: 100%;
+}
+
+th, td {
+ /* text-align: left; */
+ padding: 8px;
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;}
+

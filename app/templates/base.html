@@ -6,26 +6,59 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link
 			rel="shortcut icon"
-			href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Adef_logo.svg/320px-Adef_logo.svg.png"
+			href="{{ url_for('static',filename='images/Adef_logo.svg') }}"
 			type="image/x-icon"
 		/>
 		<title>{% block title %}{% endblock %}</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700&display=swap"
+			href="{{ url_for('static',filename='styles/css2.css') }}"
 			rel="stylesheet"
 		/>
-        <link rel="stylesheet" href="{{ url_for('static',filename='chosen.css') }}"/>
-	
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" /> 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
+		<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+		<script src=".{{ url_for('static',filename='js/mobiscroll.javascript.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+		<script src=".{{ url_for('static',filename='js/daterangepicker.min.js') }}"></script>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/daterangepicker.css') }}"
+		/>
+		<script src="{{ url_for('static',filename='js/select2.min.js') }}"></script>
+		<link
+			href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/bootstrap-icons.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/chosen.css') }}"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script
+			type="text/javascript"
+			src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+		></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -39,10 +72,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script
 	<body>
 		{% block body %} {% endblock %}
 		<script
-			src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"
+			src="{{ url_for('static',filename='styles/js/masonry.pkgd.min.js') }}"
 			integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D"
 			crossorigin="anonymous"
 			async
 		></script>
+		<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
 	</body>
 </html>
