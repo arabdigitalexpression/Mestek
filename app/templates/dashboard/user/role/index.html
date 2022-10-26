@@ -19,7 +19,7 @@ form_action = url_for('get_roles') %} {% endif %}
 		<span class="form_error">{{ error }}</span>
 		{%endfor%} {% endif%}{{ form.colorCode.label }}{{ form.colorCode }}
 	</div>
-	<button type="submit" class="btn rounded-0 btn-dark">
+	<button type="submit" class="btn btn-sm rounded-0 btn-dark">
 		{% if isUpdate %} تعديل صلاحية {% else %} إضافة صلاحية {% endif %}
 	</button>
 	{% if isUpdate %}
@@ -41,7 +41,7 @@ form_action = url_for('get_roles') %} {% endif %}
 				<th scope="col">#</th>
 				<th scope="col">الاسم</th>
 				<th scope="col">اللون</th>
-				<th scope="col"></th>
+				<th scope="col">إعدادات التحكم</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -108,12 +108,15 @@ form_action = url_for('get_roles') %} {% endif %}
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn rounded-0 btn-outline-secondary"
+											class="btn btn-sm rounded-0 btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
-										<button type="submit" class="btn rounded-0 btn-danger">
+										<button
+											type="submit"
+											class="btn btn-sm rounded-0 btn-danger"
+										>
 											تأكيد الحذف
 										</button>
 									</div>
