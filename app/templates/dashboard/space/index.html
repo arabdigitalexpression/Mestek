@@ -21,7 +21,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 				<th scope="col">قيمة الحجر</th>
 				<th scope="col">مشرف؟</th>
 				<th scope="col">سعة الأفراد</th>
-				<th scope="col"></th>
+				<th scope="col">إعدادات التحكم</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -91,12 +91,15 @@ block heading %} المساحات {% endblock %} {% block actions %}
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn rounded-0 btn-outline-secondary"
+											class="btn btn-sm rounded-0 btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
-										<button type="submit" class="btn rounded-0 btn-danger">
+										<button
+											type="submit"
+											class="btn btn-sm rounded-0 btn-danger"
+										>
 											تأكيد الحذف
 										</button>
 									</div>
