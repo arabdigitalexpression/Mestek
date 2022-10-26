@@ -132,12 +132,11 @@ class SpaceForm(FlaskForm):
                                 render_kw={
                                     "class": "form-check-input"
                                 }
-                                )
-<<<<<<< HEAD
-    description = TextAreaField('الوصف', validators=[ Length(max=128)],
-=======
+                                ),
+
+
     description = TextAreaField('الوصف', validators=[Length(max=128)],
->>>>>>> eb0c57e2712f0ce898618ab7888a6c70d97da4c9
+
                                 render_kw={
         "placeholder": "الوصف", "class": "form-control", "rows": "5", "id":"description"
     }

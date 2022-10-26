@@ -9,20 +9,20 @@
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
 	{{ form.csrf_token }}
 
-	<div class="row m-5">
+	<div class="row d-flex align-items-center my-5">
 		<div class="col">
 			{% if form.name.errors %} {%for error in form.name.errors %}
 			<span class="form_error">{{ error }}</span>
 			{%endfor%} {% endif%} {{form.name}}
-			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control" placeholder="" aria-label=""> -->
+			<!-- <input required name="name" style="height: 50px;" type="text" class="form-control rounded-0" placeholder="" aria-label=""> -->
 		</div>
 		<div class="col">
-			{% if form.price.errors %} {%for error in form.price.errors %}
+			{% if form.capacity.errors %} {%for error in form.capacity.errors %}
 			<span class="form_error">{{ error }}</span>
 			{%endfor%} {% endif%}
-			<div class="input-group mb-3">
-				{{form.price}}
-				<span class="input-group-text">جم / الساعة</span>
+			<div class="input-group">
+				{{form.capacity}}
+				<span class="input-group-text bg-dark text-white rounded-0">فرد</span>
 			</div>
 		</div>
 		<div class="col">
@@ -36,64 +36,80 @@
 			</div>
 		</div>
 	</div>
-
-	<div class="m-5">
+	<div class="table-responsive-sm">
+		<table
+			class="table table-striped table-hover table-light table table-bordered table-sm"
+		>
+			<thead class="fst-normal">
+				<tr>
+					<th scope="col">#</th>
+					{% for category in categories %}
+					<th class="text-center align-top">{{category.name}}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for cp in form.category_prices %}
+				<tr>
+					<th>
+						<div class="input-group">{{ cp.unit_value }} {{ cp.unit }}</div>
+					</th>
+					{% for pl in cp.price_list %}
+					<td>
+						<div class="input-group">
+							{{ pl.category_id }} {{ pl.price }} {{ pl.price_unit }}
+						</div>
+					</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		{{ form.add_new_price }}
+	</div>
+	<div class="my-5">
 		{% if form.description.errors %} {%for error in form.description.errors %}
 		<span class="form_error">{{ error }}</span>
 		{%endfor%} {% endif%} {{form.description}}
 	</div>
 
-	<div class="m-5">
+	<div class="my-5">
 		{% if form.guidelines.errors %} {%for error in form.guidelines.errors %}
 		<span class="form_error">{{ error }}</span>
 		{%endfor%} {% endif%} {{form.guidelines}}
 	</div>
 
-    {% for cp in form.category_prices %}
-    <div class="row my-5">
-        <div class="col">
-        {{ cp.unit_value }}
-        {{ cp.unit }}
-        </div>
-        <div class="col">
-            <div class="row">
-        {% for pl in cp.price_list %}
-                <div class="col">
-            {{ pl.category_id }}
-            {{ pl.price }}
-            {{ pl.price_unit }}
-                </div>
-        {% endfor %}
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-    {{ form.add_new_price }}
-
-	<div class="mx-5">
+	<div class="my-3">
 		{{ form.images.label(class_="form-label")}} {{ form.images}}
 	</div>
 	{% if isUpdate %}
-	<div class="row p-5" data-masonry='{"percentPosition": true, "transitionDuration": "0.8s"}'>
+	<div
+		class="row p-5"
+		data-masonry='{"percentPosition": true, "transitionDuration": "0.8s"}'
+	>
 		{% for image in space.images %}
 		<div class="col" style="width: 250px">
 			<i
 				class="bi bi-x-circle-fill text-danger position-absolute"
 				style="top: 10px; left: 20px; font-size: 1.2rem; cursor: pointer"
 			></i>
-			<img class="img-fluid pb-4" src="{{image.url}}" style="object-fit: cover" />
+			<img
+				class="img-fluid pb-4"
+				src="{{image.url}}"
+				style="object-fit: cover"
+			/>
 		</div>
 		{% endfor %}
 	</div>
 	{% endif %}
-	<div class="float-end m-5">
+	<div class="float-end my-3">
 		<a
 			href="{{url_for('space_list')}}"
 			type="button"
-			class="btn btn-outline-danger"
+			class="btn rounded-0 btn-outline-danger"
 			>الغاء</a
 		>
-		<button type="submit" class="btn btn-dark">
+		<button type="submit" class="btn rounded-0 btn-dark">
 			{% if isUpdate %} تعديل المساحة {% else %} إضافة مساحة {% endif %}
 		</button>
 	</div>
