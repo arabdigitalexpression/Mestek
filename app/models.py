@@ -227,16 +227,15 @@ class Reservation(db.Model):
         'Tool', secondary=reservation_tool,
         backref=db.backref('tools')
     )
-    intervals = db.relationship(
-        'Interval', cascade="all, delete", backref='tool', lazy=True)
+    intervals = db.relationship('Interval', cascade="all, delete", backref='reservation', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
 class Calendar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Date(), nullable=False)
-    intervals = db.relationship(
-        'Interval', cascade="all, delete", backref='interval', lazy=True)
+    intervals = db.relationship('Interval', cascade="all, delete", backref='calendar', lazy=True)
+
 
 
 class Interval(db.Model):

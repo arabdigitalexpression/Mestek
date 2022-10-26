@@ -23,8 +23,8 @@ import math
 from uuid import uuid1
 import os
 import pymysql
-connection = pymysql.connect(host='localhost', user='root', password='toor',
-                             database='adef_srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host='localhost', user='root', password='',
+                             database='srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
 @app.route("/")
 @login_required
@@ -1019,26 +1019,31 @@ def createReservation():
                     
 
                     for final_date in dates:
-                        Dates = Calendar(
-                            day=final_date
-                        )
-                        Dates.reservations.append(space)
-                        db.session.add(Dates)
 
                         time1 = request.form.get ("time_picker_no_range")
-                        time2 = request.form.get ("time2_picker_no_range")
+                        time2 = request.form.get ("time2_picker_no_range")  
                         ftime = time1.split(" ")
                         etime = time2.split(" ")
-                        Time1 = int(ftime[0])
-                        Time2 = int(etime[0])
+                        Time1 = ftime[0]
+                        Time2 = etime[0]
                         finaltime = Interval (
                             start_time = str(Time1) +":00",
                             end_time = str(Time2) +":00",
                         )
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                        # 1st way
+                        finaltime.calendar = Dates
+                        finaltime.reservation = space
                         db.session.add (finaltime)
 
+                        db.session.add(Dates)
+                        # 2nd way
+                        # Dates.intervals.append(finaltime)
+                    db.session.commit()
+                
 
-                db.session.commit()
                 return redirect(url_for("get_reservations"))
             if request.form.get("chooseTool") == "chooseTool":
                 if request.form.get("spaceName") == 'hide':
@@ -1048,7 +1053,7 @@ def createReservation():
                     val1 = name.split('&')
 
                     datetime1 = request.form.get('datetimes')
-                    return render_template('dashboard/reservation/createReservation/adminSpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1] , users = users)
+                    return render_template('dashboard/reservation/form/adminSpaceWithTool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1] , users = users)
 
             if request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
@@ -1236,7 +1241,7 @@ def userReservationTool():
                 return redirect(url_for("main_page"))
             elif request.form.get("cancel") == "cancel":
                 return redirect(url_for("main_page"))
-        return render_template('/default/tool.html' ,tools=tool)
+        return render_template('/default/reservation/tool.html' ,tools=tool)
 
 
 
@@ -1263,9 +1268,10 @@ def userReservationSpace():
                 start_date_range = request.form.get("start_date_range")
                 end_date_range = request.form.get("end_date_range")
                 date_no_range = request.form.get("date_from_to_no_range")
+
                 ########## Save Range_date ###########################  
                 if start_date_range and end_date_range != "": 
- 
+
                     start_date = start_date_range.split("/")
                     end_date = end_date_range.split("/")
                     days = int (start_date[2])
@@ -1288,12 +1294,10 @@ def userReservationSpace():
                 elif date_no_range != "":
                     dates = date_no_range.split(", ")
                     for final_date in dates:
-                        Dates = Calendar(
-                            day=final_date
-                        )
-                        db.session.add(Dates)
-                        time1 = request.form.get("time_picker_no_range")
-                        time2 = request.form.get("time2_picker_no_range")
+
+                        time1 = request.form.get ("time_picker_no_range")
+                        time2 = request.form.get ("time2_picker_no_range")  
+
                         ftime = time1.split(" ")
                         etime = time2.split(" ")
 
@@ -1304,7 +1308,19 @@ def userReservationSpace():
                             end_time = str(Time2) +":00",
 
                         )
-                        db.session.add(finaltime)
+                        Dates = Calendar(
+                            day = final_date
+                        )
+                        # 1st way
+                        finaltime.calendar = Dates
+                        db.session.add (finaltime)
+                        # raise Exception()
+                        # 2nd way
+                        # Dates.intervals.append(finaltime)
+
+                        db.session.add(Dates)
+                        
+
                     db.session.commit()
                 return redirect(url_for("main_page"))
             elif request.form.get("chooseTool") == "chooseTool":
@@ -1315,7 +1331,7 @@ def userReservationSpace():
                     val1 = name.split('&')
 
                     datetime1 = request.form.get('datetimes')
-                    return render_template('default/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1]) 
+                    return render_template('default/reservation/space_with_tool.html', id=int(val1[0]) , reserve1=reserve , tools=tool , name=val1[2] , datetime=datetime1 ,price=val1[1]) 
 
             elif request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")

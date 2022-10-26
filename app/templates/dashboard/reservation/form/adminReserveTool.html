@@ -13,73 +13,61 @@
 
 
 <form action="{{ url_for('createReservationTool') }}" method="post">
-	<div class="col-3 mt-3">
-		<select
-			id="toools"
-			name="toolName"
-			class="form-select form_select form-select-sm w-100"
-		>
-			<option value="hide">-- اختر الأداة --</option>
-			{% for tool in tools %} {% if tool.space_id is none %}
-			<option value="{{tool.id}}&{{tool.price}}">
-				{{tool.name}} تكلفة الأداة {{tool.price}} جم/ يوم
-			</option>
-			{% endif %} {% endfor %}
-		</select>
-	</div>
-	<div class="col-3 mt-3">
-		<input
-			type="text"
-			class="form-control rounded-0 date-picker-range"
-			name="datetime"
-			placeholder="-- ميعاد الحجز --"
-			onchange="range_date()"
-		/>
-		<input type="hidden" class="date_from_to" name="datetimes" />
-		<p id="cost" style="color: red"></p>
-	</div>
 
-	<div class="col-3 mt-3">
-		<select name="payment" class="form-select form-select-sm w-100">
-			<option value="hide">الحساب</option>
-			<option value="no_payment">لم يتم الدفع</option>
-			<option value="down_payment">تم دفع مبلغ من الحجز</option>
-			<option value="full_payment">تم دفع المبلغ بالكامل</option>
-		</select>
-	</div>
-	<div class="col-3 mt-3">
-		<select
-			id="selUser"
-			name="username"
-			class="form-select form_select form-select-sm w-100"
-		>
-			<option value="hide">-- البريد الإلكترونى لصاحب الحجز --</option>
-			{% for user in users %}
-			<option value="{{user.id}}">
-				{{user.email}}
-			</option>
-			{% endfor %}
-		</select>
-	</div>
 
-	<!-- <div class="col-3 ">
+
+  <div class="col-3 mt-3">
+    <select id="toools" name="toolName" class="form_select w-100">
+      <option value="hide">-- اختر الأداة --</option>
+      {% for tool in tools %}
+      {% if tool.space_id is none %}
+      <option value="{{tool.id}}&{{tool.price}}">{{tool.name}} تكلفة الأداة {{tool.price}} جم/ يوم </option>
+      {% endif %}
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-3 mt-3 ">
+    <div class="input-daterange input-group">
+      <input type="text" class=" form-control text-center date-picker-range-1 " name="start_date_range"
+        placeholder="من" />
+      <input type="text" class="form-control text-center date-picker-range-2 " name="end_date_range"
+        placeholder="الي" />
+    </div>
+  </div>
+
+  <div class="col-3 mt-3">
+    <select name="payment" class="form-select w-100">
+      <option value='hide'>الحساب</option>
+      <option value="no_payment">لم يتم الدفع</option>
+      <option value="down_payment">تم دفع مبلغ من الحجز</option>
+      <option value="full_payment">تم دفع المبلغ بالكامل</option>
+    </select>
+  </div>
+    <div class="col-3 mt-3">
+      <select id='selUser'  name="username" class="form_select w-100">
+        <option value="hide">-- اسم صاحب الحجز --</option>
+        <option value='noAccount'>بدون اسم</option>
+        {% for user in users %}
+        <option value="{{user.id}}">{{user.first_name}}&nbsp;{{user.last_name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    
+
+    <!-- <div class="col-3 ">
       مدة الحجز
       <input type="number" name="" id="" class="date" style="width: 100px;" max="30" min="0">
     </div>  -->
-	<div class="col-4 float-end">
-		<button
-			type="submit"
-			class="btn btn-sm rounded-0 btn-outline-danger"
-			style="margin-left: 10px"
-			name="cancel"
-			value="cancel"
-		>
-			الغاء
-		</button>
-		<button type="submit" class="btn btn-sm rounded-0 btn-dark flex-grow-1">
-			تأكيد الحجز
-		</button>
-	</div>
+    <div class=" col-4 float-end" >
+      
+      <button type="submit" class="btn btn-outline-danger" style="margin-left: 10px;" name="cancel"
+        value="cancel">الغاء</button>
+      <button type="submit" class="btn btn-dark flex-grow-1" >تأكيد الحجز</button>
+    </div>
+
+
+
+ 
 </form>
 
 
