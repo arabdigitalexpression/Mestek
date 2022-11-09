@@ -6,12 +6,18 @@
 	rel="stylesheet"
 />
 <link
+	href="{{ url_for('static',filename='styles/cmain.min.css') }}"
 	rel="stylesheet"
-	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
 />
-<link 
+<link
+	href="{{ url_for('static',filename='styles/cstyle.css') }}"
 	rel="stylesheet"
-	href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}"/>
+/>
+<link
+	href="{{ url_for('static',filename='styles/dashboard-cards.css') }}"
+	rel="stylesheet"
+/>
+
 <style>
 	.bd-placeholder-img {
 		font-size: 1.125rem;
@@ -255,9 +261,8 @@
 		</main>
 	</div>
 </div>
-<script src="{{ url_for('static',filename='mobiscroll.javascript.min.js')}}"
-></script>
-<script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/cmain.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/cstyle.js') }}"></script>
 <script
 	src="{{ url_for('static',filename='js/Chart.min.js')}}"
 	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
