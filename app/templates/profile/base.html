@@ -12,12 +12,62 @@
 			<li><a href="{{ url_for('login_page') }}">Login</a></li>
 			{% else %}
 			<li>مرحبا, {{ current_user.first_name }} !</li>
-			<li>
-				<a
-					href="{{ url_for('logout') }}"
-					class="btn rounded-0 btn-danger btn-sm mx-2"
-					><i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
-				</a>
+			<li class="nav-item dropstart mx-2">
+				{% if current_user.avatar_url %}
+				<img
+					src="{{ current_user.avatar_url }}"
+					alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+					class="rounded-circle"
+					style="object-fit: cover"
+					width="35"
+					height="35"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				/>
+				{% else %}
+				<img
+					src="{{ url_for('static',filename='images/default_avatar.png') }}"
+					alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+					class="rounded-circle"
+					style="object-fit: cover"
+					width="35"
+					height="35"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				/>
+				{% endif %}
+
+				<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
+					<li>
+						<a class="dropdown-item" href="{{ url_for('profile') }}">
+							<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="#">
+							<i
+								class="bi bi-bell-fill text-white position-relative me-2"
+								type="button"
+								><span
+									class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
+								>
+									<span class="visually-hidden">New alerts</span>
+								</span></i
+							><span>التنبيهات</span>
+						</a>
+					</li>
+					<li><hr class="dropdown-divider" /></li>
+					<li>
+						<a
+							class="dropdown-item text-danger fw-bold"
+							href="{{ url_for('logout') }}"
+						>
+							<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
+						</a>
+					</li>
+				</ul>
 			</li>
 			{% endif %}
 		</ul>
@@ -53,7 +103,7 @@
 					>
 					<a
 						class="list-group-item list-group-item-action"
-						href="{{url_for('user_list')}}"
+						href="{{url_for('dashboard')}}"
 						><i class="bi bi-bell-fill me-3"></i><span>التنبيهات</span></a
 					>
 				</div>

@@ -18,15 +18,14 @@
 />
 <link
 	rel="stylesheet"
-	href="{{ url_for('static',filename='mobiscroll.javascript.min.css')}}"
-/>
-<link
-	rel="stylesheet"
 	href="{{ url_for('static',filename='styles/chosen.css') }}"
 />
 
-<link href="{{ url_for('static',filename='default.rtl.css') }}" rel="stylesheet" />
-<link rel="stylesheet" href="{{ url_for('static',filename='chosen.css') }}"/>
+<link
+	href="{{ url_for('static',filename='default.rtl.css') }}"
+	rel="stylesheet"
+/>
+<link rel="stylesheet" href="{{ url_for('static',filename='chosen.css') }}" />
 
 <!-- Custom styles for this template -->
 {% endblock %}{% block body %}
@@ -38,12 +37,62 @@
 			<li><a href="{{ url_for('login_page') }}">Login</a></li>
 			{% else %}
 			<li>مرحبا, {{ current_user.username }} !</li>
-			<li>
-				<a
-					href="{{ url_for('logout') }}"
-					class="btn rounded-0 btn-danger btn-sm mx-2"
-					>Logout</a
-				>
+			<li class="nav-item dropstart mx-2">
+				{% if current_user.avatar_url %}
+				<img
+					src="{{ current_user.avatar_url }}"
+					alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+					class="rounded-circle"
+					style="object-fit: cover"
+					width="35"
+					height="35"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				/>
+				{% else %}
+				<img
+					src="{{ url_for('static',filename='images/default_avatar.png') }}"
+					alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+					class="rounded-circle"
+					style="object-fit: cover"
+					width="35"
+					height="35"
+					type="button"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				/>
+				{% endif %}
+
+				<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
+					<li>
+						<a class="dropdown-item" href="{{ url_for('profile') }}">
+							<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
+						</a>
+					</li>
+					<li>
+						<a class="dropdown-item" href="#">
+							<i
+								class="bi bi-bell-fill text-white position-relative me-2"
+								type="button"
+								><span
+									class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
+								>
+									<span class="visually-hidden">New alerts</span>
+								</span></i
+							><span>التنبيهات</span>
+						</a>
+					</li>
+					<li><hr class="dropdown-divider" /></li>
+					<li>
+						<a
+							class="dropdown-item text-danger fw-bold"
+							href="{{ url_for('logout') }}"
+						>
+							<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
+						</a>
+					</li>
+				</ul>
 			</li>
 			{% endif %}
 		</ul>
@@ -55,12 +104,12 @@
 	{% block content %}{% endblock %}
 </main>
 
-<script src="{{ url_for('static',filename='bootstrap.bundle.min.js') }}"></script>
 <script src="{{ url_for('static',filename='default.js') }}"></script>
 <script
-  src="https://code.jquery.com/jquery-3.6.1.min.js"
-  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
-  crossorigin="anonymous"></script>
+	src="https://code.jquery.com/jquery-3.6.1.min.js"
+	integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+	crossorigin="anonymous"
+></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
 
 {% endblock %}
