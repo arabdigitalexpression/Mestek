@@ -23,8 +23,8 @@ import math
 from uuid import uuid1
 import os
 import pymysql
-connection = pymysql.connect(host='localhost', user='root', password='',
-                             database='srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
+connection = pymysql.connect(host='localhost', user='adefsrs', password='Adef@SRS2022',
+                             database='adef_srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
 @app.route("/")
 @login_required
