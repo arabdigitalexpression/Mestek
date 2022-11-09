@@ -232,11 +232,6 @@ class SpaceForm(FlaskForm):
             "placeholder": "أسم المساحة", "class": "form-control form-control-sm rounded-0",
         }
     )
-    price = FloatField('السعر', validators=[DataRequired()],
-                       render_kw={
-
-        "placeholder": "السعر", "class": "form-control form-control-sm rounded-0",
-    })
     has_operator = BooleanField('مشرف؟',
                                 render_kw={
                                     "class": "form-check-input"

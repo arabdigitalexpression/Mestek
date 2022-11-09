@@ -236,6 +236,8 @@ def delete_space(id):
             tool.space_id = None
         for image in images:
             db.session.delete(image)
+        for cat_price in space.category_prices:
+            db.session.delete(cat_price)
         db.session.delete(space)
         db.session.commit()
         return redirect(url_for("space_list"))
@@ -252,7 +254,7 @@ def create_space():
         if form.validate_on_submit() and not form.add_new_price.data:
             space = Space(
                 name=form.name.data,
-                price=form.price.data,
+                price=1,
                 has_operator=form.has_operator.data,
                 description=form.description.data,
                 guidelines=form.guidelines.data,
@@ -836,6 +838,8 @@ def delete_category(id):
             users = User.query.filter_by(category_id=id).all()
             for user in users:
                 db.session.delete(user)
+            for cat_price in category.category_prices:
+                db.session.delete(cat_price)
             db.session.delete(category)
             db.session.commit()
             return redirect(url_for("get_categories"))
