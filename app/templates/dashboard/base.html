@@ -263,12 +263,7 @@
 </div>
 <script src="{{ url_for('static',filename='js/cmain.min.js') }}"></script>
 <script src="{{ url_for('static',filename='js/cstyle.js') }}"></script>
-<script
-	src="{{ url_for('static',filename='js/Chart.min.js')}}"
-	integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
-	crossorigin="anonymous"
-></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/ckeditor.js"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/35.1.0/classic/translations/ar.js"></script>
+<script src="{{ url_for('static',filename='js/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ url_for('static',filename='js/ckeditor/ar.js') }}"></script>
 <script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
 {% endblock %}
