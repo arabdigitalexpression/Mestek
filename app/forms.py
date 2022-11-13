@@ -13,12 +13,14 @@ from wtforms.widgets import (
 from wtforms.fields import MultipleFileField, FileField
 from flask_wtf.file import FileAllowed
 from app.models import User
-from app.enums import Unit, PriceUnit
+from app.enums import SpaceUnit, ToolUnit, PriceUnit
 
 images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
-class ColorField ( StringField):
+
+class ColorField (StringField):
     widget = ColorInput()
+
 
 class RoleCategoryForm(FlaskForm):
     name = StringField(
@@ -40,7 +42,7 @@ class RoleCategoryForm(FlaskForm):
             "class": "form-control form-control-color form-control-sm rounded-0", "title": "Choose your color"
         }
     )
-    isOrganization = BooleanField ("منظمة" ,default = False , render_kw={
+    isOrganization = BooleanField("منظمة", default=False, render_kw={
         "class": "form-check-input ms-2"
     })
 
@@ -97,6 +99,7 @@ class SignupForm(FlaskForm):
                          render_kw={
                              "class": "w-100 btn btn-lg btn-dark rounded-0",
                          })
+
 
 class EditUserForm(FlaskForm):
     firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
@@ -205,7 +208,7 @@ class PriceListForm(Form):
     )
 
 
-class CategoryPriceForm(Form):
+class SpaceCategoryPriceForm(Form):
     unit_value = FloatField(
 
         'القيمة', validators=[DataRequired(), NumberRange(min=0)], render_kw={
@@ -217,8 +220,28 @@ class CategoryPriceForm(Form):
 
         render_kw={"class": "form-select form-select-sm rounded-0"},
         choices=[
-            (Unit.hour, Unit.hour.description),
-            (Unit.day, Unit.day.description)
+            (SpaceUnit.hour, SpaceUnit.hour.description),
+            (SpaceUnit.day, SpaceUnit.day.description)
+        ]
+    )
+    price_list = FieldList(FormField(PriceListForm))
+
+
+class ToolCategoryPriceForm(Form):
+    unit_value = FloatField(
+
+        'القيمة', validators=[DataRequired(), NumberRange(min=0)], render_kw={
+            "placeholder": "القيمة", "class": "form-control form-control-sm rounded-0",
+        }
+    )
+    unit = SelectField(
+        'الوحدة', validators=[DataRequired()],
+
+        render_kw={"class": "form-select form-select-sm rounded-0"},
+        choices=[
+            (ToolUnit.hour, ToolUnit.hour.description),
+            (ToolUnit.day, ToolUnit.day.description),
+            (ToolUnit.gram, ToolUnit.gram.description)
         ]
     )
     price_list = FieldList(FormField(PriceListForm))
@@ -232,41 +255,34 @@ class SpaceForm(FlaskForm):
             "placeholder": "أسم المساحة", "class": "form-control form-control-sm rounded-0",
         }
     )
-    price = FloatField('السعر', validators=[DataRequired()],
-                       render_kw={
-
-        "placeholder": "السعر", "class": "form-control form-control-sm rounded-0",
-    })
     has_operator = BooleanField('مشرف؟',
                                 render_kw={
                                     "class": "form-check-input"
                                 }
                                 )
 
-
     description = TextAreaField('الوصف', validators=[Length(max=1024)],
 
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control form-control-sm rounded-0", "rows": "5", "id":"description"  }) 
+        "placeholder": "الوصف", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "description"})
     capacity = IntegerField('السعة', validators=[DataRequired()],
                             render_kw={
         "placeholder": "السعة", "class": "form-control form-control-sm rounded-0",
     })
-   
-    guidelines = TextAreaField('قواعد', 
+
+    guidelines = TextAreaField('قواعد',
                                render_kw={
-        "placeholder": "قواعد","class": "form-control form-control-sm rounded-0", "rows": "5" , "id":"guidelines"
-    }
-    )
-    category_prices = FieldList(FormField(CategoryPriceForm))
+                                   "placeholder": "قواعد", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "guidelines"
+                               }
+                               )
     images = MultipleFileField(
         'الصور', name="images", validators=[  # FileRequired(),
             FileAllowed(images, 'الرجاء إدخال صور فقط!')
 
-        ], render_kw={"class": "form-control form-control-sm rounded-0"}
-    )
+        ], render_kw={"class": "form-control form-control-sm rounded-0"})
+    category_prices = FieldList(FormField(SpaceCategoryPriceForm))
     add_new_price = SubmitField('إضافة تسعيرة جديدة', render_kw={
-                                "class": "btn btn-sm btn-dark btn-sm rounded-0"})
+        "class": "btn btn-sm btn-dark btn-sm rounded-0"})
 
 
 class ToolForm(FlaskForm):
@@ -274,26 +290,26 @@ class ToolForm(FlaskForm):
                        render_kw={
         "placeholder": "أسم اﻹداة", "class": "form-control form-control-sm rounded-0",
     })
-    price = FloatField('السعر', validators=[DataRequired()],
-                       render_kw={
-        "placeholder": "السعر", "class": "form-control form-control-sm rounded-0",
-    })
     has_operator = BooleanField('مشرف؟',
                                 render_kw={
                                     "class": "form-check-input"
                                 })
-    description = TextAreaField('الوصف', validators=[ Length(max=128)],
+    description = TextAreaField('الوصف', validators=[Length(max=128)],
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control form-control-sm rounded-0", "rows": "5", "id":"description"
+        "placeholder": "الوصف", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "description"
 
     })
-    guidelines = TextAreaField('قواعد', 
+    guidelines = TextAreaField('قواعد',
                                render_kw={
-        "placeholder": "قواعد", "class": "form-control form-control-sm rounded-0", "rows": "5" , "id":"guidelines"
-    })
+                                   "placeholder": "قواعد", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "guidelines"
+                               })
     space = SelectField('المساحة', render_kw={
-        "class": "form-select",
+        "class": "form-select form-select-sm rounded-0",
 
+    })
+    quantity = IntegerField('الكمية', validators=[DataRequired()],
+                            render_kw={
+        "placeholder": "السعة", "class": "form-control form-control-sm rounded-0",
     })
     images = MultipleFileField('الصور', name="images", validators=[
         # FileRequired(),
@@ -301,7 +317,11 @@ class ToolForm(FlaskForm):
     ], render_kw={
 
         "class": "form-control form-control-sm rounded-0"
+
     })
+    category_prices = FieldList(FormField(ToolCategoryPriceForm))
+    add_new_price = SubmitField('إضافة تسعيرة جديدة', render_kw={
+        "class": "btn btn-sm btn-dark btn-sm rounded-0"})
 
 
 class ConfirmForm(FlaskForm):
