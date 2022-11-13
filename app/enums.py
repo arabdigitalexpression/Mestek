@@ -25,7 +25,7 @@ class PriceUnit(DescriptiveEnum):
     usd = 1, "$"
 
 
-class Unit(DescriptiveEnum):
+class SpaceUnit(DescriptiveEnum):
     hour = 0, "ساعة"
     day = 1, "يوم"
 
@@ -45,3 +45,9 @@ class PaymentTypes(Enum):
     no_payment = 0
     down_payment = 1
     full_payment = 2
+
+
+class Gender(Enum):
+    male = 0
+    female = 1
+    prefer_not_answer = 2
