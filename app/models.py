@@ -8,7 +8,7 @@ from datetime import datetime
 from app import db, login
 from app.enums import (
     ReservationTypes, PriceUnit, PaymentTypes,
-    Unit, ToolUnit,
+    SpaceUnit, ToolUnit, Gender
 )
 
 
@@ -19,23 +19,6 @@ from app.enums import (
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
-
-
-class ReservationTypes(enum.Enum):
-    space = 0
-    tool = 1
-
-
-class PaymentTypes(enum.Enum):
-    no_payment = 0
-    down_payment = 1
-    full_payment = 2
-
-
-class Gender(enum.Enum):
-    male = 0
-    female = 1
-    prefer_not_answer = 2
 
 
 class User(UserMixin, db.Model):
@@ -55,7 +38,8 @@ class User(UserMixin, db.Model):
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey(
         'category.id'), nullable=False)
-    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=True)
+    organization_id = db.Column(
+        db.Integer, db.ForeignKey('organization.id'), nullable=True)
 
     # created at date when user registered
     # Date is year-month-day
@@ -104,9 +88,10 @@ class Role(db.Model):
 
 class CategorySpace(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        'category.id'), nullable=False)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=False)
-    unit = db.Column(db.Enum(Unit))
+    unit = db.Column(db.Enum(SpaceUnit))
     unit_value = db.Column(db.Float)
     price_unit = db.Column(db.Enum(PriceUnit), default=PriceUnit.egp)
     price = db.Column(db.Float)
@@ -121,7 +106,8 @@ class CategorySpace(db.Model):
 
 class CategoryTool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    category_id = db.Column(db.Integer, db.ForeignKey(
+        'category.id'), nullable=False)
     tool_id = db.Column(db.Integer, db.ForeignKey('tool.id'), nullable=False)
     unit = db.Column(db.Enum(ToolUnit))
     unit_value = db.Column(db.Float)
@@ -155,7 +141,6 @@ class Space(db.Model):
     description = db.Column(db.Text(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    price = db.Column(db.Float, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     category_prices = db.relationship(
         'CategorySpace', back_populates='space', lazy='subquery'
@@ -172,8 +157,7 @@ class Tool(db.Model):
     description = db.Column(db.String(1024), nullable=False)
     guidelines = db.Column(db.String(1024), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    count = db.Column(db.Integer, default=1, nullable=True)
+    quantity = db.Column(db.Integer, default=1, nullable=True)
     category_prices = db.relationship(
         'CategoryTool', back_populates='tool', lazy='subquery'
     )
@@ -227,15 +211,16 @@ class Reservation(db.Model):
         'Tool', secondary=reservation_tool,
         backref=db.backref('tools')
     )
-    intervals = db.relationship('Interval', cascade="all, delete", backref='reservation', lazy=True)
+    intervals = db.relationship(
+        'Interval', cascade="all, delete", backref='reservation', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
 
 class Calendar(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day = db.Column(db.Date(), nullable=False)
-    intervals = db.relationship('Interval', cascade="all, delete", backref='calendar', lazy=True)
-
+    intervals = db.relationship(
+        'Interval', cascade="all, delete", backref='calendar', lazy=True)
 
 
 class Interval(db.Model):
