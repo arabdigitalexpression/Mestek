@@ -2,9 +2,9 @@
 مستخدم {% else %} إنشاء مستخدم {% endif %} {% endblock %} {% block content %}
 <h2>{% if isUpdate %} تعديل مستخدم {% else %} إنشاء مستخدم {% endif %}</h2>
 
-{% if isUpdate %} {% set form_action = url_for('update_user',
+{% if isUpdate %} {% set form_action = url_for('dashboard.user.update_user',
 username=user.username) %} {% else %} {% set form_action =
-url_for('create_user') %} {% endif %}
+url_for('dashboard.user.create_user') %} {% endif %}
 
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
 	{{ form.csrf_token }}
@@ -61,7 +61,7 @@ url_for('create_user') %} {% endif %}
 
 	<div class="float-end my-3">
 		<a
-			href="{{url_for('user_list')}}"
+			href="{{url_for('dashboard.user.user_list')}}"
 			type="button"
 			class="btn btn-sm rounded-0 btn-outline-danger"
 			>الغاء</a

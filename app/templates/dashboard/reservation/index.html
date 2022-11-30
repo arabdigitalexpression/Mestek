@@ -4,7 +4,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 	<a
 		class="btn btn-dark btn-sm rounded-0 d-flex align-items-center me-2"
 		type="button"
-		href="{{url_for('createReservation')}}"
+		href="{{url_for('dashboard.reservation.create_reservation')}}"
 	>
 		<i class="bi bi-plus-circle me-1"></i>
 		<span class=""> حجز مساحة </span>
@@ -12,7 +12,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 	<a
 		class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
 		type="button"
-		href="{{url_for('createReservationTool')}}"
+		href="{{url_for('dashboard.reservation.create_reservation_tool')}}"
 	>
 		<i class="bi bi-plus-circle me-1"></i>
 		<span class=""> حجز أداة </span>
@@ -211,7 +211,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 						</div>
 					</div>
 					<a
-						href="{{url_for('change_payment_status', id=reservation.id)}}"
+						href="{{url_for('dashboard.reservation.change_payment_status', id=reservation.id)}}"
 						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
@@ -221,7 +221,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 					</a>
 					<form
 						method="POST"
-						action="{{url_for('delete_reservation', id=reservation.id)}}"
+						action="{{url_for('dashboard.reservation.delete_reservation', id=reservation.id)}}"
 					>
 						<button
 							type="button"

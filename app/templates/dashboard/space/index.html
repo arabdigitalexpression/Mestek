@@ -4,7 +4,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 <a
 	class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
 	type="button"
-	href="{{url_for('create_space')}}"
+	href="{{url_for('dashboard.space.create_space')}}"
 >
 	<i class="bi bi-plus-circle me-1"></i>
 	<span class=""> إنشاء مساحة </span>
@@ -47,7 +47,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 						<i class="bi bi-info-circle"></i>
 					</button>
 					<a
-						href="{{url_for('update_space', id=space.id)}}"
+						href="{{url_for('dashboard.space.update_space', id=space.id)}}"
 						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
@@ -55,7 +55,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
-					<form method="POST" action="{{url_for('delete_space', id=space.id)}}">
+					<form method="POST" action="{{url_for('dashboard.space.delete_space', id=space.id)}}">
 						<button
 							type="button"
 							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
