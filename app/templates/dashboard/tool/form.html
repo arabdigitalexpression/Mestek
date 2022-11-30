@@ -2,8 +2,8 @@
 الأداة {% else %} إنشاء أداة {% endif %} {% endblock %} {% block content %}
 <h2>{% if isUpdate %} تعديل الأداة {% else %} إنشاء أداة {% endif %}</h2>
 
-{% if isUpdate %} {% set form_action = url_for('update_tool', id=tool.id) %} {%
-else %} {% set form_action = url_for('create_tool') %} {% endif %}
+{% if isUpdate %} {% set form_action = url_for('dashboard.tool.update_tool', id=tool.id) %} {%
+else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %}
 
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
 	{{ form.csrf_token }}
@@ -114,7 +114,7 @@ else %} {% set form_action = url_for('create_tool') %} {% endif %}
 	{% endif %}
 	<div class="float-end my-3">
 		<a
-			href="{{url_for('tool_list')}}"
+			href="{{url_for('dashboard.tool.tool_list')}}"
 			type="button"
 			class="btn btn-sm rounded-0 btn-outline-danger"
 			>الغاء</a

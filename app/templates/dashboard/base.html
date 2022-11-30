@@ -76,7 +76,7 @@
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
 	<a
 		class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6"
-		href="{{url_for('dashboard')}}"
+		href="{{url_for('dashboard.dashboard')}}"
 		>أضف</a
 	>
 	<button
@@ -125,7 +125,7 @@
 
 		<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
 			<li>
-				<a class="dropdown-item" href="{{ url_for('profile') }}">
+				<a class="dropdown-item" href="{{ url_for('main.profile.profile') }}">
 					<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
 				</a>
 			</li>
@@ -146,7 +146,7 @@
 			<li>
 				<a
 					class="dropdown-item text-danger fw-bold"
-					href="{{ url_for('logout') }}"
+					href="{{ url_for('auth.logout') }}"
 				>
 					<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
 				</a>
@@ -169,7 +169,7 @@
 						<a
 							class="nav-link"
 							aria-current="page"
-							href="{{url_for('dashboard')}}"
+							href="{{url_for('dashboard.dashboard')}}"
 						>
 						<i class="bi bi-graph-down me-1"></i>
 													لوحة التحكم
@@ -183,7 +183,7 @@
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('space_list')}}">
+							<a class="nav-link" href="{{url_for('dashboard.space.space_list')}}">
 								<i class="bi bi-boxes me-1"></i>
 								 المساحات</a
 							>
@@ -197,7 +197,7 @@
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('tool_list')}}">
+							<a class="nav-link" href="{{url_for('dashboard.tool.tool_list')}}">
 								<i class="bi bi-tools me-1"></i>
 								 الأدوات
 							</a>
@@ -211,19 +211,19 @@
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('user_list')}}">
+							<a class="nav-link" href="{{url_for('dashboard.user.user_list')}}">
 								<i class="bi bi-people-fill me-1"></i>
 								 المستخدمين
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('get_roles')}}">
+							<a class="nav-link" href="{{url_for('dashboard.role.get_roles')}}">
 								<i class="bi bi-unlock-fill me-1"></i>
 								الصلاحيات
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('get_categories')}}">
+							<a class="nav-link" href="{{url_for('dashboard.category.get_categories')}}">
 								<i class="bi bi-tags-fill me-1"></i>
 								التصنيفات
 							</a>
@@ -237,13 +237,13 @@
 					</h6>
 					<ul class="nav flex-column">
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('get_reservations')}}">
+							<a class="nav-link" href="{{url_for('dashboard.reservation.get_reservations')}}">
 								<i class="bi bi-table me-1"></i>
 								 الحجوزات
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('get_Calender')}}">
+							<a class="nav-link" href="{{url_for('dashboard.get_calendar')}}">
 								<i class="bi bi-calendar-date-fill me-1"></i>
 								تقويم
 							</a>

@@ -4,7 +4,7 @@
 <a
 	class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
 	type="button"
-	href="{{url_for('create_user')}}"
+	href="{{url_for('dashboard.user.create_user')}}"
 >
 	<i class="bi bi-plus-circle me-1"></i>
 	<span class=""> إنشاء مستخدم </span>
@@ -56,14 +56,14 @@
 				</td>
 				<td class="d-flex">
 					<a
-						href="{{url_for('get_user', username=user.username)}}"
+						href="{{url_for('dashboard.user.get_user', username=user.username)}}"
 						type="button"
 						class="btn btn-info text-white btn-sm mx-1 rounded-0"
 					>
 						<i class="bi bi-info-circle"></i>
 					</a>
 					<a
-						href="{{url_for('update_user', username=user.username)}}"
+						href="{{url_for('dashboard.user.update_user', username=user.username)}}"
 						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
 					>
 						<i class="bi bi-pencil"></i>
@@ -71,7 +71,7 @@
 					{% if not current_user.username == user.username %}
 					<form
 						method="POST"
-						action="{{url_for('delete_user', username=user.username)}}"
+						action="{{url_for('dashboard.user.delete_user', username=user.username)}}"
 					>
 						{{ form.csrf_token }}
 						<button

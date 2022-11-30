@@ -1,0 +1,95 @@
+from flask import (
+    render_template, request, redirect,
+    url_for
+)
+from flask_login import current_user, login_user, logout_user
+
+from app.auth import bp
+from app.models import (
+    Category, Role, User
+)
+from app.auth.forms import SignupForm, LoginForm
+
+
+@bp.route("/signup", methods=["GET", "POST"])
+def signup_page():
+    if current_user.is_authenticated and current_user.role.name == 'admin':
+        return redirect(url_for("dashboard.dashboard"))
+    elif current_user.is_authenticated and current_user.role.name == 'user':
+        return redirect(url_for("main.main_page"))
+    form = SignupForm()
+    categories = Category.query.all()
+    roles = Role.query.all()
+    form.category.choices = [(c.id, c.name) for c in categories]
+    form.category.choices.insert(0, ("", "-- اختر تصنيف --"))
+    form.role.choices = [(r.id, r.name) for r in roles]
+    if request.method == "POST":
+        if form.validate_on_submit():
+            first_name = form.firstName.data
+            last_name = form.lastName.data
+            username = form.userName.data
+            email = form.email.data
+            password = form.password.data
+            category = form.category.data
+            role = form.role.data
+            user = User.query.get(email)
+            if user == None:
+                user = User(
+                    first_name=first_name,
+                    last_name=last_name,
+                    username=username,
+                    email=email,
+                    role=Role.query.get(1),
+                    category=Category.query.get(category)
+                )
+                user.make_password(password)
+                user.save()
+                login_user(user, remember=True)
+                return redirect(url_for("main.main_page"))
+            else:
+                # TODO: there's a logic error here, fix it!
+                errors = f"hey, There's a user with this email: {email}"
+                return render_template("default/auth/signup.html", form=form, errors=errors)
+        errors = f"Please check your form data again"
+        return render_template("default/auth/signup.html", form=form, errors=errors)
+    return render_template("default/auth/signup.html", form=form)
+
+
+@bp.route("/login", methods=["GET", "POST"])
+def login_page():
+    if current_user.is_authenticated:
+        return redirect(url_for("main.main_page"))
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+
+        # user = User.query.get()
+        # filter users by username and then get first one
+        user = User.query.filter_by(username=username).first()
+
+        if user is None:
+            msg = "Invalid username or password."
+            # render_template does autoescaping html form input data
+            return render_template("default/auth/login.html", form=form, msg=msg)
+
+        if not user.verify_password(password):
+            msg = "Invalid username or password."
+            # render_template does autoescaping html form input data
+            return render_template("default/auth/login.html", form=form, msg=msg)
+
+        # remember the user when he visits other pages
+        # TODO: add remember me button to the form
+        login_user(user, remember=True)
+        if current_user.role.name == "admin":
+            return redirect(url_for("dashboard.dashboard"))
+        else:
+            return redirect(url_for("main.main_page"))
+    return render_template("default/auth/login.html", form=form)
+
+
+@bp.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('main.main_page'))
