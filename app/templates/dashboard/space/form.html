@@ -3,8 +3,8 @@
 
 <h2>{% if isUpdate %} تعديل المساحة {% else %} إنشاء مساحة {% endif %}</h2>
 
-{% if isUpdate %} {% set form_action = url_for('update_space', id=space.id) %}
-{% else %} {% set form_action = url_for('create_space') %} {% endif %}
+{% if isUpdate %} {% set form_action = url_for('dashboard.space.update_space', id=space.id) %}
+{% else %} {% set form_action = url_for('dashboard.space.create_space') %} {% endif %}
 
 <form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
 	{{ form.csrf_token }}
@@ -111,7 +111,7 @@
 	{% endif %}
 	<div class="float-end my-3">
 		<a
-			href="{{url_for('space_list')}}"
+			href="{{url_for('dashboard.space.space_list')}}"
 			type="button"
 			class="btn btn-sm rounded-0 btn-outline-danger"
 			>الغاء</a

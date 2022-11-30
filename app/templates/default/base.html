@@ -29,7 +29,7 @@
 	<div class="row">
 		<ul class="list-unstyled d-flex m-3 align-items-center">
 			{% if current_user.is_anonymous %}
-			<li><a href="{{ url_for('login_page') }}">Login</a></li>
+			<li><a href="{{ url_for('auth.login_page') }}">Login</a></li>
 			{% else %}
 			<li>مرحبا, {{ current_user.username }} !</li>
 			<li class="nav-item dropstart mx-2">
@@ -62,7 +62,7 @@
 				<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
 					{%if current_user.role.name == 'admin'%}
 					<li>
-						<a class="dropdown-item" href="{{ url_for('dashboard') }}">
+						<a class="dropdown-item" href="{{ url_for('dashboard.dashboard') }}">
 							<i class="bi bi-person-circle me-2"></i><span>لوحة التحكم</span>
 						</a>
 					</li>
@@ -84,7 +84,7 @@
 					<li>
 						<a
 							class="dropdown-item text-danger fw-bold"
-							href="{{ url_for('logout') }}"
+							href="{{ url_for('auth.logout') }}"
 						>
 							<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
 						</a>

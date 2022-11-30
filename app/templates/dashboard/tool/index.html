@@ -4,7 +4,7 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 <a
 	class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
 	type="button"
-	href="{{url_for('create_tool')}}"
+	href="{{url_for('dashboard.tool.create_tool')}}"
 >
 	<i class="bi bi-plus-circle me-1"></i>
 	<span class=""> إنشاء الأداة </span>
@@ -50,12 +50,12 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 						<i class="bi bi-info-circle"></i>
 					</button>
 					<a
-						href="{{url_for('update_tool', id=tool.id)}}"
+						href="{{url_for('dashboard.tool.update_tool', id=tool.id)}}"
 						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
-					<form method="POST" action="{{url_for('delete_tool', id=tool.id)}}">
+					<form method="POST" action="{{url_for('dashboard.tool.delete_tool', id=tool.id)}}">
 						<button
 							type="button"
 							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
