@@ -1,4 +1,5 @@
 {% extends 'base.html' %} {% block styles %}
+{{ super() }}
 <link
 	rel="stylesheet"
 	type="text/css"
@@ -12,16 +13,6 @@
 	rel="stylesheet"
 	href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
 />
-<link
-	href="{{ url_for('static',filename='default.rtl.css') }}"
-	rel="stylesheet"
-/>
-
-<link
-	href="{{ url_for('static',filename='default.rtl.css') }}"
-	rel="stylesheet"
-/>
-
 <!-- Custom styles for this template -->
 {% endblock %}{% block body %}
 <header class="position-absolute top-0 start-0">
@@ -29,7 +20,7 @@
 	<div class="row">
 		<ul class="list-unstyled d-flex m-3 align-items-center">
 			{% if current_user.is_anonymous %}
-			<li><a href="{{ url_for('auth.login_page') }}">Login</a></li>
+			<li><a class="btn btn-dark" href="{{ url_for('auth.login_page') }}">Login</a></li>
 			{% else %}
 			<li>مرحبا, {{ current_user.username }} !</li>
 			<li class="nav-item dropstart mx-2">
@@ -101,6 +92,10 @@
 	{% block content %}{% endblock %}
 </main>
 
-<script src="{{ url_for('static',filename='default.js') }}"></script>
 
 {% endblock %}
+{% block scripts %}
+	{{ super() }}
+	<script src="{{ url_for('static',filename='default.js') }}"></script>
+
+	{% endblock %}
