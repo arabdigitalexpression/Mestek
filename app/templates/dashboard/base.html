@@ -1,16 +1,8 @@
-{% extends 'base.html' %} {% block styles %}
-
-
+{% extends 'base.html' %}
+{% block styles %}
+{{ super() }}
 <link
 	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
-	rel="stylesheet"
-/>
-<link
-	href="{{ url_for('static',filename='styles/cmain.min.css') }}"
-	rel="stylesheet"
-/>
-<link
-	href="{{ url_for('static',filename='styles/cstyle.css') }}"
 	rel="stylesheet"
 />
 <link
@@ -261,9 +253,14 @@
 		</main>
 	</div>
 </div>
-<script src="{{ url_for('static',filename='js/cmain.min.js') }}"></script>
-<script src="{{ url_for('static',filename='js/cstyle.js') }}"></script>
-<script src="{{ url_for('static',filename='js/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ url_for('static',filename='js/ckeditor/ar.js') }}"></script>
-<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
+
+
 {% endblock %}
+{% block scripts %}
+	{{ super() }}
+	<script src="{{ url_for('static',filename='js/cmain.min.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/cstyle.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/ckeditor/ckeditor.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/ckeditor/ar.js') }}"></script>
+	<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
+	{% endblock %}
