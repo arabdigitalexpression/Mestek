@@ -42,7 +42,7 @@ def get_categories():
         form.colorCode.data = generate_color()
         return render_template("dashboard/user/category/index.html", form=form, categories=categories, input=input)
     else:
-        return redirect(url_for("main_page"))
+        return redirect(url_for('main.main_page'))
 
 
 @bp.route('/<int:id>/update', methods=["GET", "POST"])
@@ -76,7 +76,7 @@ def update_category(id):
                 form=form, isUpdate=True, categories=categories, input=input
             )
     else:
-        return redirect(url_for("main_page"))
+        return redirect(url_for('main.main_page'))
 
 
 @bp.route('/<int:id>/delete', methods=['POST'])
@@ -95,4 +95,4 @@ def delete_category(id):
             db.session.commit()
             return redirect(url_for("get_categories"))
     else:
-        return redirect(url_for("main_page"))
+        return redirect(url_for('main.main_page'))

@@ -287,7 +287,7 @@ def create_reservation():
                 db.session.commit()
                 return redirect(url_for("get_reservations"))
             if request.form.get("cancel") == "cancel":
-                return redirect(url_for("main_page"))
+                return redirect(url_for('main.main_page'))
         return render_template('dashboard/reservation/form/adminReserve.html', reserve1=reserve, tools=tool,
                                users=users)
 
