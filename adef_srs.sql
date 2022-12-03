@@ -1,8 +1,8 @@
--- MariaDB dump 10.19  Distrib 10.9.3-MariaDB, for Linux (x86_64)
+-- MariaDB dump 10.19  Distrib 10.5.16-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: adef_srs
 -- ------------------------------------------------------
--- Server version	10.9.3-MariaDB
+-- Server version	10.5.16-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,8 +34,7 @@ CREATE TABLE `alembic_version` (
 
 LOCK TABLES `alembic_version` WRITE;
 /*!40000 ALTER TABLE `alembic_version` DISABLE KEYS */;
-INSERT INTO `alembic_version` VALUES
-('40e309d29ed7');
+INSERT INTO `alembic_version` VALUES ('b4a2fe3f626e');
 /*!40000 ALTER TABLE `alembic_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,12 +58,7 @@ CREATE TABLE `calendar` (
 
 LOCK TABLES `calendar` WRITE;
 /*!40000 ALTER TABLE `calendar` DISABLE KEYS */;
-INSERT INTO `calendar` VALUES
-(1,'2022-07-19'),
-(2,'2022-07-20'),
-(3,'2022-07-26'),
-(4,'2022-07-27'),
-(5,'2022-07-29');
+INSERT INTO `calendar` VALUES (1,'2022-07-19'),(2,'2022-07-20'),(3,'2022-07-26'),(4,'2022-07-27'),(5,'2022-07-29');
 /*!40000 ALTER TABLE `calendar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,14 +87,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES
-(1,'طالب/طلبة','#1a5fb4',0,NULL),
-(2,'مشروع ناشئ غير ممول','#050202',0,'فرد/فرقة محلية/ مجموعة عمل/مشروع'),
-(3,'مشروع ناشئ ممول','#457468',0,'3	فرد/فرقة محلية/ مجموعة عمل/مشروع'),
-(4,'مشروع او فرد ثقيل','#fed443',0,NULL),
-(5,'مؤسسة محلية/تجارية','#136564',1,'(فيلم تجاري، مغني او فرقة الخ)'),
-(6,'مؤسسة إقليمية/عربية','#34def2',1,''),
-(7,'مؤسسة دولية','#aeda45',1,'');
+INSERT INTO `category` VALUES (1,'طالب/طلبة','#1a5fb4',0,NULL),(2,'مشروع ناشئ غير ممول','#050202',0,'فرد/فرقة محلية/ مجموعة عمل/مشروع'),(3,'مشروع ناشئ ممول','#457468',0,'3	فرد/فرقة محلية/ مجموعة عمل/مشروع'),(4,'مشروع او فرد ثقيل','#fed443',0,NULL),(5,'مؤسسة محلية/تجارية','#136564',1,'(فيلم تجاري، مغني او فرقة الخ)'),(6,'مؤسسة إقليمية/عربية','#34def2',1,''),(7,'مؤسسة دولية','#aeda45',1,'');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +111,7 @@ CREATE TABLE `category_space` (
   KEY `space_id` (`space_id`),
   CONSTRAINT `category_space_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   CONSTRAINT `category_space_ibfk_2` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -194,12 +181,7 @@ CREATE TABLE `image` (
 
 LOCK TABLES `image` WRITE;
 /*!40000 ALTER TABLE `image` DISABLE KEYS */;
-INSERT INTO `image` VALUES
-(10,'/uploads/tool/9cf1a322-4581-11ed-8720-54271e8cb899-cf2594f84242d332889bed5a9973a662.jpg',NULL,4),
-(11,'/uploads/tool/9cf24cfa-4581-11ed-8720-54271e8cb899-CpKm0YY.jpg',NULL,4),
-(12,'/uploads/tool/9cf280bc-4581-11ed-8720-54271e8cb899-FB_IMG_1451435871419.jpg',NULL,4),
-(13,'/uploads/tool/9cf2a588-4581-11ed-8720-54271e8cb899-mikasa-ackerman-attack-on-titan-28254-1920x1080.jpg',NULL,4),
-(14,'/uploads/tool/9cf31cc0-4581-11ed-8720-54271e8cb899-mtRHVTY.jpg',NULL,4);
+INSERT INTO `image` VALUES (10,'/uploads/tool/9cf1a322-4581-11ed-8720-54271e8cb899-cf2594f84242d332889bed5a9973a662.jpg',NULL,4),(11,'/uploads/tool/9cf24cfa-4581-11ed-8720-54271e8cb899-CpKm0YY.jpg',NULL,4),(12,'/uploads/tool/9cf280bc-4581-11ed-8720-54271e8cb899-FB_IMG_1451435871419.jpg',NULL,4),(13,'/uploads/tool/9cf2a588-4581-11ed-8720-54271e8cb899-mikasa-ackerman-attack-on-titan-28254-1920x1080.jpg',NULL,4),(14,'/uploads/tool/9cf31cc0-4581-11ed-8720-54271e8cb899-mtRHVTY.jpg',NULL,4);
 /*!40000 ALTER TABLE `image` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -230,13 +212,7 @@ CREATE TABLE `interval` (
 
 LOCK TABLES `interval` WRITE;
 /*!40000 ALTER TABLE `interval` DISABLE KEYS */;
-INSERT INTO `interval` VALUES
-(1,'10:00:00','12:00:00',1,3),
-(2,'12:00:00','14:00:00',1,3),
-(3,'14:00:00','16:00:00',2,2),
-(4,'16:00:00','18:00:00',2,2),
-(5,'12:00:00','14:00:00',3,3),
-(6,'14:00:00','16:00:00',3,3);
+INSERT INTO `interval` VALUES (1,'10:00:00','12:00:00',1,3),(2,'12:00:00','14:00:00',1,3),(3,'14:00:00','16:00:00',2,2),(4,'16:00:00','18:00:00',2,2),(5,'12:00:00','14:00:00',3,3),(6,'14:00:00','16:00:00',3,3);
 /*!40000 ALTER TABLE `interval` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -266,9 +242,7 @@ CREATE TABLE `organization` (
 
 LOCK TABLES `organization` WRITE;
 /*!40000 ALTER TABLE `organization` DISABLE KEYS */;
-INSERT INTO `organization` VALUES
-(1,'مدى مصر','مدى مصر',NULL,5),
-(2,'أضف','مؤسسة التعبير الرقمي العربي (أضِف) ADEFمؤسسة التعبير الرقمي العربي (أضِف) ADEF\n ',NULL,5);
+INSERT INTO `organization` VALUES (1,'مدى مصر','مدى مصر',NULL,5),(2,'أضف','مؤسسة التعبير الرقمي العربي (أضِف) ADEFمؤسسة التعبير الرقمي العربي (أضِف) ADEF\n ',NULL,5);
 /*!40000 ALTER TABLE `organization` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,16 +283,7 @@ CREATE TABLE `reservation` (
 
 LOCK TABLES `reservation` WRITE;
 /*!40000 ALTER TABLE `reservation` DISABLE KEYS */;
-INSERT INTO `reservation` VALUES
-(1,'space','no_payment','451ds-d15sd-d41s5','2022-07-12 05:24:33',2,3837,1,NULL,'',NULL,NULL,NULL),
-(2,'space','full_payment','451ds-d15sd-d41s5','2022-07-14 11:24:33',2,8338.24,1,NULL,'',NULL,NULL,NULL),
-(3,'tool','down_payment',NULL,'2022-07-15 11:24:33',1,388.85,NULL,2,'',NULL,NULL,NULL),
-(4,'space','no_payment',NULL,'2022-07-15 04:24:33',2,3873,1,NULL,'',NULL,NULL,NULL),
-(6,'space','no_payment',NULL,'2022-07-19 11:24:33',1,2028.5,1,NULL,'',NULL,NULL,NULL),
-(7,'tool','down_payment',NULL,'2022-07-21 02:24:33',2,202,NULL,3,'',NULL,NULL,NULL),
-(8,'tool','full_payment','115dw-dw15d-f5t','2022-07-30 11:24:33',1,50,NULL,1,'',NULL,NULL,NULL),
-(9,'space','no_payment',NULL,'2022-07-30 05:24:33',2,2537,1,NULL,'',NULL,NULL,NULL),
-(10,'space','down_payment',NULL,'2022-07-31 09:46:33',2,83,1,NULL,'',NULL,NULL,NULL);
+INSERT INTO `reservation` VALUES (1,'space','no_payment','451ds-d15sd-d41s5','2022-07-12 05:24:33',2,3837,1,NULL,'',NULL,NULL,NULL),(2,'space','full_payment','451ds-d15sd-d41s5','2022-07-14 11:24:33',2,8338.24,1,NULL,'',NULL,NULL,NULL),(3,'tool','down_payment',NULL,'2022-07-15 11:24:33',1,388.85,NULL,2,'',NULL,NULL,NULL),(4,'space','no_payment',NULL,'2022-07-15 04:24:33',2,3873,1,NULL,'',NULL,NULL,NULL),(6,'space','no_payment',NULL,'2022-07-19 11:24:33',1,2028.5,1,NULL,'',NULL,NULL,NULL),(7,'tool','down_payment',NULL,'2022-07-21 02:24:33',2,202,NULL,3,'',NULL,NULL,NULL),(8,'tool','full_payment','115dw-dw15d-f5t','2022-07-30 11:24:33',1,50,NULL,1,'',NULL,NULL,NULL),(9,'space','no_payment',NULL,'2022-07-30 05:24:33',2,2537,1,NULL,'',NULL,NULL,NULL),(10,'space','down_payment',NULL,'2022-07-31 09:46:33',2,83,1,NULL,'',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `reservation` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,10 +310,7 @@ CREATE TABLE `reservation_calendar` (
 
 LOCK TABLES `reservation_calendar` WRITE;
 /*!40000 ALTER TABLE `reservation_calendar` DISABLE KEYS */;
-INSERT INTO `reservation_calendar` VALUES
-(3,1),
-(3,3),
-(2,2);
+INSERT INTO `reservation_calendar` VALUES (3,1),(3,3),(2,2);
 /*!40000 ALTER TABLE `reservation_calendar` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -375,15 +337,7 @@ CREATE TABLE `reservation_tool` (
 
 LOCK TABLES `reservation_tool` WRITE;
 /*!40000 ALTER TABLE `reservation_tool` DISABLE KEYS */;
-INSERT INTO `reservation_tool` VALUES
-(1,2),
-(1,1),
-(2,1),
-(4,1),
-(1,3),
-(6,4),
-(6,1),
-(6,3);
+INSERT INTO `reservation_tool` VALUES (1,2),(1,1),(2,1),(4,1),(1,3),(6,4),(6,1),(6,3);
 /*!40000 ALTER TABLE `reservation_tool` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -410,9 +364,7 @@ CREATE TABLE `role` (
 
 LOCK TABLES `role` WRITE;
 /*!40000 ALTER TABLE `role` DISABLE KEYS */;
-INSERT INTO `role` VALUES
-(1,'admin','#e01b24'),
-(2,'user','#2ec27e');
+INSERT INTO `role` VALUES (1,'admin','#e01b24'),(2,'user','#2ec27e');
 /*!40000 ALTER TABLE `role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -429,11 +381,9 @@ CREATE TABLE `space` (
   `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `guidelines` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `has_operator` tinyint(1) NOT NULL,
-  `price` float NOT NULL,
   `capacity` int(11) NOT NULL,
-  `cover_img_url` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -442,11 +392,7 @@ CREATE TABLE `space` (
 
 LOCK TABLES `space` WRITE;
 /*!40000 ALTER TABLE `space` DISABLE KEYS */;
-INSERT INTO `space` VALUES
-(1,'المرقص','<p>Lmaoooo</p>','<p>Loooooool</p>',0,600,20,0),
-(2,'الرووف','يشيشيشبشب ','بيبشبشبشبشب',0,800,25,0),
-(3,'المشغل','يسيسيشسيشسي','ييشبشبشبشب',0,550,27,0),
-(4,'معمل الحواسيب','<p>يشبتشبىشتبىتن</p>','<p>بيىشبتشىيبشىبتسم</p>',1,650,32,0);
+INSERT INTO `space` VALUES (1,'المرقص','<p>Lmaoooo</p>','<p>Loooooool</p>',0,20),(2,'الرووف','يشيشيشبشب ','بيبشبشبشبشب',0,25),(3,'المشغل','يسيسيشسيشسي','ييشبشبشبشب',0,27),(4,'معمل الحواسيب','<p>يشبتشبىشتبىتن</p>','<p>بيىشبتشىيبشىبتسم</p>',1,32);
 /*!40000 ALTER TABLE `space` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -463,10 +409,8 @@ CREATE TABLE `tool` (
   `description` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
   `guidelines` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
   `has_operator` tinyint(1) NOT NULL,
-  `price` float NOT NULL,
   `space_id` int(11) DEFAULT NULL,
-  `count` int(11) DEFAULT NULL,
-  `cover_img_url` tinyint(1) NOT NULL,
+  `quantity` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `space_id` (`space_id`),
   CONSTRAINT `tool_ibfk_1` FOREIGN KEY (`space_id`) REFERENCES `space` (`id`)
@@ -479,11 +423,7 @@ CREATE TABLE `tool` (
 
 LOCK TABLES `tool` WRITE;
 /*!40000 ALTER TABLE `tool` DISABLE KEYS */;
-INSERT INTO `tool` VALUES
-(1,'تو تو','يشسيسشيسشي سي شسي سشيسشي شس',' يشسي سشي شي ',1,96,NULL,1,0),
-(2,'تنورة','شسيسشيش سي سيشس','ي شسيشسيشسي',0,60,1,3,0),
-(3,'Sony A7 OR Sony A 6600 ','Sony A7 OR Sony A 6600 ','Sony A7 OR Sony A 6600 ',1,130,NULL,2,0),
-(4,'كاميرا','dasdasdsad','sadsadasdasdad',1,258,2,1,0);
+INSERT INTO `tool` VALUES (1,'تو تو','يشسيسشيسشي سي شسي سشيسشي شس',' يشسي سشي شي ',1,NULL,NULL),(2,'تنورة','شسيسشيش سي سيشس','ي شسيشسيشسي',0,1,NULL),(3,'Sony A7 OR Sony A 6600 ','Sony A7 OR Sony A 6600 ','Sony A7 OR Sony A 6600 ',1,NULL,NULL),(4,'كاميرا','dasdasdsad','sadsadasdasdad',1,2,NULL);
 /*!40000 ALTER TABLE `tool` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -530,9 +470,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES
-(1,'Ahmed','Ramadan','ramadan','askme557@gmail.com','pbkdf2:sha256:260000$9QdxVObilSi33bK1$50d05d368af305dfabaf9b2d2397d9173c3ba5ab4b7418ab587a6644d6855a45',1,5,'2022-07-30 11:11:56','+201062894694',NULL,NULL,NULL,1,NULL,'male',2),
-(2,'Dev','Joe','devjoe','devjoe@github.com','pbkdf2:sha256:260000$LeoQXSvt0ZtAj1lU$38c2166ac2c4e9cdb0566c5fc6f9fa533204562c448df0391985da5bb42776b5',2,1,'2022-07-30 11:11:56','+201113319016','https://www.joe.dev',NULL,NULL,1,'https://png.pngtree.com/png-clipart/20200819/ourlarge/pngtree-female-profile-avatar-elements-png-image_2326125.jpg','male',NULL);
+INSERT INTO `user` VALUES (1,'Ahmed','Ramadan','ramadan','askme557@gmail.com','pbkdf2:sha256:260000$9QdxVObilSi33bK1$50d05d368af305dfabaf9b2d2397d9173c3ba5ab4b7418ab587a6644d6855a45',1,5,'2022-07-30 11:11:56','+201062894694',NULL,NULL,NULL,1,NULL,'male',2),(2,'Dev','Joe','devjoe','devjoe@github.com','pbkdf2:sha256:260000$LeoQXSvt0ZtAj1lU$38c2166ac2c4e9cdb0566c5fc6f9fa533204562c448df0391985da5bb42776b5',2,1,'2022-07-30 11:11:56','+201113319016','https://www.joe.dev',NULL,NULL,1,'https://png.pngtree.com/png-clipart/20200819/ourlarge/pngtree-female-profile-avatar-elements-png-image_2326125.jpg','male',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -545,4 +483,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-11-09 20:24:05
+-- Dump completed on 2022-12-04  1:35:34
