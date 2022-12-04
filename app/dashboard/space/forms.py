@@ -1,14 +1,14 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed
 from wtforms import (
     StringField, FloatField, BooleanField, TextAreaField,
     FieldList, IntegerField, SubmitField, SelectField,
     FormField, Form,
 )
+from wtforms.fields import MultipleFileField
 from wtforms.validators import (
     DataRequired, Length, NumberRange,
 )
-from wtforms.fields import MultipleFileField
-from flask_wtf.file import FileAllowed
 
 from app.dashboard.forms import PriceListForm, images
 from app.enums import SpaceUnit
@@ -31,7 +31,6 @@ class SpaceCategoryPriceForm(Form):
     price_list = FieldList(FormField(PriceListForm))
 
 
-
 class SpaceForm(FlaskForm):
     name = StringField(
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
@@ -49,11 +48,11 @@ class SpaceForm(FlaskForm):
     description = TextAreaField('الوصف', validators=[Length(max=1024)],
 
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id": "description"})
+                                    "placeholder": "الوصف", "class": "form-control", "rows": "5", "id": "description"})
     capacity = IntegerField('السعة', validators=[DataRequired()],
                             render_kw={
-        "placeholder": "السعة", "class": "form-control",
-    })
+                                "placeholder": "السعة", "class": "form-control",
+                            })
 
     guidelines = TextAreaField('قواعد',
                                render_kw={
@@ -69,3 +68,16 @@ class SpaceForm(FlaskForm):
     add_new_price = SubmitField('إضافة تسعيرة جديدة', render_kw={
         "class": "btn btn-primary"})
 
+    def process_cat_prices(self, cat_prices=None):
+        for price_group in cat_prices:
+            p_list = [{
+                "category_id": cat_price.category.id,
+                "price_unit": cat_price.price_unit,
+                "price": cat_price.price,
+            } for cat_price in price_group
+            ]
+            self.category_prices.append_entry({
+                "unit": price_group[0].unit,
+                "unit_value": price_group[0].unit_value,
+                "price_list": p_list
+            })

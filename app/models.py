@@ -1,9 +1,9 @@
-import enum
-from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from itertools import groupby
+
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
 
 from app import db, login
 from app.enums import (
@@ -23,17 +23,17 @@ def load_user(id):
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(80), nullable=False)
-    last_name = db.Column(db.String(80), nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    first_name = db.Column(db.String(64), nullable=False)
+    last_name = db.Column(db.String(64), nullable=False)
+    username = db.Column(db.String(64), unique=True, nullable=False)
     gender = db.Column(db.Enum(Gender), nullable=True)
-    email = db.Column(db.String(120), unique=True, nullable=True)
-    phone = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(128), unique=True, nullable=True)
+    phone = db.Column(db.String(32), nullable=False)
     birthday = db.Column(db.Date(), nullable=True)
     activated = db.Column(db.Boolean, default=False, nullable=False)
-    website_url = db.Column(db.String(120),  nullable=True)
-    avatar_url = db.Column(db.String(120),  nullable=True)
-    address = db.Column(db.String(200), nullable=True)
+    website_url = db.Column(db.String(128), nullable=True)
+    avatar_url = db.Column(db.String(128), nullable=True)
+    address = db.Column(db.String(512), nullable=True)
     password = db.Column(db.String(128), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey(
@@ -71,8 +71,8 @@ class User(UserMixin, db.Model):
 
 class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    description = db.Column(db.String(1024), nullable=False)
+    name = db.Column(db.String(128), unique=True, nullable=False)
+    description = db.Column(db.String(2048), nullable=False)
     address = db.Column(db.String(200), nullable=True)
     users = db.relationship('User', backref='organization', lazy=True)
     category_id = db.Column(
@@ -124,8 +124,8 @@ class CategoryTool(db.Model):
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), unique=True, nullable=False)
-    description = db.Column(db.String(128), nullable=True)
+    name = db.Column(db.String(128), unique=True, nullable=False)
+    description = db.Column(db.String(1024), nullable=True)
     color_code = db.Column(db.String(10), unique=True, nullable=False)
     is_organization = db.Column(db.Boolean, default=False, nullable=False)
     organizations = db.relationship(
@@ -137,9 +137,9 @@ class Category(db.Model):
 
 class Space(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text(1024), nullable=False)
-    guidelines = db.Column(db.String(1024), nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.Text(2048), nullable=False)
+    guidelines = db.Column(db.String(2048), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     category_prices = db.relationship(
@@ -150,12 +150,42 @@ class Space(db.Model):
         'Reservation', cascade="all", backref='space', lazy=True)
     tools = db.relationship('Tool', backref='space', lazy=True)
 
+    @property
+    def prices(self):
+        return self.get_category_prices()
+
+    def set_category_prices(self, cat_prices, categories):
+        for cat_price in cat_prices:
+            for price in cat_price["price_list"]:
+                # filter returns an Iterator, that's why I used next.
+                category = next(filter(
+                    lambda cat: cat.id == int(price["category_id"]),
+                    categories
+                ), None)
+                self.category_prices.append(CategorySpace(
+                    unit_value=float(cat_price["unit_value"]),
+                    unit=SpaceUnit[cat_price["unit"].split('.')[1]],
+                    price=float(price["price"]),
+                    price_unit=PriceUnit[price["price_unit"].split('.')[1]],
+                    category=category
+                ))
+
+    def get_category_prices(self):
+        def key_func(x):
+            return [x.unit.value, x.unit_value]
+
+        data = sorted(self.category_prices, key=key_func)
+        res = []
+        for _, value in groupby(data, key_func):
+            res.append(list(value))
+        return res
+
 
 class Tool(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.String(1024), nullable=False)
-    guidelines = db.Column(db.String(1024), nullable=False)
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(2048), nullable=False)
+    guidelines = db.Column(db.String(2048), nullable=False)
     has_operator = db.Column(db.Boolean, default=False, nullable=False)
     quantity = db.Column(db.Integer, default=1, nullable=True)
     category_prices = db.relationship(
@@ -165,6 +195,36 @@ class Tool(db.Model):
     reservations = db.relationship(
         'Reservation', cascade="all", backref='tool', lazy=True)
     space_id = db.Column(db.Integer, db.ForeignKey('space.id'), nullable=True)
+
+    @property
+    def prices(self):
+        return self.get_category_prices()
+
+    def set_category_prices(self, cat_prices, categories):
+        for cat_price in cat_prices:
+            for price in cat_price["price_list"]:
+                # filter returns an Iterator, that's why I used next.
+                category = next(filter(
+                    lambda cat: cat.id == int(price["category_id"]),
+                    categories
+                ), None)
+                self.category_prices.append(CategoryTool(
+                    unit_value=float(cat_price["unit_value"]),
+                    unit=ToolUnit[cat_price["unit"].split('.')[1]],
+                    price=float(price["price"]),
+                    price_unit=PriceUnit[price["price_unit"].split('.')[1]],
+                    category=category
+                ))
+
+    def get_category_prices(self):
+        def key_func(x):
+            return [x.unit.value, x.unit_value]
+
+        data = sorted(self.category_prices, key=key_func)
+        res = []
+        for _, value in groupby(data, key_func):
+            res.append(list(value))
+        return res
 
 
 class Image(db.Model):
@@ -197,7 +257,7 @@ class Reservation(db.Model):
         nullable=False
     )
     full_price = db.Column(db.Float, nullable=False)
-    description = db.Column(db.String(1024), nullable=False)
+    description = db.Column(db.String(2048), nullable=False)
     attendance_num = db.Column(db.Integer, nullable=True)
     min_age = db.Column(db.Integer, nullable=True)
     max_age = db.Column(db.Integer, nullable=True)
