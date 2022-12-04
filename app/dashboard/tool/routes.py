@@ -1,18 +1,16 @@
 import math
-import os
-from uuid import uuid1
 
 from flask import (
     render_template, request, redirect,
     url_for
 )
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
 
-from app import app, db, connection
+from app import db, connection
 from app.dashboard.tool import bp
 from app.dashboard.tool.forms import ToolForm
 from app.models import Space, Tool, Image, Category
+from app.utils import save_file
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -107,20 +105,8 @@ def create_tool():
             for file in form.images.data:
                 if not file:
                     continue
-                filename = str(uuid1()) + "-" + secure_filename(file.filename)
-                file.save(os.path.join(
-                    app.config["APP_PATH"],
-                    app.config["UPLOAD_PATH"],
-                    "tool",
-                    filename
-                ))
-                imagesObjs.append(Image(
-                    url=url_for(
-                        "main.download_file",
-                        dir="tool",
-                        filename=filename
-                    )
-                ))
+                url = save_file("tool", file)
+                imagesObjs.append(Image(url=url))
             tool.images = imagesObjs
             db.session.add(tool)
             db.session.commit()
@@ -181,25 +167,8 @@ def update_tool(id):
                 for file in form.images.data:
                     if not file:
                         continue
-                    filename = str(uuid1()) + "-" + \
-                               secure_filename(file.filename)
-
-                    # TODO: image is overwritten when there's
-                    # an existing image with the same name
-                    file.save(os.path.join(
-                        app.config["APP_PATH"],
-                        app.config["UPLOAD_PATH"],
-                        "tool",
-                        filename
-                    ))
-                    imagesObjs.append(Image(
-                        tool=tool,
-                        url=url_for(
-                            "main.download_file",
-                            dir="tool",
-                            filename=filename
-                        )
-                    ))
+                    url = save_file("tool", file)
+                    imagesObjs.append(Image(url=url))
                 db.session.add_all(imagesObjs)
                 db.session.commit()
                 return redirect(url_for("dashboard.tool.tool_list"))
