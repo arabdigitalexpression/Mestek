@@ -1,14 +1,17 @@
-{% extends 'default/base.html' %} {% block title%} أضف {% endblock%} 
+{% extends 'default/base.html' %} {% block title%} أضف {% endblock%}
 {% block
 content %}
-<div class="card text-center rounded-0" style="width: 18rem">
-	<div class="card-body">
-    <a href="{{url_for('userReservationSpace')}}" class="w-100 btn btn-lg btn-dark rounded-0">حجز مساحة</a>
-		<div class="card-text my-4 text-dark">
-			أو
+
+<div class="card text-center " style="width: 18rem">
+    <div class="card-body">
+        <a href="{{url_for('main.reservation.create_reservation_space')}}" class="w-100 btn btn-lg btn-primary ">حجز
+            مساحة</a>
+        <div class="card-text my-4 text-primary">
+            أو
+        </div>
+        <a href="{{url_for('main.reservation.create_reservation_tool')}}" class="w-100 btn btn-lg btn-primary ">حجز
+            أداة</a>
     </div>
-		<a href="{{url_for('userReservationTool')}}" class="w-100 btn btn-lg btn-dark rounded-0">حجز أداة</a>
-	</div>
 </div>
 
 {% endblock %}

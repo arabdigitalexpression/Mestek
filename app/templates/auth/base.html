@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block styles %}
+{{ super() }}
+<link
+        rel="stylesheet"
+        type="text/css"
+        href="{{ url_for('static',filename='styles/signin.css') }}"
+/>
+<link
+        href="{{ url_for('static',filename='styles/default.rtl.css') }}"
+        rel="stylesheet"
+/>
+<link
+        rel="stylesheet"
+        href="{{ url_for('static',filename='styles/mobiscroll.javascript.min.css')}}"
+/>
+<!-- Custom styles for this template -->
+{% endblock %}{% block body %}
+<main class="d-flex justify-content-center align-items-center w-100 vh-100">
+    {% block content %}{% endblock %}
+</main>
+
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static',filename='default.js') }}"></script>
+
+{% endblock %}

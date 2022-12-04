@@ -1,8 +1,8 @@
 {% extends 'default/base.html' %} {% block title %}حجز مساحة{% endblock %}
 {% block content %}
 
-<div style="position:absolute; width:800px; border: 2px solid rgb(36, 34, 34);">
-    <form name="form"  action="{{ url_for('userReservationSpace') }}" method="post" >
+<div class="border m-5 p-5">
+    <form name="form" action="{{ url_for('main.reservation.create_reservation_space') }}" method="post">
         <div class="row  " style="margin:40px 40px 40px 40px;">
             <div class="col-8 d-flex  align-items-center">
                 <div class="col-6">
@@ -15,8 +15,9 @@
                 </div>
 
                 <div class="col-3">
-                    <button type="submit"  class="btn btn-dark btn-sm"
-                        name="chooseTool" value="chooseTool">حجز أداة </button>
+                    <button type="submit" class="btn btn-primary"
+                            name="chooseTool" value="chooseTool">حجز أداة
+                    </button>
                 </div>
             </div>
             <div class="col-4 ">
@@ -29,58 +30,54 @@
                 </div>
                 <div>
                     <div class="input-daterange input-group">
-                        <input type="text" class=" form-control text-center date-picker-range-1 range_HS " name="start_date_range"
-                          placeholder="من" />
-                        <input type="text" class="form-control text-center date-picker-range-2 range_HS " name="end_date_range"
-                          placeholder="الي" />
-                      </div>
+                        <input type="text" class=" form-control text-center date-picker-range-1 range_HS "
+                               name="start_date_range"
+                               placeholder="من"/>
+                        <input type="text" class="form-control text-center date-picker-range-2 range_HS "
+                               name="end_date_range"
+                               placeholder="الي"/>
+                    </div>
                 </div>
                 <div id="picker-no-range" class="my-3">
                     <div>
-                        <input class="form-control text-center w-100" type="text" name="date-picker-no-range" id="date-picker-no-range" placeholder="-- ميعاد الحجز --" onchange="no_range_date()">
+                        <input class="form-control text-center w-100" type="text" name="date-picker-no-range"
+                               id="date-picker-no-range" placeholder="-- ميعاد الحجز --" onchange="no_range_date()">
                     </div>
                     <div class="row my-3 ">
                         <div class="col-6" style="height: 150px;">
-                            <select  name="time_picker_no_range" id="time-picker-no-range" class="form-select text-center w-100 " onchange="upto()">
+                            <select name="time_picker_no_range" id="time-picker-no-range"
+                                    class="form-select text-center w-100 " onchange="upto()">
                                 <option value="hide">من</option>
-                              
-                                </select>
+
+                            </select>
                         </div>
                         <div class="col-6" style="height: 150px;">
-                            <select name="time2_picker_no_range" id="time2-picker-no-range" class="form-select text-center w-100 ">
-                                <option value="hide">الي</option> 
+                            <select name="time2_picker_no_range" id="time2-picker-no-range"
+                                    class="form-select text-center w-100 ">
+                                <option value="hide">الي</option>
 
-                                </select>
+                            </select>
                         </div>
                     </div>
                     <input type="hidden" name="date_from_to_no_range" id="date_from_to_no_range">
-                </div>   
+                </div>
             </div>
 
-           
+
         </div>
 
 
-        <div class="row float-start mb-4" style="margin-left:25px;" >
-            <div class="col-3 ">
-                <button type="submit" class="btn btn-outline-danger "
+        <div class="">
+            <button type="submit" class="btn btn-outline-danger"
                     name="cancel"
-                    value="cancel">الغاء</button>
-            </div>
-            <div class="col-9">
-                <button type="submit" class="btn btn-dark " style=" font-size: 16px;
-font-weight:600;" name="confirm" value="confirm" onclick="return space_validate()">تأكيد الحجز</button>
-            </div>
-        </div>  
+                    value="cancel">الغاء
+            </button>
+            <button type="submit" class="btn btn-primary" name="confirm" value="confirm"
+                    onclick="return space_validate()">تأكيد الحجز
+            </button>
+        </div>
     </form>
 </div>
-
-
-
-
-
-
-
 
 
 {% endblock %}

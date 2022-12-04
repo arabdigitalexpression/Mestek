@@ -6,7 +6,7 @@ from flask import (
 from flask_login import current_user, login_required
 
 from app import db
-from app.dashboard.reservation import bp
+from app.main.reservation import bp
 from app.models import (
     Reservation, Space, Tool, Calendar, Interval
 )
@@ -14,7 +14,7 @@ from app.models import (
 
 @bp.route('/create/tool/', methods=["GET", "POST"])
 @login_required
-def userReservationTool():
+def create_reservation_tool():
     tool = Tool.query.all()
     res = Reservation()
     cal = Calendar()
@@ -43,13 +43,13 @@ def userReservationTool():
                     days = int(start_date[2])
                     counter = int(end_date[2]) - int(start_date[2])
                     if start_date[0] == end_date[0] and start_date[1] == end_date[1]:
-                        for count in range(counter+1):
+                        for count in range(counter + 1):
                             ans = datetime.date(
                                 int(start_date[0]), int(start_date[1]), int(days))
                             print(ans.strftime("%A"))
                             if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                 final_date = start_date[0] + "-" + \
-                                    start_date[1] + "-" + str(days)
+                                             start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -66,9 +66,9 @@ def userReservationTool():
         return render_template('/default/reservation/tool.html', tools=tool)
 
 
-@bp.route('/reservation/create/space/', methods=["GET", "POST"])
+@bp.route('/create/space/', methods=["GET", "POST"])
 @login_required
-def userReservationSpace():
+def create_reservation_space():
     reserve = Space.query.all()
     tool = Tool.query.all()
     if current_user.role.name == "user":
@@ -98,13 +98,13 @@ def userReservationSpace():
                     days = int(start_date[2])
                     counter = int(end_date[2]) - int(start_date[2])
                     if start_date[0] == end_date[0] and start_date[1] == end_date[1]:
-                        for count in range(counter+1):
+                        for count in range(counter + 1):
                             ans = datetime.date(
                                 int(start_date[0]), int(start_date[1]), int(days))
                             print(ans.strftime("%A"))
                             if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                 final_date = start_date[0] + "-" + \
-                                    start_date[1] + "-" + str(days)
+                                             start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -117,7 +117,6 @@ def userReservationSpace():
                 elif date_no_range != "":
                     dates = date_no_range.split(", ")
                     for final_date in dates:
-
                         time1 = request.form.get("time_picker_no_range")
                         time2 = request.form.get("time2_picker_no_range")
 
@@ -153,7 +152,9 @@ def userReservationSpace():
                     val1 = name.split('&')
 
                     datetime1 = request.form.get('datetimes')
-                    return render_template('default/reservation/space_with_tool.html', id=int(val1[0]), reserve1=reserve, tools=tool, name=val1[2], datetime=datetime1, price=val1[1])
+                    return render_template('default/reservation/space_with_tool.html', id=int(val1[0]),
+                                           reserve1=reserve, tools=tool, name=val1[2], datetime=datetime1,
+                                           price=val1[1])
 
             elif request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
@@ -179,9 +180,9 @@ def userReservationSpace():
                     days = int(start_date[1])
                     counter = int(end_date[1]) - int(start_date[1])
                     if start_date[0] == end_date[0] and start_date[2] == end_date[2]:
-                        for count in range(counter+1):
+                        for count in range(counter + 1):
                             final_date = start_date[2] + "-" + \
-                                start_date[0] + "-" + str(days)
+                                         start_date[0] + "-" + str(days)
                             days += 1
                             Dates = Calendar(
                                 day=final_date

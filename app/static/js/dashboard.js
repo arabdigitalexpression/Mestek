@@ -174,12 +174,16 @@ function tool_validate() {
 		return false;
 	}
 }
-$(".form_select").chosen();
 
-ClassicEditor.create(document.querySelector("#description"), {
-	language: "ar",
-});
 
-ClassicEditor.create(document.querySelector("#guidelines"), {
-	language: "ar",
+$(document).ready(function() {
+    $('#dataTable').DataTable();
+    $(".form_select").chosen();
+    ClassicEditor.create(document.querySelector("#description"), {
+	    language: "ar",
+    });
+
+    ClassicEditor.create(document.querySelector("#guidelines"), {
+        language: "ar",
+    });
 });
