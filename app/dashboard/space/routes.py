@@ -8,7 +8,7 @@ from flask import (
 )
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
-from app import app, db, connection
+from app import app, db
 from app.models import Space, Tool, Image, Category, CategorySpace
 from app.enums import SpaceUnit, PriceUnit
 from app.dashboard.space import bp
@@ -18,52 +18,9 @@ from app.dashboard.space.forms import SpaceForm
 @bp.route('/', methods=["GET", "POST"])
 @login_required
 def space_list():
-    i = 1
-    j = 10
     if current_user.role.name == "admin":
         data = Space.query.all()
-        cursor = connection.cursor()
-        cursor.execute("SELECT COUNT(*) FROM space")
-        data3 = cursor.fetchone()
-        rows = data3['COUNT(*)']
-        if rows % 10 == 0:
-            pages = rows/10
-        else:
-            pages = math.trunc(rows/10)+1
-
-        if request.method == 'POST':
-            if request.form.get("b") != None:
-                num = int(request.form.get("b"))
-                global x
-                x = int(request.form.get("b"))
-                i = int(str(num-1) + "1")
-                j = int(str(num) + "0")
-            elif request.form.get("next") == "next":
-                try:
-                    x
-                except NameError:
-                    x = 1
-                x += 1
-                print(pages)
-                print(x)
-
-                if x >= pages:
-                    x = pages
-                i = int(str(x-1) + "1")
-                j = int(str(x) + "0")
-
-            elif request.form.get("Previous") == "Previous":
-                try:
-                    x
-                except NameError:
-                    x = 1
-                x -= 1
-                if x <= 0:
-                    x = 1
-                i = int(str(x-1) + "1")
-                j = int(str(x) + "0")
-
-        return render_template('dashboard/space/index.html', spaces=data, i=i, j=j, pages=pages)
+        return render_template('dashboard/space/index.html', spaces=data)
 
 
 
