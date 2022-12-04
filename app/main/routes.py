@@ -1,10 +1,8 @@
-import os
-
-from flask import render_template, send_file
+from flask import render_template
 from flask_login import login_required
 
-from app import app
 from app.main import bp
+from app.utils import get_file_response
 
 
 @bp.route("/")
@@ -13,10 +11,6 @@ def main_page():
     return render_template('default/home.html', name="hello")
 
 
-@bp.route('/uploads/<dir>/<filename>')
-def download_file(dir, filename):
-    return send_file(os.path.join(
-        app.config["APP_PATH"],
-        app.config["UPLOAD_PATH"],
-        f'{dir}/{filename}'
-    ))
+@bp.route('/uploads/<directory>/<filename>')
+def download_file(directory, filename):
+    return get_file_response(directory, filename)

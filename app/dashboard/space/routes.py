@@ -1,18 +1,16 @@
 import math
-import os
-from uuid import uuid1
 
 from flask import (
     render_template, request, redirect,
     url_for
 )
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
 
-from app import app, db, connection
+from app import db, connection
 from app.dashboard.space import bp
 from app.dashboard.space.forms import SpaceForm
 from app.models import Space, Tool, Image, Category
+from app.utils import save_file
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -107,20 +105,8 @@ def create_space():
             for file in form.images.data:
                 if not file:
                     continue
-                filename = str(uuid1()) + "-" + secure_filename(file.filename)
-                file.save(os.path.join(
-                    app.config["APP_PATH"],
-                    app.config["UPLOAD_PATH"],
-                    "space",
-                    filename
-                ))
-                imagesObjs.append(Image(
-                    url=url_for(
-                        "main.download_file",
-                        dir="space",
-                        filename=filename
-                    )
-                ))
+                url = save_file("space", file)
+                imagesObjs.append(Image(url=url))
             space.images = imagesObjs
             db.session.add(space)
             db.session.commit()
@@ -174,24 +160,8 @@ def update_space(id):
                 for file in form.images.data:
                     if not file:
                         continue
-                    filename = str(uuid1()) + "-" + \
-                               secure_filename(file.filename)
-                    # TODO: image is overwritten when there's
-                    # an existing image with the same name
-                    file.save(os.path.join(
-                        app.config["APP_PATH"],
-                        app.config["UPLOAD_PATH"],
-                        "space",
-                        filename
-                    ))
-                    imagesObjs.append(Image(
-                        space=space,
-                        url=url_for(
-                            "main.download_file",
-                            dir="space",
-                            filename=filename
-                        )
-                    ))
+                    url = save_file("space", file)
+                    imagesObjs.append(Image(url=url))
                 db.session.add_all(imagesObjs)
                 db.session.commit()
                 return redirect(url_for("dashboard.space.space_list"))
