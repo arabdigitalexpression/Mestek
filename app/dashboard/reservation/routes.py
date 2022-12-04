@@ -6,7 +6,7 @@ from flask import (
 )
 from flask_login import current_user, login_required
 
-from app import db, connection
+from app import db
 from app.dashboard.reservation import bp
 from app.models import (
     Reservation, Space, Tool, User,
@@ -21,16 +21,16 @@ def get_reservations():
     j = 10
     if current_user.role.name == "admin":
         reservations = Reservation.query.all()
-        cursor = connection.cursor()
-        cursor.execute("SELECT COUNT(*) FROM reservation")
-        data = cursor.fetchone()
-        rows = data['COUNT(*)']
+        rows = int(Reservation.query.count())
 
-        if rows % 10 == 0:
+        
+        if rows == 0:
+            pages = 0
+        elif rows % 10 == 0:
             pages = rows / 10
         else:
             pages = math.trunc(rows / 10) + 1
-        print(pages)
+        
 
         if request.method == 'POST':
             if request.form.get("b") != None:

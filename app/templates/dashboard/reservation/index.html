@@ -276,7 +276,10 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 			{% endfor %}
 		</tbody>
 	</table>
-
+	<form
+	method="POST"
+	action="{{url_for('dashboard.reservation.get_reservations')}}"
+>
 	<nav aria-label="Page navigation example" class="d-flex float-end">
 		<ul class="pagination ">
 		  <li class="page-item"><button class="page-link" name="Previous" value="Previous" type="submit">Previous</button></li>
