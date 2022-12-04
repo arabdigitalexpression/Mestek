@@ -1,8 +1,17 @@
 {% extends 'dashboard/base.html' %} {% block title %} الصلاحيات {% endblock %}
-{% block heading %} الصلاحيات {% endblock %} {% block content %} 
-<div class="table-responsive my-3">
+{% block heading %} الصلاحيات {% endblock %} {% block content %}
+<div class="card shadow my-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									الصلاحيات
+								</h6>
+							</div>
+							<div class="card-body">
+<div class="table-responsive">
 	<table
-		class="table align-middle table-light table-striped table-hover table-sm"
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
 	>
 		<thead>
 			<tr>
@@ -19,7 +28,7 @@
 				<td>{{role.name}}</td>
 				<td>
 					<span
-						class="badge rounded-0 font-monospace"
+						class="badge  font-monospace"
 						style="background-color: {{role.color_code}};"
 						>{{ role.color_code }}</span
 					>

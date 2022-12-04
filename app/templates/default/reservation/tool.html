@@ -1,9 +1,11 @@
 {% extends 'default/base.html' %} {% block title %}حجز أداة{% endblock %}
 {% block content %}
 
-<div style="position:absolute; width:600px; height:250px; border: 2px solid rgb(36, 34, 34);">
-    <form name="form" onsubmit="return tool_validate()" action="{{ url_for('userReservationTool') }}" method="post">
-        <div class="row pt-5" style="justify-content: center">
+<div class="border rounded m-5 p-5">
+    <form name="form" onsubmit="return tool_validate()"
+          action="{{ url_for('main.reservation.create_reservation_tool') }}"
+          method="post">
+        <div class="row my-3">
             <div class="col-5">
                 <select id="toools" name="toolName" class="form_select ">
                     <option value="hide">-- اختر الأداة --</option>
@@ -18,20 +20,20 @@
             <div class="col-5 ">
                 <div class="input-daterange input-group">
                     <input type="text" class=" form-control text-center date-picker-range-1"
-                        name="start_date_range" placeholder="من" />
+                           name="start_date_range" placeholder="من"/>
                     <input type="text" class="form-control text-center date-picker-range-2"
-                        name="end_date_range" placeholder="الي" />
+                           name="end_date_range" placeholder="الي"/>
                 </div>
 
             </div>
         </div>
-        <button type="submit" class="btn btn-dark " style=" width:70%; margin-top: 40px; font-size: 16px;
-    font-weight:600;" name="confirm" value="confirm">تأكيد الحجز</button>
-        <button type="submit" class="btn btn-outline-danger" style="width:70%; margin-top: 10px;" name="cancel"
-            value="cancel">الغاء</button>
+        <button type="submit" class="btn btn-primary" name="confirm" value="confirm">تأكيد الحجز
+        </button>
+        <button type="submit" class="btn btn-outline-danger" name="cancel"
+                value="cancel">الغاء
+        </button>
     </form>
 </div>
-
 
 
 {% endblock %}

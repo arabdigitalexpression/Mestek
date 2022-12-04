@@ -3,164 +3,164 @@
 
 <h2 class="m-3">حجز مساحة</h2>
 
-<form action="{{ url_for('dashboard.reservation.create_reservation') }}" method="post">
-	<div class="row align-items-center" style="margin: 60px 80px 50px 0">
-		<div class="col-3">
-			<select id="spacee" name="spaceName" class="form_select w-100">
-				<option value="hide">-- اختر المساحة --</option>
-				{% for reserve in reserve1 %}
-				<option value="{{reserve.id}}&{{reserve.price}}&{{reserve.name}}">
-					{{ reserve.name }}
-				</option>
-				{% endfor %}
-			</select>
-		</div>
+<form action="{{ url_for('dashboard.reservation.create_reservation_space') }}" method="post">
+    <div class="row align-items-center" style="margin: 60px 80px 50px 0">
+        <div class="col-3">
+            <select id="spacee" name="spaceName" class="form_select w-100">
+                <option value="hide">-- اختر المساحة --</option>
+                {% for reserve in reserve1 %}
+                <option value="{{reserve.id}}&{{reserve.price}}&{{reserve.name}}">
+                    {{ reserve.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
 
-		<div class="col-2">
-			<button
-				type="submit"
-				class="btn btn-dark btn-sm"
-				name="chooseTool"
-				value="chooseTool"
-			>
-				حجز اداة
-			</button>
-		</div>
-	</div>
+        <div class="col-2">
+            <button
+                    type="submit"
+                    class="btn btn-primary"
+                    name="chooseTool"
+                    value="chooseTool"
+            >
+                حجز اداة
+            </button>
+        </div>
+    </div>
 
-	<div class="row" style="margin: 60px 80px 0 0">
-		<div class="col-3 d-flex">
-			<select
-				id="mySelect"
-				class="form-select text-center"
-				onchange="myFunction()"
-			>
-				<option value="hide">-- نوع الحجز --</option>
-				<option value="no_range">حجز ايام منفصلة</option>
-				<option value="range">حجز فترة متصلة</option>
-				<!-- <option value="weekly">حجز اسبوعي لفتره</option> -->
-			</select>
-			<div class="check">
-				<label>السبت</label>
-				<input
-					type="checkbox"
-					name="check-sa"
-					class="ms-2"
-					onclick="check();"
-				/>
+    <div class="row" style="margin: 60px 80px 0 0">
+        <div class="col-3 d-flex">
+            <select
+                    id="mySelect"
+                    class="form-select text-center"
+                    onchange="myFunction()"
+            >
+                <option value="hide">-- نوع الحجز --</option>
+                <option value="no_range">حجز ايام منفصلة</option>
+                <option value="range">حجز فترة متصلة</option>
+                <!-- <option value="weekly">حجز اسبوعي لفتره</option> -->
+            </select>
+            <div class="check">
+                <label>السبت</label>
+                <input
+                        type="checkbox"
+                        name="check-sa"
+                        class="ms-2"
+                        onclick="check();"
+                />
 
-				<label>الجمعة</label>
-				<input
-					type="checkbox"
-					name="check-fr"
-					class="ms-2"
-					onclick="check();"
-				/>
-			</div>
-		</div>
+                <label>الجمعة</label>
+                <input
+                        type="checkbox"
+                        name="check-fr"
+                        class="ms-2"
+                        onclick="check();"
+                />
+            </div>
+        </div>
 
-		<div class="col-7 mx-5">
-			<div class="col-4">
-				<div class="input-daterange input-group">
-					<input
-						type="text"
-						class="form-control text-center date-picker-range-1 range_HS"
-						name="start_date_range"
-						placeholder="من"
-					/>
-					<input
-						type="text"
-						class="form-control text-center date-picker-range-2 range_HS"
-						name="end_date_range"
-						placeholder="الي"
-					/>
-				</div>
-			</div>
-			<div id="picker-no-range" class="row align-items-center">
-				<div class="col-4">
-					<input
-						class="form-select text-center w-100"
-						type="text"
-						name="date-picker-no-range"
-						id="date-picker-no-range"
-						placeholder="-- ميعاد الحجز --"
-						onchange="no_range_date()"
-					/>
-				</div>
-				<div class="col-3 ms-5">
-					<select
-						name="time_picker_no_range"
-						id="time-picker-no-range"
-						class="form-select text-center w-100"
-						onchange="upto()"
-					>
-						<option value="hide">من الساعة</option>
-					</select>
-				</div>
-				<div class="col-2">
-					<select
-						name="time2_picker_no_range"
-						id="time2-picker-no-range"
-						class="form-select text-center w-100"
-					>
-						<option value="hide">الي</option>
-					</select>
-				</div>
-				<input
-					type="hidden"
-					name="date_from_to_no_range"
-					id="date_from_to_no_range"
-				/>
-			</div>
-			<!-- <div id="picker-weekly" class="row">
+        <div class="col-7 mx-5">
+            <div class="col-4">
+                <div class="input-daterange input-group">
+                    <input
+                            type="text"
+                            class="form-control text-center date-picker-range-1 range_HS"
+                            name="start_date_range"
+                            placeholder="من"
+                    />
+                    <input
+                            type="text"
+                            class="form-control text-center date-picker-range-2 range_HS"
+                            name="end_date_range"
+                            placeholder="الي"
+                    />
+                </div>
+            </div>
+            <div id="picker-no-range" class="row align-items-center">
+                <div class="col-4">
+                    <input
+                            class="form-select text-center w-100"
+                            type="text"
+                            name="date-picker-no-range"
+                            id="date-picker-no-range"
+                            placeholder="-- ميعاد الحجز --"
+                            onchange="no_range_date()"
+                    />
+                </div>
+                <div class="col-3 ms-5">
+                    <select
+                            name="time_picker_no_range"
+                            id="time-picker-no-range"
+                            class="form-select text-center w-100"
+                            onchange="upto()"
+                    >
+                        <option value="hide">من الساعة</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select
+                            name="time2_picker_no_range"
+                            id="time2-picker-no-range"
+                            class="form-select text-center w-100"
+                    >
+                        <option value="hide">الي</option>
+                    </select>
+                </div>
+                <input
+                        type="hidden"
+                        name="date_from_to_no_range"
+                        id="date_from_to_no_range"
+                />
+            </div>
+            <!-- <div id="picker-weekly" class="row">
         <input type="text" name="" id="date-picker-weekly">
       </div> -->
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<div class="row" style="margin: 60px 80px 0 0">
-		<div class="col-3">
-			<select class="form_select text-center w-100" name="username">
-				<option value="hide">-- اسم صاحب الحجز --</option>
-				{% for user in users %}
-				<option value="{{user.id}}">{{user.email}}</option>
-				{% endfor %}
-			</select>
-		</div>
-		<div class="col-3 mx-5">
-			<select
-				class="form-select text-center w-100"
-				style="width: 200px"
-				name="payment"
-			>
-				<option value="hide">الحساب</option>
-				<option value="no_payment">لم يتم الدفع</option>
-				<option value="down_payment">تم دفع مبلغ من الحجز</option>
-				<option value="full_payment">تم دفع المبلغ بالكامل</option>
-			</select>
-		</div>
-	</div>
+    <div class="row" style="margin: 60px 80px 0 0">
+        <div class="col-3">
+            <select class="form_select text-center w-100" name="username">
+                <option value="hide">-- اسم صاحب الحجز --</option>
+                {% for user in users %}
+                <option value="{{user.id}}">{{user.email}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-3 mx-5">
+            <select
+                    class="form-select text-center w-100"
+                    style="width: 200px"
+                    name="payment"
+            >
+                <option value="hide">الحساب</option>
+                <option value="no_payment">لم يتم الدفع</option>
+                <option value="down_payment">تم دفع مبلغ من الحجز</option>
+                <option value="full_payment">تم دفع المبلغ بالكامل</option>
+            </select>
+        </div>
+    </div>
 
-	<div class="float-end ml-5">
-		<button
-			type="submit"
-			class="btn btn-outline-danger"
-			style="margin-left: 10px"
-			name="cancel"
-			value="cancel"
-		>
-			الغاء
-		</button>
-		<button
-			type="submit"
-			class="btn btn-dark"
-			style="margin-left: 10px"
-			name="confirm"
-			value="confirm"
-		>
-			تأكيد الحجز
-		</button>
-	</div>
+    <div class="float-end ml-5">
+        <button
+                type="submit"
+                class="btn btn-outline-danger"
+                style="margin-left: 10px"
+                name="cancel"
+                value="cancel"
+        >
+            الغاء
+        </button>
+        <button
+                type="submit"
+                class="btn btn-primary"
+                style="margin-left: 10px"
+                name="confirm"
+                value="confirm"
+        >
+            تأكيد الحجز
+        </button>
+    </div>
 </form>
 
 {% endblock %}

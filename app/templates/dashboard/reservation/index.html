@@ -2,15 +2,15 @@
 block heading %} الحجوزات {% endblock %} {% block actions %}
 <div class="d-flex flex-row">
 	<a
-		class="btn btn-dark btn-sm rounded-0 d-flex align-items-center me-2"
+		class="btn btn-primary  d-flex align-items-center me-2"
 		type="button"
-		href="{{url_for('dashboard.reservation.create_reservation')}}"
+		href="{{url_for('dashboard.reservation.create_reservation_space')}}"
 	>
 		<i class="bi bi-plus-circle me-1"></i>
 		<span class=""> حجز مساحة </span>
 	</a>
 	<a
-		class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
+		class="btn btn-primary  d-flex align-items-center"
 		type="button"
 		href="{{url_for('dashboard.reservation.create_reservation_tool')}}"
 	>
@@ -22,7 +22,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 {% endblock %} {% block content %}
 <div class="table-responsive">
 	<table
-		class="table align-middle table-light table-striped table-hover table-sm"
+		class="table align-middle text-center table-bordered"
 	>
 		<thead>
 			<tr>
@@ -52,13 +52,13 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 				</td>
 				<td class="text-center">
 					{% if reservation.payment_status.name == 'no_payment' %}<span
-						class="badge rounded-0 text-bg-danger"
-						>حجز غير مدفوع</span
+						class="badge text-bg-danger"
+						>{{ reservation.payment_status.description }}</span
 					>
 					{% elif reservation.payment_status.name == 'down_payment' %}
-					<span class="badge rounded-0 text-bg-warning">حجز مدفوع جزئيا</span>
+					<span class="badge text-bg-warning">{{ reservation.payment_status.description }}</span>
 					{% else %}
-					<span class="badge rounded-0 text-bg-success">حجز مدفوع</span>
+					<span class="badge text-bg-success">{{ reservation.payment_status.description }}</span>
 					{% endif %}
 				</td>
 				<td>{{reservation.created_at}}</td>
@@ -69,7 +69,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 				<td class="d-flex">
 					<button
 						type="button"
-						class="btn btn-info text-white btn-sm mx-1 rounded-0"
+						class="btn btn-info btn-sm text-white mx-1 "
 						data-bs-toggle="modal"
 						data-bs-target="#infoModal-{{reservation.id}}"
 						data-bs-toggle="tooltip"
@@ -88,7 +88,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 						<div
 							class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg"
 						>
-							<div class="modal-content rounded-0">
+							<div class="modal-content ">
 								<div class="modal-header">
 									<h5 class="modal-title" id="infoModalLabel">
 										حجز باسم {{ reservation.user.first_name + ' '
@@ -127,16 +127,16 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 											<div class="col-md-6">
 												<h6 class="d-inline">الدفع النقدى</h6>
 												: {% if reservation.payment_status.name == 'no_payment'
-												%}<span class="badge rounded-0 text-bg-danger"
+												%}<span class="badge  text-bg-danger"
 													>{{ reservation.payment_status.name }}</span
 												>
 												{% elif reservation.payment_status.name ==
 												'down_payment' %}
-												<span class="badge rounded-0 text-bg-warning"
+												<span class="badge  text-bg-warning"
 													>{{ reservation.payment_status.name }}</span
 												>
 												{% else %}
-												<span class="badge rounded-0 text-bg-success"
+												<span class="badge  text-bg-success"
 													>{{ reservation.payment_status.name }}</span
 												>
 												{% endif %}
@@ -212,7 +212,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 					</div>
 					<a
 						href="{{url_for('dashboard.reservation.change_payment_status', id=reservation.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
+						class="text-white btn btn-warning btn-sm mx-1 "
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
 						title="تغيير حالة"
@@ -225,7 +225,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 					>
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm rounded-0 mx-1"
+							class="text-white btn btn-danger btn-sm  mx-1"
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{reservation.id}}"
 							data-bs-toggle="tooltip"
@@ -242,7 +242,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 							aria-hidden="true"
 						>
 							<div class="modal-dialog">
-								<div class="modal-content rounded-0">
+								<div class="modal-content ">
 									<div class="modal-header">
 										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
 										<button
@@ -256,12 +256,12 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn btn-sm rounded-0 btn-outline-secondary"
+											class="btn  btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
-										<button type="submit" class="btn btn-sm rounded-0 btn-danger">
+										<button type="submit" class="btn  btn-danger">
 											تأكيد الحذف
 										</button>
 									</div>
@@ -276,6 +276,7 @@ block heading %} الحجوزات {% endblock %} {% block actions %}
 			{% endfor %}
 		</tbody>
 	</table>
+
 	<nav aria-label="Page navigation example" class="d-flex float-end">
 		<ul class="pagination ">
 		  <li class="page-item"><button class="page-link" name="Previous" value="Previous" type="submit">Previous</button></li>

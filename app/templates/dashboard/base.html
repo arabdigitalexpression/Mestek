@@ -2,265 +2,622 @@
 {% block styles %}
 {{ super() }}
 <link
-	href="{{ url_for('static',filename='styles/dashboard.rtl.css') }}"
-	rel="stylesheet"
+        href="{{ url_for('static',filename='vendor/datatables/dataTables.bootstrap4.min.css') }}"
+        rel="stylesheet"
 />
-<link
-	href="{{ url_for('static',filename='styles/dashboard-cards.css') }}"
-	rel="stylesheet"
-/>
-
-<style>
-	.bd-placeholder-img {
-		font-size: 1.125rem;
-		text-anchor: middle;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		user-select: none;
-	}
-
-	@media (min-width: 768px) {
-		.bd-placeholder-img-lg {
-			font-size: 3.5rem;
-		}
-	}
-
-	.b-example-divider {
-		height: 3rem;
-		background-color: rgba(0, 0, 0, 0.1);
-		border: solid rgba(0, 0, 0, 0.15);
-		border-width: 1px 0;
-		box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
-			inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-	}
-
-	.b-example-vr {
-		flex-shrink: 0;
-		width: 1.5rem;
-		height: 100vh;
-	}
-
-	.bi {
-		vertical-align: -0.125em;
-		fill: currentColor;
-	}
-
-	.nav-scroller {
-		position: relative;
-		z-index: 2;
-		height: 2.75rem;
-		overflow-y: hidden;
-	}
-
-	.nav-scroller .nav {
-		display: flex;
-		flex-wrap: nowrap;
-		padding-bottom: 1rem;
-		margin-top: -1px;
-		overflow-x: auto;
-		text-align: center;
-		white-space: nowrap;
-		-webkit-overflow-scrolling: touch;
-	}
-</style>
-{% endblock %} {% block body %}
-{% block header %}
-<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	<a
-		class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6"
-		href="{{url_for('dashboard.dashboard')}}"
-		>أضف</a
-	>
-	<button
-		class="navbar-toggler position-absolute d-md-none collapsed"
-		type="button"
-		data-bs-toggle="collapse"
-		data-bs-target="#sidebarMenu"
-		aria-controls="sidebarMenu"
-		aria-expanded="false"
-		aria-label="/إخفاء لوحة التنقل"
-	>
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<input
-		class="form-control form-control-dark w-25 rounded-0 border-0 d-none d-md-block"
-		type="text"
-		placeholder="بحث"
-		aria-label="بحث"
-	/>
-	<li class="nav-item dropstart mx-2">
-		{% if current_user.avatar_url %}
-		<img
-			src="{{ current_user.avatar_url }}"
-			alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
-			class="rounded-circle"
-			style="object-fit: cover"
-			width="35"
-			height="35"
-			type="button"
-			data-bs-toggle="dropdown"
-			aria-expanded="false"
-		/>
-		{% else %}
-		<img
-			src="{{ url_for('static',filename='images/default_avatar.png') }}"
-			alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
-			class="rounded-circle"
-			style="object-fit: cover"
-			width="35"
-			height="35"
-			type="button"
-			data-bs-toggle="dropdown"
-			aria-expanded="false"
-		/>
-		{% endif %}
-
-		<ul class="dropdown-menu dropdown-menu-dark rounded-0 py-0">
-			<li>
-				<a class="dropdown-item" href="{{ url_for('main.profile.profile') }}">
-					<i class="bi bi-person-circle me-2"></i><span>حسابى</span>
-				</a>
-			</li>
-			<li>
-				<a class="dropdown-item" href="#">
-					<i
-						class="bi bi-bell-fill text-white position-relative me-2"
-						type="button"
-						><span
-							class="position-absolute top-0 start-100 translate-middle p-1 bg-danger rounded-circle"
-						>
-							<span class="visually-hidden">New alerts</span>
-						</span></i
-					><span>التنبيهات</span>
-				</a>
-			</li>
-			<li><hr class="dropdown-divider" /></li>
-			<li>
-				<a
-					class="dropdown-item text-danger fw-bold"
-					href="{{ url_for('auth.logout') }}"
-				>
-					<i class="bi bi-box-arrow-left me-2"></i><span>الخروج</span>
-				</a>
-			</li>
-		</ul>
-	</li>
-</nav>
-</header>
 {% endblock %}
+{% block body %}
+<!-- Page Wrapper -->
+<div id="wrapper">
+    <!-- Sidebar -->
+    <ul
+            class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+            id="accordionSidebar"
+    >
+        <!-- Sidebar - Brand -->
+        <a
+                class="sidebar-brand d-flex align-items-center justify-content-center"
+                href="{{url_for('dashboard.dashboard')}}"
+        >
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-puzzle-piece"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">{{'مساحتى'}}</div>
+        </a>
 
-<div class="container-fluid">
-	<div class="row">
-		<nav
-			id="sidebarMenu"
-			class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse overflow-auto"
-		>
-			<div class="position-sticky pt-3 ps-">
-				<ul class="nav flex-column">
-					<li class="nav-item">
-						<a
-							class="nav-link"
-							aria-current="page"
-							href="{{url_for('dashboard.dashboard')}}"
-						>
-						<i class="bi bi-graph-down me-1"></i>
-													لوحة التحكم
-						</a>
-					</li>
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
-					>
-						<span>المساحات</span>
-						<a class="link-secondary" href="#"> </a>
-					</h6>
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.space.space_list')}}">
-								<i class="bi bi-boxes me-1"></i>
-								 المساحات</a
-							>
-						</li>
-					</ul>
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
-					>
-						<span>الأدوات</span>
-						<a class="link-secondary" href="#"> </a>
-					</h6>
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.tool.tool_list')}}">
-								<i class="bi bi-tools me-1"></i>
-								 الأدوات
-							</a>
-						</li>
-					</ul>
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
-					>
-						<span>المستخدمين</span>
-						<a class="link-secondary" href="#"> </a>
-					</h6>
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.user.user_list')}}">
-								<i class="bi bi-people-fill me-1"></i>
-								 المستخدمين
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.role.get_roles')}}">
-								<i class="bi bi-unlock-fill me-1"></i>
-								الصلاحيات
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.category.get_categories')}}">
-								<i class="bi bi-tags-fill me-1"></i>
-								التصنيفات
-							</a>
-						</li>
-					</ul>
-					<h6
-						class="sidebar-heading d-flex justify-content-between align-items-center px-3 my-1 text-muted text-uppercase"
-					>
-						<span>الحجوزات</span>
-						<a class="link-secondary" href="#"> </a>
-					</h6>
-					<ul class="nav flex-column">
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.reservation.get_reservations')}}">
-								<i class="bi bi-table me-1"></i>
-								 الحجوزات
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{url_for('dashboard.get_calendar')}}">
-								<i class="bi bi-calendar-date-fill me-1"></i>
-								تقويم
-							</a>
-						</li>
-					</ul>
-				</ul>
-			</div>
-		</nav>
-		<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-			<div class="my-3 d-flex justify-content-between">
-				<h2 class="">{% block heading %} {% endblock %}</h2>
-				{% block actions %} {% endblock %}
-			</div>
-			{% block content %} {% endblock %}
-		</main>
-	</div>
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0"/>
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+            <a class="nav-link" href="{{url_for('dashboard.dashboard')}}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>لوحة التحكم</span></a
+            >
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <!-- Heading -->
+        <div class="sidebar-heading">الأساسى</div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseTwo"
+                    aria-expanded="true"
+                    aria-controls="collapseTwo"
+            >
+                <i class="fas fa-fw fa-puzzle-piece"></i>
+                <span>المساحات</span>
+            </a>
+            <div
+                    id="collapseTwo"
+                    class="collapse"
+                    aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.space.space_list')}}"
+                    >عرض المساحات</a
+                    >
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.space.create_space')}}"
+                    >إنشاء مساحة</a
+                    >
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseUtilities"
+                    aria-expanded="true"
+                    aria-controls="collapseUtilities"
+            >
+                <i class="fas fa-fw fa-tools"></i>
+                <span>الأدوات</span>
+            </a>
+            <div
+                    id="collapseUtilities"
+                    class="collapse"
+                    aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.tool.tool_list')}}"
+                    >عرض الأدوات</a
+                    >
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.tool.create_tool')}}"
+                    >إنشاء أداة</a
+                    >
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <!-- Heading -->
+        <div class="sidebar-heading">الأمان</div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapsePages"
+                    aria-expanded="true"
+                    aria-controls="collapsePages"
+            >
+                <i class="fas fa-fw fa-users"></i>
+                <span>المستخدمين</span>
+            </a>
+            <div
+                    id="collapsePages"
+                    class="collapse"
+                    aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">المستخدمين </h6>
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.user.user_list')}}"
+                    >عرض المستخدمين</a
+                    >
+                    <a class="collapse-item" href="{{url_for('dashboard.user.create_user')}}">إنشاء مستخدم</a>
+                    <div class="collapse-divider"></div>
+                    <h6 class="collapse-header">الصلاحيات </h6>
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.role.get_roles')}}"
+                    >عرض الصلاحيات</a
+                    >
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider"/>
+
+        <!-- Heading -->
+        <div class="sidebar-heading">الأمان</div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseCategory"
+                    aria-expanded="true"
+                    aria-controls="collapseCategory"
+            >
+                <i class="fas fa-fw fa-people-arrows"></i>
+                <span>التصنيفات</span>
+            </a>
+            <div
+                    id="collapseCategory"
+                    class="collapse"
+                    aria-labelledby="headingCategory"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.category.get_categories')}}"
+                    >عرض التصنيفات</a
+                    >
+                </div>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseOrganization"
+                    aria-expanded="true"
+                    aria-controls="collapseOrganization"
+            >
+                <i class="fas fa-fw fa-globe"></i>
+                <span>المؤسسات</span>
+            </a>
+            <div
+                    id="collapseOrganization"
+                    class="collapse"
+                    aria-labelledby="headingOrganization"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.user.user_list')}}"
+                    >عرض المؤسسات</a
+                    >
+                    <a class="collapse-item" href="register.html">إنشاء مؤسسة</a>
+                </div>
+            </div>
+        </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block"/>
+        <div class="sidebar-heading">الحجوزات</div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link collapsed"
+                    href="#"
+                    data-toggle="collapse"
+                    data-target="#collapseFour"
+                    aria-expanded="true"
+                    aria-controls="collapseTwo"
+            >
+                <i class="fas fa-fw fa-file-invoice-dollar"></i>
+                <span>الحجوزات</span>
+            </a>
+            <div
+                    id="collapseFour"
+                    class="collapse"
+                    aria-labelledby="headingTwo"
+                    data-parent="#accordionSidebar"
+            >
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.reservation.get_reservations')}}"
+                    >عرض الحجوزات</a
+                    >
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.space.create_space')}}"
+                    >حجز مساحة</a
+                    >
+                    <a
+                            class="collapse-item"
+                            href="{{url_for('dashboard.space.create_space')}}"
+                    >حجز أداة</a
+                    >
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a
+                    class="nav-link"
+                    href="{{ url_for ('dashboard.get_calendar')}}"
+            >
+                <i class="fas fa-fw fa-calendar-alt"></i>
+                <span>التقويم</span>
+            </a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider"/>
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav
+                    class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+            >
+                <!-- Sidebar Toggle (Topbar) -->
+                <button
+                        id="sidebarToggleTop"
+                        class="btn btn-link d-md-none rounded-circle mr-3"
+                >
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Search -->
+                <form
+                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+                >
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                class="form-control bg-light border-0 small"
+                                placeholder="بحث"
+                                aria-label="Search"
+                                aria-describedby="basic-addon2"
+                        />
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">
+                                <i class="fas fa-search fa-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Topbar Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                    <li class="nav-item dropdown no-arrow d-sm-none">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="searchDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div
+                                class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                                aria-labelledby="searchDropdown"
+                        >
+                            <form class="form-inline mr-auto w-100 navbar-search">
+                                <div class="input-group">
+                                    <input
+                                            type="text"
+                                            class="form-control bg-light border-0 small"
+                                            placeholder="بحث"
+                                            aria-label="Search"
+                                            aria-describedby="basic-addon2"
+                                    />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="button">
+                                            <i class="fas fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </li>
+
+                    <!-- Nav Item - Alerts -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="alertsDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <i class="fas fa-bell fa-fw"></i>
+                            <!-- Counter - Alerts -->
+                            <span class="badge badge-danger badge-counter">3+</span>
+                        </a>
+                        <!-- Dropdown - Alerts -->
+                        <div
+                                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown"
+                        >
+                            <h6 class="dropdown-header">الإشعارات</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 12, 2019</div>
+                                    <span class="font-weight-bold"
+                                    >A new monthly report is ready to download!</span
+                                    >
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-success">
+                                        <i class="fas fa-donate text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 7, 2019</div>
+                                    $290.29 has been deposited into your account!
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-warning">
+                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">December 2, 2019</div>
+                                    Spending Alert: We've noticed unusually high spending for
+                                    your account.
+                                </div>
+                            </a>
+                            <a
+                                    class="dropdown-item text-center small text-gray-500"
+                                    href="#"
+                            >المزيد</a
+                            >
+                        </div>
+                    </li>
+
+                    <!-- Nav Item - Messages -->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="messagesDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <i class="fas fa-envelope fa-fw"></i>
+                            <!-- Counter - Messages -->
+                            <span class="badge badge-danger badge-counter">7</span>
+                        </a>
+                        <!-- Dropdown - Messages -->
+                        <div
+                                class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown"
+                        >
+                            <h6 class="dropdown-header">الرسائل</h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src=""
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-success"></div>
+                                </div>
+                                <div class="font-weight-bold">
+                                    <div class="text-truncate">
+                                        Hi there! I am wondering if you can help me with a
+                                        problem I've been having.
+                                    </div>
+                                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src=""
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        I have the photos that you ordered last month, how would
+                                        you like them sent to you?
+                                    </div>
+                                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src=""
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-warning"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        Last month's report looks great, I am very happy with
+                                        the progress so far, keep up the good work!
+                                    </div>
+                                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="dropdown-list-image mr-3">
+                                    <img
+                                            class="rounded-circle"
+                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="..."
+                                    />
+                                    <div class="status-indicator bg-success"></div>
+                                </div>
+                                <div>
+                                    <div class="text-truncate">
+                                        Am I a good boy? The reason I ask is because someone
+                                        told me that people say this to all dogs, even if they
+                                        aren't good...
+                                    </div>
+                                    <div class="small text-gray-500">
+                                        Chicken the Dog · 2w
+                                    </div>
+                                </div>
+                            </a>
+                            <a
+                                    class="dropdown-item text-center small text-gray-500"
+                                    href="#"
+                            >المزيد</a
+                            >
+                        </div>
+                    </li>
+
+                    <div class="topbar-divider d-none d-sm-block"></div>
+
+                    <!-- Nav Item - User Information -->
+                    <li class="nav-item dropdown no-arrow">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                id="userDropdown"
+                                role="button"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+									<span class="mr-2 d-none d-lg-inline text-gray-600 small"
+                                    >{{ current_user.first_name + ' ' + current_user.last_name }}</span
+                                    >
+                            <img
+                                    class="img-profile rounded-circle"
+                                    {% if current_user.avatar_url %}
+                                    src="{{ current_user.avatar_url }}"
+                                    {% elif current_user.gender.name == "male" %}
+                                    src="{{ url_for('static',filename='images/male_avatar.svg') }}"
+                                    {% else %}
+                                    src="{{ url_for('static',filename='images/female_avatar.svg') }}"
+                                    {% endif %}
+                                    alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
+                            />
+                        </a>
+                        <!-- Dropdown - User Information -->
+                        <div
+                                class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown"
+                        >
+                            <a class="dropdown-item" href="{{url_for('main.profile.profile')}}">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                الصفحة الشخصية
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                الإعدادات
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                سجل الأنشطة
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a
+                                    class="dropdown-item text-danger"
+                                    href="#"
+                                    data-toggle="modal"
+                                    data-target="#logoutModal"
+                            >
+                                <i
+                                        class="fas fa-sign-out-alt fa-sm fa-fw mr-2"
+                                ></i>
+                                تسجيل الخروج
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                {% block content %} {% endblock %}
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+							<span
+                            >Copyright &copy; Your Website
+								<script>
+									document.write(new Date().getFullYear());
+								</script></span
+                            >
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
 </div>
+<!-- End of Page Wrapper -->
 
 
 {% endblock %}
 {% block scripts %}
-	{{ super() }}
-	<script src="{{ url_for('static',filename='js/cmain.min.js') }}"></script>
-	<script src="{{ url_for('static',filename='js/cstyle.js') }}"></script>
-	<script src="{{ url_for('static',filename='js/ckeditor/ckeditor.js') }}"></script>
-	<script src="{{ url_for('static',filename='js/ckeditor/ar.js') }}"></script>
-	<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
-	{% endblock %}
+{{ super() }}
+<script src="{{ url_for('static',filename='vendor/chartjs/chart.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/chartjs/chart-area-demo.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/chartjs/chart-pie-demo.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/ckeditor/ckeditor.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/ckeditor/ar.js') }}"></script>
+<script src="{{ url_for('static',filename='js/dashboard.js') }}"></script>
+{% endblock %}

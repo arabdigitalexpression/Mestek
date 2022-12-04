@@ -13,22 +13,38 @@
 	<div>{{ form.name.label }}{{ form.name }}</div>
 	<div>{{ form.desc.label }}{{ form.desc }}</div>
 	<div>{{ form.colorCode.label }}{{ form.colorCode }}</div>
-	<div>{{ form.isOrganization.label }} {{ form.isOrganization }}</div>
-	<button type="submit" class="btn btn-sm rounded-0 btn-dark">
+	<div class="d-flex align-items-center ms-3">
+			<div class="form-check form-switch">
+				{{form.isOrganization}}
+				{{form.isOrganization.label(class_="form-check-label")}}
+			</div>
+		</div>
+	<div>
+	<button type="submit" class="btn btn-primary">
 		{% if isUpdate %} تعديل تصنيف {% else %} إضافة تصنيف {% endif %}
 	</button>
+	</div>
 	{% if isUpdate %}
 	<a
 		href="{{ url_for('dashboard.category.get_categories') }}"
 		type="button"
-		class="btn btn-sm rounded-0 btn-outline-danger"
+		class="btn  btn-outline-danger"
 		>إلغاء</a
 	>
 	{% endif %}
 </form>
-<div class="table-responsive my-3">
+<div class="card shadow my-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									التصنيفات
+								</h6>
+							</div>
+							<div class="card-body">
+<div class="table-responsive">
 	<table
-		class="table align-middle table-light table-striped table-hover table-sm"
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
 	>
 		<thead>
 			<tr>
@@ -51,7 +67,7 @@
 				</td>
 				<td class="text-center">
 					<span
-						class="badge rounded-0 font-monospace"
+						class="badge  font-monospace"
 						style="background-color: {{category.color_code}};"
 						>{{ category.color_code }}</span
 					>
@@ -64,7 +80,7 @@
 				<td class="d-flex">
 					<a
 						href="{{url_for('dashboard.category.update_category', id=category.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
+						class="text-white btn btn-warning btn-sm mx-1 "
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
@@ -75,7 +91,7 @@
 						{{ form.csrf_token }}
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
+							class="text-white btn btn-danger btn-sm mx-1 "
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{category.id}}"
 							data-bs-toggle="tooltip"
@@ -92,7 +108,7 @@
 							aria-hidden="true"
 						>
 							<div class="modal-dialog">
-								<div class="modal-content rounded-0">
+								<div class="modal-content ">
 									<div class="modal-header">
 										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
 										<button
@@ -107,7 +123,7 @@
 										<br />
 										اعد كتابة إسم التصنيف فى المربع أدناه:
 										<p class="lead d-inline-block">
-											<mark class="badge rounded-0 text-muted h2"
+											<mark class="badge  text-muted h2"
 												>{{category.name}}</mark
 											>
 										</p>
@@ -116,14 +132,14 @@
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn btn-sm rounded-0 btn-outline-secondary"
+											class="btn  btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
 										<button
 											type="submit"
-											class="btn btn-sm rounded-0 btn-danger"
+											class="btn  btn-danger"
 										>
 											تأكيد الحذف
 										</button>
@@ -137,5 +153,6 @@
 			{% endfor %}
 		</tbody>
 	</table>
-</div>
+</div></div>
+
 {% endblock %}

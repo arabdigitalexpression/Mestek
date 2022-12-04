@@ -29,12 +29,24 @@ def profile_edit():
         current_user.last_name = form.lastName.data
         current_user.username = form.userName.data
         current_user.email = form.email.data
+        current_user.phone = form.phone.data
+        current_user.address = form.address.data
+        current_user.website_url = form.website_url.data
+        current_user.gender = form.gender.data
+        current_user.birthday = form.birthday.data
+        current_user.avatar_url = form.avatar_url.data
         db.session.commit()
         return redirect(url_for("main.profile.profile"))
     form.firstName.data = current_user.first_name
     form.lastName.data = current_user.last_name
     form.userName.data = current_user.username
     form.email.data = current_user.email
+    form.phone.data = current_user.phone
+    form.address.data = current_user.address
+    form.website_url.data = current_user.website_url
+    form.gender.data = current_user.gender.name
+    form.birthday.data = current_user.birthday
+    form.avatar_url.data = current_user.avatar_url
     return render_template("profile/update_profile.html", form=form)
 
 

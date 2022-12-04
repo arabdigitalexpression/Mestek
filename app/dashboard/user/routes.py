@@ -5,10 +5,10 @@ from flask import (
 from flask_login import current_user, login_required
 
 from app import db
-from app.models import User, Category, Role
+from app.dashboard.forms import ConfirmForm
 from app.dashboard.user import bp
 from app.dashboard.user.forms import UserCreateForm
-from app.dashboard.forms import ConfirmForm
+from app.models import User, Category, Role
 
 
 @bp.route('/')
@@ -62,10 +62,8 @@ def create_user():
             password = form.password.data
             role = form.role.data
             category = form.category.data
-
             user = User.query.get(email)
-
-            if user == None:
+            if user is None:
                 user = User(
                     first_name=first_name,
                     last_name=last_name,
