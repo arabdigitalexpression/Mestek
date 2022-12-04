@@ -2,7 +2,7 @@
 block heading %} المساحات {% endblock %} {% block actions %}
 
 <a
-	class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
+	class="btn btn-primary  d-flex align-items-center"
 	type="button"
 	href="{{url_for('dashboard.space.create_space')}}"
 >
@@ -10,9 +10,18 @@ block heading %} المساحات {% endblock %} {% block actions %}
 	<span class=""> إنشاء مساحة </span>
 </a>
 {% endblock %} {% block content %}
+<div class="card shadow my-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									المساحات
+								</h6>
+							</div>
+							<div class="card-body">
 <div class="table-responsive">
 	<table
-		class="table align-middle table-light table-striped table-hover table-sm"
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
 	>
 		<thead>
 			<tr>
@@ -32,14 +41,14 @@ block heading %} المساحات {% endblock %} {% block actions %}
 				<td>{{space.price}} جم / الساعة</td>
 				<td>
 					{% if space.has_operator %}
-					<i class="bi bi-check2-circle text-success"></i> {% else %}
-					<i class="bi bi-x-circle text-danger"></i> {% endif %}
+					<span>يوجد</span> {% else %}
+					<span>-</span> {% endif %}
 				</td>
 				<td>{{ "" ~ space.capacity ~ " فرد" }}</td>
 				<td class="d-flex">
 					<button
 						type="button"
-						class="btn btn-info text-white btn-sm mx-1 rounded-0"
+						class="btn btn-info btn-sm text-white mx-1 "
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
 						title="تفاصيل"
@@ -48,7 +57,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 					</button>
 					<a
 						href="{{url_for('dashboard.space.update_space', id=space.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
+						class="text-white btn btn-warning btn-sm mx-1 "
 						data-bs-toggle="tooltip"
 						data-bs-placement="top"
 						title="تحديث"
@@ -58,7 +67,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 					<form method="POST" action="{{url_for('dashboard.space.delete_space', id=space.id)}}">
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
+							class="text-white btn btn-danger btn-sm mx-1 "
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{space.id}}"
 							data-bs-toggle="tooltip"
@@ -75,7 +84,7 @@ block heading %} المساحات {% endblock %} {% block actions %}
 							aria-hidden="true"
 						>
 							<div class="modal-dialog">
-								<div class="modal-content rounded-0">
+								<div class="modal-content ">
 									<div class="modal-header">
 										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
 										<button
@@ -91,14 +100,14 @@ block heading %} المساحات {% endblock %} {% block actions %}
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn btn-sm rounded-0 btn-outline-secondary"
+											class="btn  btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
 										<button
 											type="submit"
-											class="btn btn-sm rounded-0 btn-danger"
+											class="btn  btn-danger"
 										>
 											تأكيد الحذف
 										</button>
@@ -112,5 +121,6 @@ block heading %} المساحات {% endblock %} {% block actions %}
 			{% endfor %}
 		</tbody>
 	</table>
-</div>
+</div></div>
+
 {% endblock %}

@@ -5,10 +5,10 @@ from flask import (
 from flask_login import current_user, login_user, logout_user
 
 from app.auth import bp
+from app.auth.forms import SignupForm, LoginForm
 from app.models import (
     Category, Role, User
 )
-from app.auth.forms import SignupForm, LoginForm
 
 
 @bp.route("/signup", methods=["GET", "POST"])
@@ -33,7 +33,7 @@ def signup_page():
             category = form.category.data
             role = form.role.data
             user = User.query.get(email)
-            if user == None:
+            if user is None:
                 user = User(
                     first_name=first_name,
                     last_name=last_name,
@@ -49,10 +49,10 @@ def signup_page():
             else:
                 # TODO: there's a logic error here, fix it!
                 errors = f"hey, There's a user with this email: {email}"
-                return render_template("default/auth/signup.html", form=form, errors=errors)
+                return render_template("auth/signup.html", form=form, errors=errors)
         errors = f"Please check your form data again"
-        return render_template("default/auth/signup.html", form=form, errors=errors)
-    return render_template("default/auth/signup.html", form=form)
+        return render_template("auth/signup.html", form=form, errors=errors)
+    return render_template("auth/signup.html", form=form)
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -70,14 +70,14 @@ def login_page():
         user = User.query.filter_by(username=username).first()
 
         if user is None:
-            msg = "Invalid username or password."
+            msg = "إسم المستخدم أو كلمة المرور غير صحيحة"
             # render_template does autoescaping html form input data
-            return render_template("default/auth/login.html", form=form, msg=msg)
+            return render_template("auth/login.html", form=form, msg=msg)
 
         if not user.verify_password(password):
-            msg = "Invalid username or password."
+            msg = "إسم المستخدم أو كلمة المرور غير صحيحة"
             # render_template does autoescaping html form input data
-            return render_template("default/auth/login.html", form=form, msg=msg)
+            return render_template("auth/login.html", form=form, msg=msg)
 
         # remember the user when he visits other pages
         # TODO: add remember me button to the form
@@ -86,7 +86,7 @@ def login_page():
             return redirect(url_for("dashboard.dashboard"))
         else:
             return redirect(url_for("main.main_page"))
-    return render_template("default/auth/login.html", form=form)
+    return render_template("auth/login.html", form=form)
 
 
 @bp.route('/logout')

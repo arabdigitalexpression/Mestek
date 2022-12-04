@@ -1,19 +1,16 @@
 import os
-from flask import render_template, send_file, redirect, url_for
-from flask_login import current_user, login_required
-from app.main import bp
+
+from flask import render_template, send_file
+from flask_login import login_required
+
 from app import app
+from app.main import bp
 
 
 @bp.route("/")
 @login_required
 def main_page():
-    if current_user.is_authenticated and current_user.role.name == 'admin':
-        return redirect(url_for("dashboard.dashboard"))
-    elif current_user.is_authenticated and current_user.role.name == 'user':
-        return redirect(url_for("main.main_page"))
-    else:
-        return render_template('default/home.html', name="hello")
+    return render_template('default/home.html', name="hello")
 
 
 @bp.route('/uploads/<dir>/<filename>')

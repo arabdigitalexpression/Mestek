@@ -1,19 +1,18 @@
 {% extends 'dashboard/base.html' %} {% block title %} اﻷدوات {% endblock %} {%
-block heading %} اﻷدوات {% endblock %} {% block actions %}
-
-<a
-	class="btn btn-dark btn-sm rounded-0 d-flex align-items-center"
-	type="button"
-	href="{{url_for('dashboard.tool.create_tool')}}"
->
-	<i class="bi bi-plus-circle me-1"></i>
-	<span class=""> إنشاء الأداة </span>
-</a>
-{% endblock %} {% block content %}
-
+block heading %} اﻷدوات {% endblock %}
+{% block content %}
+<div class="card shadow my-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									اﻷدوات
+								</h6>
+							</div>
+							<div class="card-body">
 <div class="table-responsive">
 	<table
-		class="table align-middle table-light table-striped table-hover table-sm"
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
 	>
 		<thead>
 			<tr>
@@ -34,8 +33,8 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 				<td>{{tool.price}} جم / اليوم</td>
 				<td>
 					{% if tool.has_operator %}
-					<i class="bi bi-check2-circle text-success"></i> {% else %}
-					<i class="bi bi-x-circle text-danger"></i> {% endif %}
+					<span>يوجد</span> {% else %}
+					<span>-</span> {% endif %}
 				</td>
 				<td>{{ tool.count }}</td>
 				<td>
@@ -45,20 +44,20 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 				<td class="d-flex">
 					<button
 						type="button"
-						class="btn btn-info text-white btn-sm mx-1 rounded-0"
+						class="btn btn-info btn-sm text-white mx-1 "
 					>
 						<i class="bi bi-info-circle"></i>
 					</button>
 					<a
 						href="{{url_for('dashboard.tool.update_tool', id=tool.id)}}"
-						class="text-white btn btn-warning btn-sm mx-1 rounded-0"
+						class="text-white btn btn-warning btn-sm mx-1 "
 					>
 						<i class="bi bi-pencil"></i>
 					</a>
 					<form method="POST" action="{{url_for('dashboard.tool.delete_tool', id=tool.id)}}">
 						<button
 							type="button"
-							class="text-white btn btn-danger btn-sm mx-1 rounded-0"
+							class="text-white btn btn-danger btn-sm mx-1 "
 							data-bs-toggle="modal"
 							data-bs-target="#deleteModal-{{tool.id}}"
 							data-bs-toggle="tooltip"
@@ -75,7 +74,7 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 							aria-hidden="true"
 						>
 							<div class="modal-dialog">
-								<div class="modal-content rounded-0">
+								<div class="modal-content ">
 									<div class="modal-header">
 										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
 										<button
@@ -91,14 +90,14 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 									<div class="modal-footer">
 										<button
 											type="button"
-											class="btn btn-sm rounded-0 btn-outline-secondary"
+											class="btn  btn-outline-secondary"
 											data-bs-dismiss="modal"
 										>
 											رجوع
 										</button>
 										<button
 											type="submit"
-											class="btn btn-sm rounded-0 btn-danger"
+											class="btn  btn-danger"
 										>
 											تأكيد الحذف
 										</button>
@@ -112,5 +111,6 @@ block heading %} اﻷدوات {% endblock %} {% block actions %}
 			{% endfor %}
 		</tbody>
 	</table>
-</div>
+</div></div>
+
 {% endblock %}

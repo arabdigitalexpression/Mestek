@@ -11,35 +11,35 @@ from wtforms.validators import (
 class UserCreateForm(FlaskForm):
     firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
                             render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     lastName = StringField('الاسم الأخير', validators=[DataRequired(), Length(min=3, max=20)],
                            render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     userName = StringField('إسم المستخدم', validators=[DataRequired(), Length(min=3, max=20)],
                            render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     email = EmailField('البريد الإلكترونى', validators=[DataRequired()],
                        render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     password = PasswordField('كلمة المرور', validators=[DataRequired(), Length(min=6, max=20)],
                              render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     confirm_password = PasswordField('تأكيد كلمة المرور', validators=[DataRequired(), EqualTo('password')],
                                      render_kw={
-        "class": "form-control rounded-0",
+        "class": "form-control ",
     })
     role = SelectField('الصلاحية', render_kw={
-        "class": "form-select rounded-0",
+        "class": "form-select ",
     })
     category = SelectField('التصنيف', render_kw={
-        "class": "form-select rounded-0",
+        "class": "form-select ",
     })
     submit = SubmitField('تسجيل الحساب',
                          render_kw={
-                             "class": "w-100 btn btn-lg btn-dark rounded-0",
+                             "class": "w-100 btn btn-lg btn-primary",
                          })

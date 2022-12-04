@@ -57,10 +57,17 @@
 * {
 	font-family: "Tajawal Medium", sans-serif;
 }
+html,
 body {
 	margin: 0;
 	padding: 0;
 	font-family: "Tajawal Medium", sans-serif;
+    direction: rtl;
+    min-height: 100vh;
+}
+*{
+	font-family: "Tajawal Medium", sans-serif;
+    direction: rtl;
 }
 .bd-placeholder-img {
 	font-size: 1.125rem;
@@ -113,3 +120,21 @@ body {
 	white-space: nowrap;
 	-webkit-overflow-scrolling: touch;
 }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: rgba(200,200,200,0.7);
+    }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: rgba(78,115,223,0.9);
+        border-radius: 5px;
+    }
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(78,115,223,0.6);
+
+    }

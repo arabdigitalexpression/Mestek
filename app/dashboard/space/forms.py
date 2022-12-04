@@ -17,12 +17,12 @@ from app.enums import SpaceUnit
 class SpaceCategoryPriceForm(Form):
     unit_value = FloatField(
         'القيمة', validators=[DataRequired(), NumberRange(min=0)], render_kw={
-            "placeholder": "القيمة", "class": "form-control form-control-sm rounded-0",
+            "placeholder": "القيمة", "class": "form-control",
         }
     )
     unit = SelectField(
         'الوحدة', validators=[DataRequired()],
-        render_kw={"class": "form-select form-select-sm rounded-0"},
+        render_kw={"class": "form-select"},
         choices=[
             (SpaceUnit.hour, SpaceUnit.hour.description),
             (SpaceUnit.day, SpaceUnit.day.description)
@@ -37,7 +37,7 @@ class SpaceForm(FlaskForm):
         'أسم المساحة', validators=[DataRequired(), Length(max=50)],
         render_kw={
 
-            "placeholder": "أسم المساحة", "class": "form-control form-control-sm rounded-0",
+            "placeholder": "أسم المساحة", "class": "form-control",
         }
     )
     has_operator = BooleanField('مشرف؟',
@@ -49,23 +49,23 @@ class SpaceForm(FlaskForm):
     description = TextAreaField('الوصف', validators=[Length(max=1024)],
 
                                 render_kw={
-        "placeholder": "الوصف", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "description"})
+        "placeholder": "الوصف", "class": "form-control", "rows": "5", "id": "description"})
     capacity = IntegerField('السعة', validators=[DataRequired()],
                             render_kw={
-        "placeholder": "السعة", "class": "form-control form-control-sm rounded-0",
+        "placeholder": "السعة", "class": "form-control",
     })
 
     guidelines = TextAreaField('قواعد',
                                render_kw={
-                                   "placeholder": "قواعد", "class": "form-control form-control-sm rounded-0", "rows": "5", "id": "guidelines"
+                                   "placeholder": "قواعد", "class": "form-control", "rows": "5", "id": "guidelines"
                                }
                                )
     images = MultipleFileField(
         'الصور', name="images", validators=[  # FileRequired(),
             FileAllowed(images, 'الرجاء إدخال صور فقط!')
 
-        ], render_kw={"class": "form-control form-control-sm rounded-0"})
+        ], render_kw={"class": "form-control"})
     category_prices = FieldList(FormField(SpaceCategoryPriceForm))
     add_new_price = SubmitField('إضافة تسعيرة جديدة', render_kw={
-        "class": "btn btn-sm btn-dark btn-sm rounded-0"})
+        "class": "btn btn-primary"})
 

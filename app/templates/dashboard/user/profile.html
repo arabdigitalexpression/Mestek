@@ -5,7 +5,9 @@
 		<img src="https://i.pravatar.cc/300" alt="avatar" class="img-thumbnail" />
 	</div>
 	<div class="col">
-		<table class="table table-borderless">
+		<table
+			class="table table-borderless"
+		>
 			<tbody>
 				<tr>
 					<th scope="row">الاسم الأول</th>
@@ -27,7 +29,7 @@
 					<th scope="row">الصلاحية</th>
 					<td>
 						<span
-							class="badge rounded-0"
+							class="badge "
 							style="background-color: {{user.role.color_code}};"
 							>{{ user.role.name }}</span
 						>
@@ -37,7 +39,7 @@
 					<th scope="row">التصنيف</th>
 					<td>
 						<span
-							class="badge rounded-0"
+							class="badge "
 							style="background-color: {{user.category.color_code}};"
 							>{{ user.category.name }}</span
 						>

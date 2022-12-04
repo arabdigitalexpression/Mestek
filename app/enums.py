@@ -41,13 +41,13 @@ class ReservationTypes(Enum):
     tool = 1
 
 
-class PaymentTypes(Enum):
-    no_payment = 0
-    down_payment = 1
-    full_payment = 2
+class PaymentTypes(DescriptiveEnum):
+    no_payment = 0, "حجز غير مدفوع"
+    down_payment = 1, "حجز مدفوع جزئيا"
+    full_payment = 2, "حجز مدفوع"
 
 
-class Gender(Enum):
-    male = 0
-    female = 1
-    prefer_not_answer = 2
+class Gender(DescriptiveEnum):
+    male = 0, "ذكر"
+    female = 1, "أنثى"
+    prefer_not_answer = 2, "أرجو عدم التوضيح"

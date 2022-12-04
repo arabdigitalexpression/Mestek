@@ -1,5 +1,5 @@
-import math
 import datetime
+import math
 
 from flask import (
     render_template, redirect, url_for, request,
@@ -69,7 +69,7 @@ def get_reservations():
 
 @bp.route('/create/space/', methods=["GET", "POST"])
 @login_required
-def create_reservation():
+def create_reservation_space():
     reserve = Space.query.all()
     tool = Tool.query.all()
     users = User.query.all()
