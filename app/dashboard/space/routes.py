@@ -1,5 +1,5 @@
-import os
 import math
+import os
 from uuid import uuid1
 
 from flask import (
@@ -8,11 +8,11 @@ from flask import (
 )
 from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
+
 from app import app, db, connection
-from app.models import Space, Tool, Image, Category, CategorySpace
-from app.enums import SpaceUnit, PriceUnit
 from app.dashboard.space import bp
 from app.dashboard.space.forms import SpaceForm
+from app.models import Space, Tool, Image, Category
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -27,16 +27,16 @@ def space_list():
         data3 = cursor.fetchone()
         rows = data3['COUNT(*)']
         if rows % 10 == 0:
-            pages = rows/10
+            pages = rows / 10
         else:
-            pages = math.trunc(rows/10)+1
+            pages = math.trunc(rows / 10) + 1
 
         if request.method == 'POST':
             if request.form.get("b") != None:
                 num = int(request.form.get("b"))
                 global x
                 x = int(request.form.get("b"))
-                i = int(str(num-1) + "1")
+                i = int(str(num - 1) + "1")
                 j = int(str(num) + "0")
             elif request.form.get("next") == "next":
                 try:
@@ -49,7 +49,7 @@ def space_list():
 
                 if x >= pages:
                     x = pages
-                i = int(str(x-1) + "1")
+                i = int(str(x - 1) + "1")
                 j = int(str(x) + "0")
 
             elif request.form.get("Previous") == "Previous":
@@ -60,11 +60,10 @@ def space_list():
                 x -= 1
                 if x <= 0:
                     x = 1
-                i = int(str(x-1) + "1")
+                i = int(str(x - 1) + "1")
                 j = int(str(x) + "0")
 
         return render_template('dashboard/space/index.html', spaces=data, i=i, j=j, pages=pages)
-
 
 
 @bp.route('/<int:id>/delete', methods=['POST'])
@@ -101,20 +100,9 @@ def create_space():
                 guidelines=form.guidelines.data,
                 capacity=form.capacity.data,
             )
-            for cat_price in form.category_prices.data:
-                for price in cat_price["price_list"]:
-                    category = next(filter(
-                        lambda cat: cat.id == int(price["category_id"]),
-                        categories
-                    ), None)
-                    space.category_prices.append(CategorySpace(
-                        unit_value=float(cat_price["unit_value"]),
-                        unit=SpaceUnit[cat_price["unit"].split('.')[1]],
-                        price=float(price["price"]),
-                        price_unit=PriceUnit[price["price_unit"].split('.')[
-                            1]],
-                        category=category
-                    ))
+            space.set_category_prices(
+                form.category_prices.data, categories
+            )
             imagesObjs = list()
             for file in form.images.data:
                 if not file:
@@ -141,16 +129,7 @@ def create_space():
             {"category_id": cat.id}
             for cat in categories
         ]
-        if request.method == "POST" and form.add_new_price.data:
-            form.category_prices.append_entry({"price_list": cat_prices})
-            return render_template("dashboard/space/form.html", form=form, categories=categories)
-        form.process(data={
-            "category_prices": [
-                {
-                    "price_list": cat_prices
-                }
-            ]
-        })
+        form.category_prices.append_entry({"price_list": cat_prices})
         return render_template("dashboard/space/form.html", form=form, categories=categories)
     else:
         return redirect(url_for("main.main_page"))
@@ -170,23 +149,33 @@ def update_space(id):
             form.guidelines.data = space.guidelines
             form.description.data = space.description
             form.has_operator.data = space.has_operator
+
+            form.process_cat_prices(space.get_category_prices())
             return render_template(
                 'dashboard/space/form.html',
                 form=form, isUpdate=True, space=space, categories=categories
             )
         elif request.method == "POST":
-            if form.validate_on_submit():
+            if form.validate_on_submit() and not form.add_new_price.data:
                 space.name = form.name.data
                 space.has_operator = form.has_operator.data
                 space.description = form.description.data
                 space.guidelines = form.guidelines.data
                 space.capacity = form.capacity.data
+
+                for cat_price in space.category_prices:
+                    db.session.delete(cat_price)
+                db.session.commit()
+                space.set_category_prices(
+                    form.category_prices.data, categories
+                )
+
                 imagesObjs = list()
                 for file in form.images.data:
                     if not file:
                         continue
                     filename = str(uuid1()) + "-" + \
-                        secure_filename(file.filename)
+                               secure_filename(file.filename)
                     # TODO: image is overwritten when there's
                     # an existing image with the same name
                     file.save(os.path.join(
@@ -206,6 +195,12 @@ def update_space(id):
                 db.session.add_all(imagesObjs)
                 db.session.commit()
                 return redirect(url_for("dashboard.space.space_list"))
+            if form.validate_on_submit() and form.add_new_price.data:
+                cat_prices = [
+                    {"category_id": cat.id}
+                    for cat in categories
+                ]
+                form.category_prices.append_entry({"price_list": cat_prices})
             return render_template(
                 "dashboard/space/form.html",
                 form=form, isUpdate=True, space=space, categories=categories
