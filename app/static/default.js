@@ -27,7 +27,6 @@ function myFunction() {
 var date = new Date();
 current_date = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
 last_month = date.getMonth() + 3;
-console.log(last_month)
 if (last_month > 12) last_month -= 12;
 last_date = date.getFullYear() + "/" + (last_month) + "/" + date.getDate();
 
