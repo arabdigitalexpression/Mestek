@@ -3,9 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 
-import pymysql
-connection = pymysql.connect(host='localhost', user='adefsrs', password='Adef@SRS2022',
-                             database='adef_srs', charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
 
 app = Flask(__name__)
 

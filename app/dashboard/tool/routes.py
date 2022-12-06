@@ -5,62 +5,21 @@ from flask import (
     url_for
 )
 from flask_login import current_user, login_required
-
-from app import db, connection
+from werkzeug.utils import secure_filename
+from app import app, db
+from app.models import Space, Tool, Image, Category, CategoryTool
+from app.enums import ToolUnit, PriceUnit
 from app.dashboard.tool import bp
 from app.dashboard.tool.forms import ToolForm
-from app.models import Space, Tool, Image, Category
 from app.utils import save_file
 
 
 @bp.route('/', methods=["GET", "POST"])
 @login_required
 def tool_list():
-    i = 1
-    j = 10
     if current_user.role.name == "admin":
         data = Tool.query.all()
-        cursor = connection.cursor()
-        cursor.execute("SELECT COUNT(*) FROM tool")
-        data2 = cursor.fetchone()
-        rows = data2['COUNT(*)']
-        if rows % 10 == 0:
-            pages = rows / 10
-        else:
-            pages = math.trunc(rows / 10) + 1
-        if request.method == 'POST':
-            if request.form.get("b") != None:
-                num = int(request.form.get("b"))
-                global x
-                x = int(request.form.get("b"))
-                i = int(str(num - 1) + "1")
-                j = int(str(num) + "0")
-            elif request.form.get("next") == "next":
-                try:
-                    x
-                except NameError:
-                    x = 1
-                x += 1
-                print(pages)
-                print(x)
-
-                if x >= pages:
-                    x = pages
-                i = int(str(x - 1) + "1")
-                j = int(str(x) + "0")
-
-            elif request.form.get("Previous") == "Previous":
-                try:
-                    x
-                except NameError:
-                    x = 1
-                x -= 1
-                if x <= 0:
-                    x = 1
-                i = int(str(x - 1) + "1")
-                j = int(str(x) + "0")
-        return render_template('dashboard/tool/index.html', tools=data, i=i, j=j, pages=pages)
-
+        return render_template('dashboard/tool/index.html', tools=data)
 
 @bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
