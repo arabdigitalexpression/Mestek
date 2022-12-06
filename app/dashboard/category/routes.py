@@ -5,10 +5,10 @@ from flask import (
 from flask_login import current_user, login_required
 
 from app import db
-from app.random_color import generate_color
-from app.models import Category, User
 from app.dashboard.category import bp
 from app.dashboard.forms import ConfirmForm, RoleCategoryForm
+from app.models import Category, User
+from app.random_color import generate_color
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -36,9 +36,11 @@ def get_categories():
                     db.session.commit()
                     categories = Category.query.all()
                 errors = f"hey, There's a category with this name: {name}"
-                return render_template("dashboard/user/category/index.html", form=form, errors=errors, categories=categories, input=input)
+                return render_template("dashboard/user/category/index.html", form=form, errors=errors,
+                                       categories=categories, input=input)
             errors = f"Please check your form data again"
-            return render_template("dashboard/user/category/index.html", form=form, errors=errors, categories=categories, input=input)
+            return render_template("dashboard/user/category/index.html", form=form, errors=errors,
+                                   categories=categories, input=input)
         form.colorCode.data = generate_color()
         return render_template("dashboard/user/category/index.html", form=form, categories=categories, input=input)
     else:
@@ -70,7 +72,7 @@ def update_category(id):
                 category.color_code = form.colorCode.data
                 category.is_organization = form.isOrganization.data
                 db.session.commit()
-                return redirect(url_for("get_categories"))
+                return redirect(url_for("dashboard.category.get_categories"))
             return render_template(
                 "dashboard/user/category/index.html",
                 form=form, isUpdate=True, categories=categories, input=input
@@ -93,6 +95,6 @@ def delete_category(id):
                 db.session.delete(cat_price)
             db.session.delete(category)
             db.session.commit()
-            return redirect(url_for("get_categories"))
+            return redirect(url_for("dashboard.category.get_categories"))
     else:
         return redirect(url_for('main.main_page'))
