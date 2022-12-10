@@ -91,7 +91,7 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
     </div>
     {% if isUpdate %}
     <div
-            class="row p-5"
+            class="row"
             data-masonry='{"percentPosition": true, "transitionDuration": "0.8s" }'
     >
         {% for image in tool.images %}
@@ -113,10 +113,10 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
         <a
                 href="{{url_for('dashboard.tool.tool_list')}}"
                 type="button"
-                class="btn  btn-outline-danger"
-        >الغاء</a
-        >
-        <button type="submit" class="btn  btn-primary col">
+                class="btn btn-outline-danger">
+            الغاء
+        </a>
+        <button type="submit" class="btn btn-primary">
             {% if isUpdate %} تعديل الأداة {% else %} إضافة أداة {% endif %}
         </button>
     </div>
