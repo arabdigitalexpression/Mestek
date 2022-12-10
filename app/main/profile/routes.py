@@ -59,13 +59,13 @@ def change_password():
 
     if form.validate_on_submit():
         if not current_user.verify_password(current_pass):
-            flash("Current password is invalid.", "error")
+            flash("كلمة المرور الحالية غير صحيحة", "error")
             return render_template("profile/change_password.html", form=form)
         if not form.password.data == form.confirm_password.data:
-            flash("Password and confirm password doesn't match.", "error")
+            flash("كلمة المرور غير مطابقة", "error")
             return render_template("profile/change_password.html", form=form)
         current_user.make_password(form.password.data)
         db.session.commit()
-        flash("Password changed successfully.", "info")
+        flash("تم تعيين كلمة مرور جديدة بنجاح", "info")
         return redirect(url_for("main.profile.profile"))
     return render_template("profile/change_password.html", form=form)
