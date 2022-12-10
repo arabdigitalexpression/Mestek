@@ -1,16 +1,10 @@
-import math
-
 from flask import (
     render_template, request, redirect,
     url_for
 )
 from flask_login import current_user, login_required
 
-from app import db, connection
-from werkzeug.utils import secure_filename
-from app import app, db
-from app.models import Space, Tool, Image, Category, CategorySpace
-from app.enums import SpaceUnit, PriceUnit
+from app import db
 from app.dashboard.space import bp
 from app.dashboard.space.forms import SpaceForm
 from app.models import Space, Tool, Image, Category
@@ -67,7 +61,7 @@ def create_space():
                 if not file:
                     continue
                 url = save_file("space", file)
-                imagesObjs.append(Image(url=url))
+                imagesObjs.append(Image(space=space, url=url))
             space.images = imagesObjs
             db.session.add(space)
             db.session.commit()
@@ -122,7 +116,7 @@ def update_space(id):
                     if not file:
                         continue
                     url = save_file("space", file)
-                    imagesObjs.append(Image(url=url))
+                    imagesObjs.append(Image(space=space, url=url))
                 db.session.add_all(imagesObjs)
                 db.session.commit()
                 return redirect(url_for("dashboard.space.space_list"))

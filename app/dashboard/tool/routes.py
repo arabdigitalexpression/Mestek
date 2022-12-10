@@ -1,16 +1,13 @@
-import math
-
 from flask import (
     render_template, request, redirect,
     url_for
 )
 from flask_login import current_user, login_required
-from werkzeug.utils import secure_filename
-from app import app, db
-from app.models import Space, Tool, Image, Category, CategoryTool
-from app.enums import ToolUnit, PriceUnit
+
+from app import db
 from app.dashboard.tool import bp
 from app.dashboard.tool.forms import ToolForm
+from app.models import Space, Tool, Image, Category
 from app.utils import save_file
 
 
@@ -20,6 +17,7 @@ def tool_list():
     if current_user.role.name == "admin":
         data = Tool.query.all()
         return render_template('dashboard/tool/index.html', tools=data)
+
 
 @bp.route('/<int:id>/delete', methods=['POST'])
 @login_required
@@ -65,7 +63,7 @@ def create_tool():
                 if not file:
                     continue
                 url = save_file("tool", file)
-                imagesObjs.append(Image(url=url))
+                imagesObjs.append(Image(tool=tool, url=url))
             tool.images = imagesObjs
             db.session.add(tool)
             db.session.commit()
@@ -127,7 +125,7 @@ def update_tool(id):
                     if not file:
                         continue
                     url = save_file("tool", file)
-                    imagesObjs.append(Image(url=url))
+                    imagesObjs.append(Image(tool=tool, url=url))
                 db.session.add_all(imagesObjs)
                 db.session.commit()
                 return redirect(url_for("dashboard.tool.tool_list"))
