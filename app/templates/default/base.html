@@ -23,13 +23,6 @@
                 class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow d-flex align-items-center justify-content-center"
         >
             <div class="mx-4 text-primary fw-bold">{{ 'مساحتى' }}</div>
-            <!-- Sidebar Toggle (Topbar) -->
-            <button
-                    id="sidebarToggleTop"
-                    class="btn btn-link d-md-none rounded-circle mr-3"
-            >
-                <i class="fa fa-bars"></i>
-            </button>
 
             <!-- Topbar Search -->
             <form
@@ -273,10 +266,10 @@
                             class="img-profile rounded-circle"
                             {% if current_user.avatar_url %}
                             src="{{ current_user.avatar_url }}"
-                            {% elif current_user.gender.name == "male" %}
-                            src="{{ url_for('static',filename='images/male_avatar.svg') }}"
-                            {% else %}
+                            {% elif current_user.gender.name == "female" %}
                             src="{{ url_for('static',filename='images/female_avatar.svg') }}"
+                            {% else %}
+                            src="{{ url_for('static',filename='images/male_avatar.svg') }}"
                             {% endif %}
                             alt="{{ current_user.first_name + ' ' + current_user.last_name }}"
                         />
@@ -300,10 +293,12 @@
                             <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                             الإعدادات
                         </a>
+                        {% if current_user.role.name == "admin" %}
                         <a class="dropdown-item" href="#">
                             <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                             سجل الأنشطة
                         </a>
+                        {% endif %}
                         <div class="dropdown-divider"></div>
                         <a
                                 class="dropdown-item text-danger"
