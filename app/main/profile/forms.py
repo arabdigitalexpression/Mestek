@@ -50,7 +50,7 @@ class EditUserForm(FlaskForm):
                             "class": "form-control my-2",
                             "placeholder": "الهاتف"
                         })
-    gender = SelectField('النوع', validators=[DataRequired()],
+    gender = SelectField('الجنس', validators=[DataRequired()],
                          choices=[(Gender.male.name, Gender.male.description),
                                   (Gender.female.name, Gender.female.description),
                                   (Gender.prefer_not_answer.name, Gender.prefer_not_answer.description)],
