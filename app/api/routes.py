@@ -14,9 +14,18 @@ def get_reservations_data():
         for reservation in reservations:
             dates = []
             for cal in reservation.calendars:
-                dates.append(cal.day.strftime("%d/%m/%Y, %H:%M:%S"))
-            result.append({
-                "title": str(reservation.space.name) if reservation.type.name == 'space' else str(reservation.tool.name),
-                "dates": dates
-            })
+                dates.append(cal.day)
+
+            if not dates:
+                continue
+
+            data = {
+                "title": str(reservation.space.name) if reservation.type.name == 'space' else str(
+                    reservation.tool.name),
+                "start": min(dates).strftime("%Y-%m-%dT%H:%M:%S"),
+                # "dates": dates
+            }
+            if len(dates) > 1:
+                data["end"] = max(dates).strftime("%Y-%m-%dT%H:%M:%S")
+            result.append(data)
         return jsonify(result)
