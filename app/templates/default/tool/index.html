@@ -115,6 +115,7 @@
 
 
 
+
 </style>
 {% endblock %}
 
@@ -133,7 +134,7 @@
                         <img {% if tool.images|length> 0 %}
                         src="{{tool.images[0].url}}"
                         {% else %}
-                        src="src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                        src="{{ url_for('static',filename='images/no_photo.svg') }}"
                         {% endif %}
                         alt="{{tool.name}}"/>
                     </div>

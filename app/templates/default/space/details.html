@@ -287,7 +287,7 @@ color: #4782d3;
                 <img {% if space.images|length> 0 %}
                 src="{{space.images[0].url}}"
                 {% else %}
-                src="src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                src="{{ url_for('static',filename='images/no_photo.svg') }}"
                 {% endif %} alt="{{space.name}}" class="img-fluid mb30 hero-img">
                 <div class="post-content">
                     <h2>{{space.name}}</h2>
@@ -382,7 +382,7 @@ color: #4782d3;
                              {% if tool.images|length> 0 %}
                 src="{{tool.images[0].url}}"
                 {% else %}
-                src="src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                src="{{ url_for('static',filename='images/no_photo.svg') }}"
                 {% endif %} alt="{{tool.name}}"/>
                         <div class="media-body mt-2">
                             <h5 class="mt-0 mb-0 tool-name">{{tool.name}}
