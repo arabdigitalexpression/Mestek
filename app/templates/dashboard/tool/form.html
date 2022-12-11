@@ -9,18 +9,18 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
     {{ form.csrf_token }}
 
     <div class="row d-flex align-items-center justify-content-between mb-5">
-        <div class="col">
+        <div class="col-md-3">
             {% if form.name.errors %} {%for error in form.name.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form.name}}
             <!-- <input required name="name" style="height: 50px;" type="text" class="form-control " placeholder="" aria-label=""> -->
         </div>
-        <div class="col">
+        <div class="col-md-3">
             {% if form.space.errors %} {%for error in form.space.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form.space}}
         </div>
-        <div class="col">
+        <div class="col-md-3">
             {% if form.quantity.errors %} {%for error in form.quantity.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%}
@@ -29,7 +29,7 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
                 <span class="input-group-text bg-primary text-white ">أداة</span>
             </div>
         </div>
-        <div class="col d-flex justify-content-center">
+        <div class="col-md-3 d-flex justify-content-center">
             {% if form.has_operator.errors %} {%for error in form.has_operator.errors
             %}
             <span class="form_error">{{ error }}</span>
