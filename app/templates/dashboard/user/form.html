@@ -54,6 +54,18 @@ url_for('dashboard.user.create_user') %} {% endif %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form_user.category.label}} {{form_user.category}}
         </div>
+        <div class="col-md-4 justify-content-center d-flex align-items-end">
+            <div>
+                {% if form_user.activated.errors %} {%for error in form_user.activated.errors
+                %}
+                <span class="form_error">{{ error }}</span>
+                {%endfor%} {% endif%}
+                <div class="form-check form-switch">
+                    {{form_user.activated}}
+                    {{form_user.activated.label(class_="form-check-label")}}
+                </div>
+            </div>
+        </div>
     </div>
     {% if not isUpdate %}
     <h6 class="text-muted mt-5">تعيين كلمة المرور</h6>
