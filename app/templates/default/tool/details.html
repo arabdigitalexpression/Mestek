@@ -283,6 +283,7 @@ color: #4782d3;
 
 
 
+
 </style>
 {% endblock %}
 
@@ -294,7 +295,7 @@ color: #4782d3;
                 <img {% if tool.images|length> 0 %}
                 src="{{tool.images[0].url}}"
                 {% else %}
-                src="src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                src="{{ url_for('static',filename='images/no_photo.svg') }}"
                 {% endif %}
                 alt="{{tool.name}}" class="img-fluid mb30 hero-img">
                 <div class="post-content">
