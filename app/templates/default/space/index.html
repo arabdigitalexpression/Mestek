@@ -110,6 +110,9 @@
 
 
 
+
+
+
 </style>
 {% endblock %}
 
@@ -134,6 +137,8 @@
             </div>
         </a>
         </div>
+        {% else %}
+        <div class="alert alert-warning">عذراً لا يوجد مساحات مسجلة</div>
         {% endfor %}
     </div>
 </div>
