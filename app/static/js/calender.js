@@ -1,7 +1,7 @@
 let events = []
 
 let getReservations = async () => {
-    const res = await fetch('http://127.0.0.1:5000/api/reservations/');
+    const res = await fetch("/api/reservations/");
     const data = await res.json();
     events = data
 }
