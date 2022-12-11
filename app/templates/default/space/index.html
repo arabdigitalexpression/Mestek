@@ -109,6 +109,7 @@
 
 
 
+
 </style>
 {% endblock %}
 
@@ -124,7 +125,7 @@
                 <img {% if space.images|length> 0 %}
                 src="{{space.images[0].url}}"
                 {% else %}
-                src="src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                src="{{ url_for('static',filename='images/no_photo.svg') }}"
                 {% endif %} class="img-responsive card-img" alt="{{space.name}}">
                 <span class="badge-corner">
                 <span>{{space.name}}</span>
