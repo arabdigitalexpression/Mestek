@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from app import db
 from app.dashboard.forms import ConfirmForm
 from app.dashboard.user import bp
-from app.dashboard.user.forms import UserCreateForm, ChangePasswordForm
+from app.dashboard.user.forms import UserForm, ChangePasswordForm
 from app.models import User, Category, Role
 
 
@@ -48,7 +48,7 @@ def delete_user(username):
 def create_user():
     categories = Category.query.all()
     roles = Role.query.all()
-    form = UserCreateForm()
+    form = UserForm()
     form.category.choices = [(c.id, c.name) for c in categories]
     form.category.choices.insert(0, (0, "-- اختر تصنيف --"))
     form.role.choices = [(r.id, r.name) for r in roles]
@@ -62,6 +62,12 @@ def create_user():
             password = form.password.data
             role = form.role.data
             category = form.category.data
+            address = form.address.data
+            phone = form.phone.data
+            website_url = form.website_url.data
+            gender = form.gender.data
+            birthday = form.birthday.data
+            avatar_url = form.avatar_url.data
             user = User.query.get(email)
             if user is None:
                 user = User(
@@ -69,6 +75,13 @@ def create_user():
                     last_name=last_name,
                     username=username,
                     email=email,
+                    address=address,
+                    phone=phone,
+                    website_url=website_url,
+                    gender=gender,
+                    birthday=birthday,
+                    avatar_url=avatar_url,
+                    activated=True,
                     role=Role.query.get(role) if not role == 0 else None,
                     category=Category.query.get(
                         category) if not category == 0 else None
@@ -80,10 +93,10 @@ def create_user():
             # TODO: there's a logic error here, fix it!
             errors = f"hey, There's a user with this email: {email}"
             # render_template does autoescaping html form input data
-            return render_template("dashboard/user/form.html", form=form, errors=errors)
+            return render_template("dashboard/user/form.html", form_user=form, errors=errors)
         errors = f"Please check your form data again"
-        return render_template("dashboard/user/form.html", form=form, errors=errors)
-    return render_template("dashboard/user/form.html", form=form)
+        return render_template("dashboard/user/form.html", form_user=form, errors=errors)
+    return render_template("dashboard/user/form.html", form_user=form)
 
 
 @bp.route('/<string:username>/update', methods=["GET", "POST"])
@@ -92,7 +105,7 @@ def update_user(username):
     if current_user.role.name == "admin":
         categories = Category.query.all()
         roles = Role.query.all()
-        form_user = UserCreateForm()
+        form_user = UserForm()
         form_password = ChangePasswordForm()
         form_user.category.choices = [(c.id, c.name) for c in categories]
         form_user.category.choices.insert(0, (0, "-- اختر تصنيف --"))
@@ -105,6 +118,7 @@ def update_user(username):
             form_user.userName.data = user.username
             form_user.email.data = user.email
             form_user.phone.data = user.phone
+            form_user.activated.data = user.activated
             form_user.address.data = user.address
             form_user.website_url.data = user.website_url
             form_user.gender.data = user.gender.name
@@ -124,6 +138,8 @@ def update_user(username):
             user.username = form_user.userName.data
             user.email = form_user.email.data
             user.address = form_user.address.data
+            user.phone = form_user.phone.data
+            user.activated = form_user.activated.data
             user.website_url = form_user.website_url.data
             user.gender = form_user.gender.data
             user.birthday = form_user.birthday.data

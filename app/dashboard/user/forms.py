@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed
 from wtforms import (
     StringField, PasswordField, EmailField,
-    SubmitField, SelectField, DateField, FileField,
+    SubmitField, SelectField, DateField, FileField, BooleanField,
 )
 from wtforms.validators import (
     DataRequired, Length, EqualTo,
@@ -13,7 +13,7 @@ from app.enums import Gender
 images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
 
-class UserCreateForm(FlaskForm):
+class UserForm(FlaskForm):
     firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
                             render_kw={
                                 "class": "form-control ",
@@ -77,6 +77,10 @@ class UserCreateForm(FlaskForm):
     category = SelectField('التصنيف', render_kw={
         "class": "form-select ",
     })
+    activated = BooleanField('مفعل',
+                             render_kw={
+                                 "class": "form-check-input"
+                             })
     submit = SubmitField('تسجيل الحساب',
                          render_kw={
                              "class": "w-100 btn btn-lg btn-primary",
