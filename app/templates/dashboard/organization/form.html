@@ -1,0 +1,80 @@
+{% extends 'dashboard/base.html' %} {% block title %} {% if isUpdate %} تعديل
+المؤسسة {% else %} إنشاء مؤسسة {% endif %} {% endblock %} {% block content %}
+<h2>{% if isUpdate %} تعديل المؤسسة {% else %} إنشاء مؤسسة {% endif %}</h2>
+
+{% if isUpdate %} {% set form_action = url_for('dashboard.organization.update_organization', name=organization.name) %} {%
+else %} {% set form_action = url_for('dashboard.organization.create_organization') %} {% endif %}
+
+<form method="POST" enctype="multipart/form-data" action="{{ form_action }}" enctype="multipart/form-data">
+    {{ form.csrf_token }}
+
+    <div class="row d-flex align-items-center justify-content-between mb-5">
+        <div class="col-md-4">
+            {% if form.name.errors %} {%for error in form.name.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.name}}
+        </div>
+        <div class="col-md-4">
+            {% if form.category.errors %} {%for error in form.category.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.category}}
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+    <div class="row d-flex align-items-center justify-content-between mb-5">
+        <div class="col-md-3">
+            {% if form.phone.errors %} {%for error in form.phone.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.phone}}
+        </div>
+        <div class="col-md-5">
+            {% if form.address.errors %} {%for error in form.address.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.address}}
+        </div>
+        <div class="col-md-4">
+            {% if form.website_url.errors %} {%for error in form.website_url.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.website_url}}
+        </div>
+    </div>
+
+    <div class="my-5">
+        {% if form.description.errors %} {%for error in form.description.errors %}
+        <span class="form_error">{{ error }}</span>
+        {%endfor%} {% endif%} {{form.description}}
+    </div>
+    {% if isUpdate and organization.logo_url == ''%}
+    <div
+            class="row"
+    >
+        <div class="col-md-4">
+            <img
+                    class="rounded-circle"
+                    src="{{organization.logo_url}}"
+                    alt="{{organization.name}}"
+                    style="object-fit: cover"
+                    width="150"
+                    height="150"
+            />
+        </div>
+    </div>
+    {% endif %}
+    <div class="my-5">
+        {{ form.logo_url.label(class_="form-label")}} {{ form.logo_url}}
+    </div>
+    <div class="float-end my-3">
+        <a
+                href="{{url_for('dashboard.organization.organization_list')}}"
+                type="button"
+                class="btn btn-outline-danger">
+            الغاء
+        </a>
+        <button type="submit" class="btn btn-primary">
+            {% if isUpdate %} تعديل المؤسسة {% else %} إضافة مؤسسة {% endif %}
+        </button>
+    </div>
+</form>
+{% endblock %}

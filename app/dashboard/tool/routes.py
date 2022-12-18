@@ -58,13 +58,13 @@ def create_tool():
             tool.set_category_prices(
                 form.category_prices.data, categories
             )
-            imagesObjs = list()
+            images_objs = list()
             for file in form.images.data:
                 if not file:
                     continue
                 url = save_file("tool", file)
-                imagesObjs.append(Image(tool=tool, url=url))
-            tool.images = imagesObjs
+                images_objs.append(Image(tool=tool, url=url))
+            tool.images = images_objs
             db.session.add(tool)
             db.session.commit()
             return redirect(url_for("dashboard.tool.tool_list"))
@@ -120,13 +120,14 @@ def update_tool(id):
                     form.category_prices.data, categories
                 )
 
-                imagesObjs = list()
+                images_objs = list()
                 for file in form.images.data:
+                    print(file)
                     if not file:
                         continue
                     url = save_file("tool", file)
-                    imagesObjs.append(Image(tool=tool, url=url))
-                db.session.add_all(imagesObjs)
+                    images_objs.append(Image(tool=tool, url=url))
+                db.session.add_all(images_objs)
                 db.session.commit()
                 return redirect(url_for("dashboard.tool.tool_list"))
             if form.validate_on_submit() and form.add_new_price.data:

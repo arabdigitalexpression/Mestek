@@ -1,11 +1,11 @@
 from flask import (
-    render_template, redirect, url_for, flash,
-)
+    render_template, redirect, url_for, flash, )
 from flask_login import current_user, login_required
 
 from app import db
 from app.main.profile import bp
 from app.main.profile.forms import EditUserForm, ChangePasswordForm
+from app.utils import save_file, remove_file
 
 
 @bp.route('/')
@@ -34,7 +34,10 @@ def profile_edit():
         current_user.website_url = form.website_url.data
         current_user.gender = form.gender.data
         current_user.birthday = form.birthday.data
-        current_user.avatar_url = form.avatar_url.data
+        if current_user.avatar_url:
+            remove_file("user", current_user.avatar_url.split("/")[-1])
+        if form.avatar_url.data:
+            current_user.avatar_url = save_file("user", form.avatar_url.data)
         db.session.commit()
         return redirect(url_for("main.profile.profile"))
     form.firstName.data = current_user.first_name

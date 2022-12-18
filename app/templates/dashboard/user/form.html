@@ -6,7 +6,7 @@
 username=user.username) %} {% else %} {% set form_action =
 url_for('dashboard.user.create_user') %} {% endif %}
 
-<form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
+<form method="POST" action="{{ form_action }}" enctype="multipart/form-data">
     {{ form_user.csrf_token }}
     <h6 class="text-muted mt-5">المعلومات الشخصية</h6>
     <div class="row mt-3">
@@ -44,7 +44,7 @@ url_for('dashboard.user.create_user') %} {% endif %}
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-md-4">
+        <div class="col-md-2">
             {% if form_user.role.errors %} {%for error in form_user.role.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form_user.role.label}} {{form_user.role}}
@@ -54,7 +54,14 @@ url_for('dashboard.user.create_user') %} {% endif %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form_user.category.label}} {{form_user.category}}
         </div>
-        <div class="col-md-4 justify-content-center d-flex align-items-end">
+        {% if isUpdate and user.category.is_organization %}
+        <div class="col-md-4">
+            {% if form_user.organization.errors %} {%for error in form_user.organization.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.organization.label}} {{form_user.organization}}
+        </div>
+        {% endif %}
+        <div class="col-md-2 justify-content-center d-flex align-items-end">
             <div>
                 {% if form_user.activated.errors %} {%for error in form_user.activated.errors
                 %}

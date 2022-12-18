@@ -13,7 +13,6 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
             {% if form.name.errors %} {%for error in form.name.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form.name}}
-            <!-- <input required name="name" style="height: 50px;" type="text" class="form-control " placeholder="" aria-label=""> -->
         </div>
         <div class="col-md-3">
             {% if form.space.errors %} {%for error in form.space.errors %}
