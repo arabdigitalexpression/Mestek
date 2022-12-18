@@ -27,7 +27,6 @@ block heading %} المساحات {% endblock %} {% block actions %}
 			<tr>
 				<th scope="col">#</th>
 				<th scope="col">إسم المساحة</th>
-				<th scope="col">قيمة الحجر</th>
 				<th scope="col">مشرف؟</th>
 				<th scope="col">سعة الأفراد</th>
 				<th scope="col">إعدادات التحكم</th>
@@ -38,7 +37,6 @@ block heading %} المساحات {% endblock %} {% block actions %}
 			<tr>
 				<td>{{space.id}}</td>
 				<td>{{space.name}}</td>
-				<td>{{space.price}} جم / الساعة</td>
 				<td>
 					{% if space.has_operator %}
 					<span>يوجد</span> {% else %}

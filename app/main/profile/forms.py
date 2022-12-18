@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import (
-    StringField, EmailField, DateField, FileField,
+    StringField, EmailField, DateField,
     SubmitField, SelectField, PasswordField,
 )
 from wtforms.validators import (
@@ -63,7 +63,7 @@ class EditUserForm(FlaskForm):
                              "class": "form-control my-2",
                              "placeholder": "تاريخ الميلاد"
                          })
-    avatar_url = FileField('الصورة الشخصية', name="images", validators=[
+    avatar_url = FileField('الصورة الشخصية', name="avatar", validators=[
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
     ], render_kw={
         "class": "form-control"

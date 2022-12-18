@@ -56,13 +56,13 @@ def create_space():
             space.set_category_prices(
                 form.category_prices.data, categories
             )
-            imagesObjs = list()
+            images_objs = list()
             for file in form.images.data:
                 if not file:
                     continue
                 url = save_file("space", file)
-                imagesObjs.append(Image(space=space, url=url))
-            space.images = imagesObjs
+                images_objs.append(Image(space=space, url=url))
+            space.images = images_objs
             db.session.add(space)
             db.session.commit()
             return redirect(url_for("dashboard.space.space_list"))
@@ -111,13 +111,13 @@ def update_space(id):
                     form.category_prices.data, categories
                 )
 
-                imagesObjs = list()
+                images_objs = list()
                 for file in form.images.data:
                     if not file:
                         continue
                     url = save_file("space", file)
-                    imagesObjs.append(Image(space=space, url=url))
-                db.session.add_all(imagesObjs)
+                    images_objs.append(Image(space=space, url=url))
+                db.session.add_all(images_objs)
                 db.session.commit()
                 return redirect(url_for("dashboard.space.space_list"))
             if form.validate_on_submit() and form.add_new_price.data:
