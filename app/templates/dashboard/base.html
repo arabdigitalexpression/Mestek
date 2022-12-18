@@ -156,7 +156,7 @@
         <hr class="sidebar-divider"/>
 
         <!-- Heading -->
-        <div class="sidebar-heading">الأمان</div>
+        <div class="sidebar-heading">العلاقات</div>
 
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
@@ -207,10 +207,10 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <a
                             class="collapse-item"
-                            href="{{url_for('dashboard.user.user_list')}}"
+                            href="{{url_for('dashboard.organization.organization_list')}}"
                     >عرض المؤسسات</a
                     >
-                    <a class="collapse-item" href="register.html">إنشاء مؤسسة</a>
+                    <a class="collapse-item" href="{{url_for('dashboard.organization.create_organization')}}">إنشاء مؤسسة</a>
                 </div>
             </div>
         </li>

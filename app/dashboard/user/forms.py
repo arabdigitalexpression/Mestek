@@ -1,8 +1,8 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileAllowed
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import (
     StringField, PasswordField, EmailField,
-    SubmitField, SelectField, DateField, FileField, BooleanField,
+    SubmitField, SelectField, DateField, BooleanField,
 )
 from wtforms.validators import (
     DataRequired, Length, EqualTo,
@@ -58,7 +58,7 @@ class UserForm(FlaskForm):
                              "class": "form-control",
                              "placeholder": "تاريخ الميلاد"
                          })
-    avatar_url = FileField('الصورة الشخصية', name="images", validators=[
+    avatar_url = FileField('الصورة الشخصية', name="avatar", validators=[
         FileAllowed(images, 'الرجاء إدخال صور فقط!')
     ], render_kw={
         "class": "form-control"
@@ -75,6 +75,9 @@ class UserForm(FlaskForm):
         "class": "form-select ",
     })
     category = SelectField('التصنيف', render_kw={
+        "class": "form-select ",
+    })
+    organization = SelectField('المؤسسة', render_kw={
         "class": "form-select ",
     })
     activated = BooleanField('مفعل',

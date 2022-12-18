@@ -73,7 +73,10 @@ class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True, nullable=False)
     description = db.Column(db.String(2048), nullable=False)
-    address = db.Column(db.String(200), nullable=True)
+    logo_url = db.Column(db.String(128), nullable=True)
+    address = db.Column(db.String(512), nullable=True)
+    phone = db.Column(db.String(32), nullable=True)
+    website_url = db.Column(db.String(128), nullable=True)
     users = db.relationship('User', backref='organization', lazy=True)
     category_id = db.Column(
         db.Integer, db.ForeignKey('category.id'), nullable=True)

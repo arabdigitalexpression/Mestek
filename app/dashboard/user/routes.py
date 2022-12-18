@@ -8,7 +8,8 @@ from app import db
 from app.dashboard.forms import ConfirmForm
 from app.dashboard.user import bp
 from app.dashboard.user.forms import UserForm, ChangePasswordForm
-from app.models import User, Category, Role
+from app.models import User, Category, Role, Organization
+from app.utils import save_file, remove_file
 
 
 @bp.route('/')
@@ -67,7 +68,6 @@ def create_user():
             website_url = form.website_url.data
             gender = form.gender.data
             birthday = form.birthday.data
-            avatar_url = form.avatar_url.data
             user = User.query.get(email)
             if user is None:
                 user = User(
@@ -80,21 +80,20 @@ def create_user():
                     website_url=website_url,
                     gender=gender,
                     birthday=birthday,
-                    avatar_url=avatar_url,
+                    avatar_url=save_file("user", form.avatar_url.data) if form.avatar_url.data else None,
                     activated=True,
                     role=Role.query.get(role) if not role == 0 else None,
                     category=Category.query.get(
                         category) if not category == 0 else None
                 )
-
                 user.make_password(password)
                 user.save()
                 return redirect(url_for("dashboard.user.user_list"))
             # TODO: there's a logic error here, fix it!
-            errors = f"hey, There's a user with this email: {email}"
+            errors = f"البريد الأكترونى: \"{email}\" مسجل لدينا"
             # render_template does autoescaping html form input data
             return render_template("dashboard/user/form.html", form_user=form, errors=errors)
-        errors = f"Please check your form data again"
+        errors = f"من فضلك تأكد من صحة البيانات"
         return render_template("dashboard/user/form.html", form_user=form, errors=errors)
     return render_template("dashboard/user/form.html", form_user=form)
 
@@ -105,13 +104,16 @@ def update_user(username):
     if current_user.role.name == "admin":
         categories = Category.query.all()
         roles = Role.query.all()
+        user = User.query.filter_by(username=username).first_or_404()
         form_user = UserForm()
         form_password = ChangePasswordForm()
         form_user.category.choices = [(c.id, c.name) for c in categories]
         form_user.category.choices.insert(0, (0, "-- اختر تصنيف --"))
         form_user.role.choices = [(r.id, r.name) for r in roles]
         form_user.role.choices.insert(0, (0, "-- اختر صلاحية --"))
-        user = User.query.filter_by(username=username).first_or_404()
+        form_user.organization.choices = [(o.id, o.name) for o in
+                                          Organization.query.filter_by(category_id=user.category.id)]
+
         if request.method == "GET":
             form_user.firstName.data = user.first_name
             form_user.lastName.data = user.last_name
@@ -123,11 +125,12 @@ def update_user(username):
             form_user.website_url.data = user.website_url
             form_user.gender.data = user.gender.name
             form_user.birthday.data = user.birthday
-            form_user.avatar_url.data = user.avatar_url
             form_user.role.data = str(
-                user.role.id) if not user.role == None else "0"
+                user.role.id) if user.role is not None else "0"
             form_user.category.data = str(
-                user.category.id) if not user.category == None else "0"
+                user.category.id) if user.category is not None else "0"
+            form_user.organization.data = str(
+                user.organization.id) if user.organization is not None else "0"
             return render_template(
                 'dashboard/user/form.html',
                 form_user=form_user, form_password=form_password, isUpdate=True, user=user
@@ -143,11 +146,16 @@ def update_user(username):
             user.website_url = form_user.website_url.data
             user.gender = form_user.gender.data
             user.birthday = form_user.birthday.data
-            user.avatar_url = form_user.avatar_url.data
+            if user.avatar_url:
+                remove_file("user", user.avatar_url.split("/")[-1])
+            if form_user.avatar_url.data:
+                user.avatar_url = save_file("user", form_user.avatar_url.data)
             user.role = Role.query.get(
                 form_user.role.data) if not form_user.role.data == 0 else None
             user.category = Category.query.get(
                 form_user.category.data) if not form_user.category.data == 0 else None
+            if user.category.is_organization:
+                user.organization = Organization.query.get(form_user.organization.data)
             db.session.commit()
             return redirect(url_for("dashboard.user.user_list"))
     else:
