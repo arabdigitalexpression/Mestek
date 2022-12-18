@@ -1,8 +1,7 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from flask_login import LoginManager
-
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
@@ -23,10 +22,10 @@ login = LoginManager(app)
 # that needs authentication
 login.login_view = "auth.login_page"
 
-
 from app.main import bp as main_bp
 from app.main.profile import bp as profile_main_bp
 from app.main.reservation import bp as reservation_main_bp
+
 main_bp.register_blueprint(profile_main_bp)
 main_bp.register_blueprint(reservation_main_bp)
 app.register_blueprint(main_bp)
@@ -38,19 +37,23 @@ from app.dashboard.tool import bp as tool_dashboard_bp
 from app.dashboard.role import bp as role_dashboard_bp
 from app.dashboard.category import bp as category_dashboard_bp
 from app.dashboard.user import bp as user_dashboard_bp
+from app.dashboard.organization import bp as organization_dashboard_bp
+
 dashboard_bp.register_blueprint(reservation_dashboard_bp)
 dashboard_bp.register_blueprint(space_dashboard_bp)
 dashboard_bp.register_blueprint(tool_dashboard_bp)
 dashboard_bp.register_blueprint(role_dashboard_bp)
 dashboard_bp.register_blueprint(category_dashboard_bp)
 dashboard_bp.register_blueprint(user_dashboard_bp)
+dashboard_bp.register_blueprint(organization_dashboard_bp)
 app.register_blueprint(dashboard_bp)
 
 from app.auth import bp as auth_bp
+
 app.register_blueprint(auth_bp)
 
 from app.api import bp as api_bp
-app.register_blueprint(api_bp)
 
+app.register_blueprint(api_bp)
 
 from app import models
