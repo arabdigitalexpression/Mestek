@@ -81,3 +81,24 @@
 
 
 {% endblock %}
+
+{% block script %}
+{{ super() }}
+
+<script>
+	let csrf_token = "{{ form.csrf_token.current_token }}";
+	let data = {
+		from_time: new Date(Date.UTC(6969, 4, 20, 10, 0, 0)).toJSON(),
+		to_time: new Date(Date.UTC(6969, 4, 20, 15, 0, 0)).toJSON(),
+	};
+	let testy = fetch('/api/space/1/reserved-days/', {
+		method: 'POST',
+		credentials: 'include',
+		headers: {
+			"Content-Type": "application/json",
+			"X-CSRFToken": csrf_token,
+		},
+		body: JSON.stringify(data),
+	}).then((response) => response.json()).then((data) => console.log(data));
+</script>
+{% endblock %}
