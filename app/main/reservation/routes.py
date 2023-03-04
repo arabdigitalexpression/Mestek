@@ -4,6 +4,7 @@ from flask import (
     render_template, redirect, url_for, request,
 )
 from flask_login import current_user, login_required
+from flask_wtf import FlaskForm
 
 from app import db
 from app.main.reservation import bp
@@ -71,6 +72,7 @@ def create_reservation_tool():
 def create_reservation_space():
     reserve = Space.query.all()
     tool = Tool.query.all()
+    form = FlaskForm()
     if current_user.role.name == "user":
         if request.method == 'POST':
             if request.form.get("confirm") == "confirm":
@@ -146,7 +148,7 @@ def create_reservation_space():
                 return redirect(url_for("main.main_page"))
             elif request.form.get("chooseTool") == "chooseTool":
                 if request.form.get("spaceName") == 'hide':
-                    return render_template('default/reservation/space.html', reserve1=reserve, tools=tool)
+                    return render_template('default/reservation/space.html', reserve1=reserve, tools=tool, form=form)
                 else:
                     name = request.form.get("spaceName")
                     val1 = name.split('&')
@@ -154,7 +156,7 @@ def create_reservation_space():
                     datetime1 = request.form.get('datetimes')
                     return render_template('default/reservation/space_with_tool.html', id=int(val1[0]),
                                            reserve1=reserve, tools=tool, name=val1[2], datetime=datetime1,
-                                           price=val1[1])
+                                           price=val1[1], form=form)
 
             elif request.form.get("confirmWithTool") == "confirmWithTool":
                 name = request.form.get("toolName")
@@ -226,4 +228,4 @@ def create_reservation_space():
                     return redirect(url_for("main.main_page"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main.main_page"))
-        return render_template('/default/reservation/space.html', reserve1=reserve, tools=tool)
+        return render_template('/default/reservation/space.html', reserve1=reserve, tools=tool, form=form)
