@@ -294,6 +294,33 @@ class Calendar(db.Model):
     intervals = db.relationship(
         'Interval', cascade="all, delete", backref='calendar', lazy=True)
 
+    @classmethod
+    def space_reserved_days(cls, space_id, days_only, days, from_time, to_time):
+        # TODO: Change hardcoded months to be in App Config
+        three_month_limit = datetime.today() + relativedelta(months=3)
+        if days_only:
+            return cls.query.join(Calendar.reservations).filter(
+                Calendar.day.in_(days)
+            ).distinct().all()
+        else:
+            return cls.query. \
+                join(Calendar.reservations, Calendar.intervals). \
+                filter(
+                    Reservation.space_id == space_id,
+                    Calendar.day < three_month_limit.date(),
+                    or_(
+                        and_(
+                            Interval.start_time < from_time,
+                            from_time < Interval.end_time
+                        ),
+                        and_(
+                            from_time < Interval.start_time,
+                            Interval.start_time < to_time
+                        )
+                   )
+                ). \
+                with_entities(Calendar.day).distinct().all()
+
 
 class Interval(db.Model):
     id = db.Column(db.Integer, primary_key=True)
