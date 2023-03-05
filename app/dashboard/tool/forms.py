@@ -26,7 +26,8 @@ class ToolCategoryPriceForm(Form):
         choices=[
             (ToolUnit.hour, ToolUnit.hour.description),
             (ToolUnit.day, ToolUnit.day.description),
-            (ToolUnit.gram, ToolUnit.gram.description)
+            (ToolUnit.gram, ToolUnit.gram.description),
+            (ToolUnit.trivial, ToolUnit.trivial.description)
         ]
     )
     price_list = FieldList(FormField(PriceListForm))

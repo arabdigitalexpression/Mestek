@@ -34,6 +34,7 @@ class ToolUnit(DescriptiveEnum):
     hour = 0, "ساعة"
     day = 1, "يوم"
     gram = 2, "جرام"
+    trivial = 3, "ثابت"
 
 
 class ReservationTypes(Enum):

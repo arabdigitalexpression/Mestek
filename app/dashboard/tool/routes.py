@@ -45,6 +45,7 @@ def create_tool():
     form.space.choices = [(s.id, s.name) for s in spaces]
     form.space.choices.insert(0, (0, "-- اختر المساحة --"))
     if current_user.role.name == "admin":
+        space_selected = form.space.data and not form.space.data == '0'
         if form.validate_on_submit() and not form.add_new_price.data:
             tool = Tool(
                 name=form.name.data,
@@ -53,10 +54,10 @@ def create_tool():
                 guidelines=form.guidelines.data,
                 quantity=form.quantity.data,
                 space=Space.query.get(
-                    form.space.data) if not form.space.data == 0 else None
+                    form.space.data) if space_selected else None
             )
             tool.set_category_prices(
-                form.category_prices.data, categories
+                form.category_prices.data, categories, space_selected
             )
             images_objs = list()
             for file in form.images.data:
@@ -72,7 +73,8 @@ def create_tool():
             {"category_id": cat.id}
             for cat in categories
         ]
-        form.category_prices.append_entry({"price_list": cat_prices})
+        if not space_selected:
+            form.category_prices.append_entry({"price_list": cat_prices})
         return render_template("dashboard/tool/form.html", form=form, categories=categories)
     else:
         return redirect(url_for("main.main_page"))
