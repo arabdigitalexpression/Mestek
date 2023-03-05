@@ -1,8 +1,10 @@
-from datetime import datetime
+import json
+from datetime import datetime, time
+from dateutil.relativedelta import relativedelta
 from itertools import groupby
 
 from flask_login import UserMixin
-from sqlalchemy import UniqueConstraint
+from sqlalchemy import UniqueConstraint, or_, and_
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login
@@ -50,6 +52,8 @@ class User(UserMixin, db.Model):
     )
 
     reservations = db.relationship('Reservation', backref='user', lazy=True)
+    # notifications = db.relationship('Notification', backref='user',
+    #                                 lazy='dynamic')
 
     def __repr__(self):
         return '<User %r>' % self.username
@@ -87,6 +91,8 @@ class Role(db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     color_code = db.Column(db.String(10), unique=True, nullable=False)
     users = db.relationship('User', backref='role', lazy=True)
+    # announcements = db.relationship('Announcement', backref='role',
+    #                                 lazy='dynamic')
 
 
 class CategorySpace(db.Model):
@@ -203,7 +209,7 @@ class Tool(db.Model):
     def prices(self):
         return self.get_category_prices()
 
-    def set_category_prices(self, cat_prices, categories):
+    def set_category_prices(self, cat_prices, categories, space_selected):
         for cat_price in cat_prices:
             for price in cat_price["price_list"]:
                 # filter returns an Iterator, that's why I used next.
@@ -211,12 +217,15 @@ class Tool(db.Model):
                     lambda cat: cat.id == int(price["category_id"]),
                     categories
                 ), None)
+                unit = ToolUnit[cat_price["unit"].split('.')[1]]
+                unit_value = cat_price["unit_value"]
+                if space_selected:
+                    unit = ToolUnit.trivial
+                    unit_value = 1
                 self.category_prices.append(CategoryTool(
-                    unit_value=float(cat_price["unit_value"]),
-                    unit=ToolUnit[cat_price["unit"].split('.')[1]],
-                    price=float(price["price"]),
+                    unit_value=float(unit_value), unit=unit,
+                    price=float(price["price"]), category=category,
                     price_unit=PriceUnit[price["price_unit"].split('.')[1]],
-                    category=category
                 ))
 
     def get_category_prices(self):
@@ -294,3 +303,34 @@ class Interval(db.Model):
         'calendar.id', ondelete="CASCADE"), nullable=True)
     reservation_id = db.Column(db.Integer, db.ForeignKey(
         'reservation.id', ondelete="CASCADE"), nullable=True)
+
+#
+# class Event(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(128), index=True)
+#     text = db.Column(db.Text)
+#     notifications = db.relationship('Notification', backref='event',
+#                                     lazy='dynamic')
+#     announcements = db.relationship('Announcement', backref='event',
+#                                     lazy='dynamic')
+#
+#
+# class Notification(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     timestamp = db.Column(db.Float, index=True, default=time)
+#     is_read = db.Column(db.Float, index=True, nullable=True)
+#     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+#     user_id = db.Column(
+#         db.Integer, db.ForeignKey('user.id'),
+#         nullable=True
+#     )
+#
+#
+# class Announcement(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     timestamp = db.Column(db.Float, index=True, default=time)
+#     event_id = db.Column(db.Integer, db.ForeignKey('event.id'))
+#     role_id = db.Column(
+#         db.Integer, db.ForeignKey('role.id'),
+#         nullable=True
+#     )
