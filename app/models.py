@@ -295,31 +295,40 @@ class Calendar(db.Model):
         'Interval', cascade="all, delete", backref='calendar', lazy=True)
 
     @classmethod
-    def space_reserved_days(cls, space_id, days_only, days, from_time, to_time):
+    def space_reserved_days(
+            cls, space_id, days_only, days, from_time, to_time,
+            to_reserve=False
+    ):
         # TODO: Change hardcoded months to be in App Config
         three_month_limit = datetime.today() + relativedelta(months=3)
         if days_only:
-            return cls.query.join(Calendar.reservations).filter(
-                Calendar.day.in_(days)
+            data = cls.query.filter(
+                Calendar.day.in_(days), Calendar.intervals.any()
             ).distinct().all()
+            return data
         else:
-            return cls.query. \
-                join(Calendar.reservations, Calendar.intervals). \
-                filter(
-                    Reservation.space_id == space_id,
-                    Calendar.day < three_month_limit.date(),
-                    or_(
-                        and_(
-                            Interval.start_time < from_time,
-                            from_time < Interval.end_time
-                        ),
-                        and_(
-                            from_time < Interval.start_time,
-                            Interval.start_time < to_time
-                        )
-                   )
-                ). \
-                with_entities(Calendar.day).distinct().all()
+            filters = [
+                Reservation.space_id == space_id,
+                Calendar.day < three_month_limit.date(),
+                Calendar.intervals.any(),
+                or_(
+                    and_(
+                        Interval.start_time < from_time,
+                        from_time < Interval.end_time
+                    ),
+                    and_(
+                        from_time < Interval.start_time,
+                        Interval.start_time < to_time
+                    )
+                )
+            ]
+            data = cls.query.join(Calendar.reservations, Calendar.intervals). \
+                filter(*filters).with_entities(Calendar.day).distinct().all()
+            if to_reserve:
+                data = [
+                    day for day in data if day in days
+                ]
+            return data
 
 
 class Interval(db.Model):
