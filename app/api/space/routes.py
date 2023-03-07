@@ -131,7 +131,7 @@ def calculate_price(pk):
         abort(400)
 
     space_cat_price = CategorySpace.query.get_or_404(int(space_price_id))
-    res = [[space.name, space_cat_price.price]]
+    res = [[space.name, float(days) * space_cat_price.price]]
     tools_total_price = float()
     if space_with_tools:
         tool_ids = [int(tool_id) for tool_id in tool_ids]
@@ -142,7 +142,7 @@ def calculate_price(pk):
             Tool.name, CategoryTool.price
         ).all()
         for tool_cat_price in tools_cat_prices:
-            res.append([tool_cat_price.name, tool_cat_price.price])
+            res.append([tool_cat_price.name, float(days) * tool_cat_price.price])
         tools_total_price = sum([float(days) * p.price for p in tools_cat_prices])
     total_price = float(days) * space_cat_price.price + tools_total_price
     res.append(["المجموع", total_price])
