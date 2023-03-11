@@ -3,9 +3,25 @@ from flask_login import current_user, login_required
 
 from app.api import bp
 from app.models import (
-    Reservation,
+    User,
     # Notification
 )
+
+
+@bp.route('users/', methods=['GET'])
+@login_required
+def notifications():
+    if current_user.role != "admin":
+        return abort(401)
+
+    users = User.query.with_entities(
+        User.id, User.email
+    ).all()
+
+    return jsonify([{
+            "id": u.id, "email": u.email
+        } for u in users
+    ])
 
 #
 # @bp.route('notifications/', methods=['GET'])

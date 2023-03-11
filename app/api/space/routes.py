@@ -153,9 +153,13 @@ def calculate_price(pk):
 @login_required
 @use_args(space_reservation_args, location="json")
 def reserve_space(args):
+    home_url = url_for("main.main_page")
+    space_reservation_url = url_for("main.reservation.create_reservation_space")
     user = current_user
     if current_user.role.name == "admin":
         user_id = request.args.get("user_id", type=int)
+        home_url = url_for("dashboard.dashboard")
+        space_reservation_url = url_for("dashboard.reservation.create_reservation_space")
         if user_id:
             user = User.query.get_or_404(user_id)
 
@@ -241,5 +245,7 @@ def reserve_space(args):
     db.session.commit()
     return jsonify({
         "status": "OK",
-        "message": f"Reservation with ID {reservation.id} has been created"
+        "message": f"تم إنشاء مساحة",
+        "home_url": home_url,
+        "space_reservation_url": space_reservation_url
     })
