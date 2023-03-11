@@ -210,7 +210,7 @@ def reserve_space(args):
     reservation = Reservation(
         type=ReservationTypes.space, payment_status=PaymentTypes.no_payment,
         min_age=min_age, max_age=max_age, space=space, full_price=total_price,
-        description=description, attendance_num=attendance_num
+        description=description, attendance_num=attendance_num, user=user
     )
 
     for day in days:
