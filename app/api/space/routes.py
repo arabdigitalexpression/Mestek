@@ -142,8 +142,10 @@ def calculate_price(pk):
             Tool.name, CategoryTool.price
         ).all()
         for tool_cat_price in tools_cat_prices:
-            res.append([tool_cat_price.name, float(days) * tool_cat_price.price])
-        tools_total_price = sum([float(days) * p.price for p in tools_cat_prices])
+            res.append([tool_cat_price.name, float(
+                days) * tool_cat_price.price])
+        tools_total_price = sum(
+            [float(days) * p.price for p in tools_cat_prices])
     total_price = float(days) * space_cat_price.price + tools_total_price
     res.append(["المجموع", total_price])
     return jsonify(res)
@@ -154,12 +156,14 @@ def calculate_price(pk):
 @use_args(space_reservation_args, location="json")
 def reserve_space(args):
     home_url = url_for("main.main_page")
-    space_reservation_url = url_for("main.reservation.create_reservation_space")
+    space_reservation_url = url_for(
+        "main.reservation.create_reservation_space")
     user = current_user
     if current_user.role.name == "admin":
         user_id = request.args.get("user_id", type=int)
         home_url = url_for("dashboard.dashboard")
-        space_reservation_url = url_for("dashboard.reservation.create_reservation_space")
+        space_reservation_url = url_for(
+            "dashboard.reservation.create_reservation_space")
         if user_id:
             user = User.query.get_or_404(user_id)
 
