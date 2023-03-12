@@ -11,7 +11,7 @@ from app.models import (
 @bp.route('users/', methods=['GET'])
 @login_required
 def notifications():
-    if current_user.role != "admin":
+    if current_user.role.name != "admin":
         return abort(401)
 
     users = User.query.with_entities(
