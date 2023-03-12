@@ -10,7 +10,7 @@ from flask_login import current_user, login_required
 from app import db
 from app.api.parser import use_args
 from app.api.space import bp
-from app.api.space.serializers import space_reservation_args
+from app.api.space.serializers import space_reservation_args, valid_attendance_num
 from app.enums import ReservationTypes, PaymentTypes
 from app.models import (
     Tool, Calendar, User, CategorySpace,
@@ -33,6 +33,7 @@ def get_spaces():
         group = list(group)
         res.append({
             "id": key, "name": group[0].space.name,
+            "capacity": group[0].space.capacity,
             "cat_prices": [
                 {
                     "id": cat_price.id,
@@ -155,7 +156,12 @@ def calculate_price(pk):
 
 @bp.route('/reserve/', methods=['POST'])
 @login_required
-@use_args(space_reservation_args, location="json")
+@use_args(
+    space_reservation_args, location="json",
+    validate=lambda args: valid_attendance_num(
+        args["attendance_num"], args["space_id"]
+    )
+)
 def reserve_space(args):
     home_url = url_for("main.main_page")
     space_reservation_url = url_for("main.reservation.create_reservation_space")
