@@ -1,21 +1,21 @@
-$(document).ready(function () {
-	$("#dataTable").DataTable();
-	$(".form_select").chosen();
-	ClassicEditor.create(document.querySelector("#description"), {
-		language: "ar",
-	});
+// $(document).ready(function () {
+// 	$("#dataTable").DataTable();
+// 	$(".form_select").chosen();
+// 	ClassicEditor.create(document.querySelector("#description"), {
+// 		language: "ar",
+// 	});
 
-	ClassicEditor.create(document.querySelector("#guidelines"), {
-		language: "ar",
-	});
-});
+// 	ClassicEditor.create(document.querySelector("#guidelines"), {
+// 		language: "ar",
+// 	});
+// });
 
 $(".form_select").chosen();
 const { createApp } = Vue;
 const app = createApp({
 	data() {
 		return {
-			spaces: [{ id: 0, name: " -- اختر المساحة  --" }],
+			spaces: [],
 			selectedSpace: {},
 			users: [{ id: "", email: " --- " }],
 			selectedUserId: "",
@@ -31,10 +31,9 @@ const app = createApp({
 			description: "",
 			min_age: 0,
 			max_age: 0,
-			start_date: "",
-			end_date: "",
 			price_table: [],
 			dates: [],
+			payment_status: "",
 		};
 	},
 	computed: {},
@@ -44,9 +43,16 @@ const app = createApp({
 				this.calculate();
 			}
 		},
+		selectedUserId(newVal, oldVal) {
+			this.spaces = [];
+			this.selectedSpace = {};
+			this.getSpaces(newVal);
+		},
 		selectedSpace() {
 			this.fromTime = "";
 			this.toTime = "";
+			this.price_table = [];
+			this.tools = [];
 		},
 		selectedUnit() {
 			this.fromTime = "";
@@ -73,11 +79,6 @@ const app = createApp({
 				this.max_age = oldVal;
 			}
 		},
-		start_date(newVal, oldVal) {
-			if (new Date(newVal) > new Date(this.end_date)) {
-				this.start_date = oldVal;
-			}
-		},
 		toTime(newVal, oldVal) {
 			if (oldVal !== newVal) {
 				this.getReservedDays();
@@ -85,16 +86,19 @@ const app = createApp({
 		},
 	},
 	mounted() {
-		this.getSpaces();
 		this.getUsers();
 	},
 	methods: {
-		getSpaces() {
-			fetch("/api/spaces/")
+		getSpaces(user_id) {
+			if (!user_id) {
+				return;
+			}
+			fetch(`/api/spaces?user_id=${user_id}`)
 				.then((response) => response.json())
 				.then((data) => {
-					this.spaces = [...this.spaces, ...data];
-				});
+					this.spaces = [{ id: "", name: " -- اختر المساحة  --" }, ...data];
+				})
+				.then(console.log("Spaces", this.spaces));
 		},
 		getUsers() {
 			fetch("/api/users/", {
@@ -112,7 +116,9 @@ const app = createApp({
 		},
 		getSpaceTools(event) {
 			this.spaceUnits = [];
-			fetch(`/api/spaces/${event.target.value}/tools`)
+			fetch(
+				`/api/spaces/${event.target.value}/tools?user_id=${this.selectedUserId}`
+			)
 				.then((response) => response.json())
 				.then((data) => {
 					this.tools = [...data];
@@ -222,6 +228,9 @@ const app = createApp({
 			return Math.min(...unitValues);
 		},
 		getReservedDays() {
+			if (!this.selectedSpace.id) {
+				return;
+			}
 			let data = {
 				from_time:
 					this.fromTime % 1 === 0
@@ -271,20 +280,28 @@ const app = createApp({
 				});
 		},
 		calculate() {
+			if (!this.selectedUserId) {
+				return;
+			}
 			let data = {
 				days: this.dates.length,
-				space_price_id: this.selectedUnit.id,
+				space_price_id: this.selectedSpace.cat_prices.filter(
+					(price) => price.unit_value === this.toTime - this.fromTime
+				)[0].id,
 				tool_ids: [...this.tool_ids],
 			};
-			fetch(`/api/spaces/${this.selectedSpace.id}/calculate-price/`, {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRFToken": csrf_token,
-				},
-				body: JSON.stringify(data),
-			})
+			fetch(
+				`/api/spaces/${this.selectedSpace.id}/calculate-price?user_id=${this.selectedUserId}`,
+				{
+					method: "POST",
+					credentials: "include",
+					headers: {
+						"Content-Type": "application/json",
+						"X-CSRFToken": csrf_token,
+					},
+					body: JSON.stringify(data),
+				}
+			)
 				.then((response) => response.json())
 				.then((res) => (this.price_table = [...res]));
 		},
@@ -299,7 +316,9 @@ const app = createApp({
 				this.description &&
 				this.min_age &&
 				this.max_age &&
-				this.dates.length
+				this.dates.length &&
+				this.selectedUserId &&
+				this.payment_status
 			);
 		},
 		submitForm() {
@@ -335,6 +354,8 @@ const app = createApp({
 							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
 						: null,
+				user_id: this.selectedUserId,
+				payment_status: this.payment_status,
 			};
 			fetch(`/api/spaces/reserve/`, {
 				method: "POST",

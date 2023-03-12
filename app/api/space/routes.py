@@ -164,7 +164,8 @@ def calculate_price(pk):
 )
 def reserve_space(args):
     home_url = url_for("main.main_page")
-    space_reservation_url = url_for("main.reservation.create_reservation_space")
+    space_reservation_url = url_for(
+        "main.reservation.create_reservation_space")
     user = current_user
     status = PaymentTypes.no_payment
     if current_user.role.name == "admin":
