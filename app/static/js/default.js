@@ -17,8 +17,6 @@ const app = createApp({
 			description: "",
 			min_age: 0,
 			max_age: 0,
-			start_date: "",
-			end_date: "",
 			price_table: [],
 			dates: [],
 		};
@@ -27,12 +25,13 @@ const app = createApp({
 	watch: {
 		tool_ids(newVal, oldVal) {
 			if (newVal.length !== oldVal.length) {
-				this.calculate()
+				this.calculate();
 			}
 		},
 		selectedSpace() {
 			this.fromTime = "";
 			this.toTime = "";
+			this.price_table = [];
 		},
 		selectedUnit() {
 			this.fromTime = "";
@@ -57,11 +56,6 @@ const app = createApp({
 				this.max_age = 0;
 			} else if (newVal % 1 !== 0) {
 				this.max_age = oldVal;
-			}
-		},
-		start_date(newVal, oldVal) {
-			if (new Date(newVal) > new Date(this.end_date)) {
-				this.start_date = oldVal;
 			}
 		},
 		toTime(newVal, oldVal) {
@@ -244,7 +238,9 @@ const app = createApp({
 		calculate() {
 			let data = {
 				days: this.dates.length,
-				space_price_id: this.selectedUnit.id,
+				space_price_id: this.selectedSpace.cat_prices.filter(
+					(price) => price.unit_value === this.toTime - this.fromTime
+				)[0].id,
 				tool_ids: [...this.tool_ids],
 			};
 			fetch(`/api/spaces/${this.selectedSpace.id}/calculate-price/`, {

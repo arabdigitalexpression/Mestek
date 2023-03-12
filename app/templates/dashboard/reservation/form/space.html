@@ -1,11 +1,27 @@
 {% extends 'dashboard/base.html' %} {% block title %} حجز مساحة {% endblock %}
 {% block content %}
 
-<div class="border m-5 p-5" id="app">
+<div class="border m-3 p-5" id="app">
 	<h2 class="mb-3">حجز مساحة</h2>
 	<form class="row">
 		<div class="col-md-8">
 			<div class="row mb-3">
+				<div class="col-md-4 mb-3">
+					<template v-if="users.length">
+						<label for="users">مستخدم المساحة</label>
+						<select
+							id="users"
+							class="form-select w-100 text-center"
+							v-model="selectedUserId"
+						>
+							<template v-for="user in users">
+								<option v-if="user" :key="user.id" :value="user.id">
+									{user.email }
+								</option>
+							</template>
+						</select>
+					</template>
+				</div>
 				<div class="col-md-4 mb-3">
 					<template v-if="spaces.length">
 						<label for="spaces">إختر المساحة </label>
@@ -35,10 +51,6 @@
 							</option>
 						</template>
 					</select>
-				</div>
-				<div class="col-md-4 mb-3">
-					<label for="units">عدد الحاضرين</label>
-					<input type="number" v-model="attendance_num" class="form-control" />
 				</div>
 			</div>
 			<div class="row mb-3">
@@ -106,27 +118,20 @@
 							</div>
 						</div>
 						<div class="col-md-6 mb-3">
-							<template v-if="users.length">
-								<label for="users">البريد الإلكترونى للحاجز</label>
-								<select
-									id="users"
-									class="form-select form_select w-100 text-center"
-									v-model="selectedUserId"
-								>
-									<template v-for="user in users">
-										<option v-if="user" :key="user.id" :value="user.id">
-											{user.email }
-										</option>
-									</template>
-								</select>
-							</template>
+							<label for="units">عدد الحاضرين</label>
+							<input
+								type="number"
+								v-model="attendance_num"
+								class="form-control"
+							/>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-6 mb-3">
 							<label for="">الحساب</label>
 							<select
 								class="form-select text-center w-100"
 								style="width: 200px"
 								name="payment"
+								v-model="payment_status"
 							>
 								<option value="">---</option>
 								<option value="0">لم يتم الدفع</option>
@@ -137,12 +142,10 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<label for="description"
-								>قولنا ناوى تستخدم المساحة فى إيه ؟</label
-							>
+							<label for="desc">قولنا ناوى تستخدم المساحة فى إيه ؟</label>
 							<textarea
 								class="form-control"
-								id="description"
+								id="desc"
 								v-model="description"
 								cols="30"
 								rows="10"
@@ -163,19 +166,21 @@
 				<div class="col-md-12">
 					<template v-if="tools.length">
 						<label for="tools">إختر الأدوات </label>
-						<select
-							id="tools"
-							multiple
-							class="form-select w-100"
-							v-model="tool_ids"
-						>
-							<template v-for="tool in tools">
-								<option v-if="tool" :key="tool.id" :value="tool.id">
-									{tool.name}
-								</option>
-							</template>
-						</select></template
-					>
+						<ul class="ks-cboxtags">
+							<li v-for="tool in tools" :key="tool.id" class="ms-1">
+								<input
+									type="checkbox"
+									:id="`${tool.id}`"
+									:value="tool.id"
+									v-model="tool_ids"
+								/><label :for="tool.id"
+									>&nbsp;
+									<span> {tool.name} - </span>
+									&nbsp;<span>{tool.price}</span>&nbsp;<span>{tool.price_title}</span>&nbsp;&lrm;
+								</label>
+							</li>
+						</ul>
+					</template>
 				</div>
 
 				<div class="col-md-12 my-3">
@@ -197,7 +202,7 @@
 			<button
 				type="submit"
 				class="btn btn-primary bg-gradient-primary"
-				:disabled="validateForm"
+				:disabled="!price_table.length"
 				@click.prevent="submitForm"
 			>
 				تأكيد الحجز

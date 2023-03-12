@@ -198,7 +198,7 @@ def create_reservation_space():
                 return redirect(url_for("get_reservations"))
             if request.form.get("chooseTool") == "chooseTool":
                 if request.form.get("spaceName") == 'hide':
-                    return render_template('dashboard/reservation/form/adminReserve.html', reserve1=reserve, tools=tool)
+                    return render_template('dashboard/reservation/form/space.html', reserve1=reserve, tools=tool)
                 else:
                     name = request.form.get("spaceName")
                     val1 = name.split('&')
@@ -288,7 +288,7 @@ def create_reservation_space():
                 return redirect(url_for("get_reservations"))
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for('main.main_page'))
-        return render_template('dashboard/reservation/form/adminReserve.html', reserve1=reserve, tools=tool,
+        return render_template('dashboard/reservation/form/space.html', reserve1=reserve, tools=tool,
                                users=users, form=form)
 
 
