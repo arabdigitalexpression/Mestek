@@ -3,6 +3,7 @@ from webargs import fields, validate
 from app.enums import (
     PaymentTypes,  # ReservationTypes
 )
+from app.models import Space
 
 space_reservation_args = {
     "description": fields.Str(required=True),
@@ -18,3 +19,8 @@ space_reservation_args = {
     "from_time": fields.DateTime(),
     "to_time": fields.DateTime(),
 }
+
+
+def valid_attendance_num(val, space_id):
+    space = Space.query.get_or_404(space_id)
+    return val <= space.capacity
