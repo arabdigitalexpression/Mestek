@@ -132,18 +132,20 @@ block content %}
 				<div class="col-md-12">
 					<template v-if="tools.length">
 						<label for="tools">إختر الأدوات </label>
-						<select
-							id="tools"
-							multiple
-							class="form-select w-100"
-							v-model="tool_ids"
-						>
-							<template v-for="tool in tools">
-								<option v-if="tool" :key="tool.id" :value="tool.id">
-									{tool.name}
-								</option>
-							</template>
-						</select>
+						<ul class="ks-cboxtags">
+							<li v-for="tool in tools" :key="tool.id" class="ms-1">
+								<input
+									type="checkbox"
+									:id="`${tool.id}`"
+									:value="tool.id"
+									v-model="tool_ids"
+								/><label :for="tool.id"
+									>&nbsp;
+									<span> {tool.name} - </span>
+									&nbsp;<span>{tool.price}</span>&nbsp;<span>{tool.price_title}</span>&nbsp;</label
+								>
+							</li>
+						</ul>
 					</template>
 				</div>
 
