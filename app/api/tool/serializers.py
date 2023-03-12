@@ -4,17 +4,13 @@ from app.enums import (
     PaymentTypes,  # ReservationTypes
 )
 
-space_reservation_args = {
+tool_reservation_args = {
     "description": fields.Str(required=True),
-    "payment_status": fields.Enum(PaymentTypes),
-    "attendance_num": fields.Int(),
-    "min_age": fields.Int(),
-    "max_age": fields.Int(),
-    "space_id": fields.Int(required=True),
-    "space_price_id": fields.Int(required=True),
-    "tools": fields.List(fields.Int()),
+    "tool_id": fields.Int(required=True),
+    "tool_price_id": fields.Int(required=True),
     "days_only": fields.Boolean(required=True),
     "days": fields.List(fields.DateTime(), required=True),
+    "payment_status": fields.Enum(PaymentTypes),
     "from_time": fields.DateTime(),
     "to_time": fields.DateTime(),
 }

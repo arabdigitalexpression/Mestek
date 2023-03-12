@@ -10,7 +10,7 @@ from app.models import (
 
 @bp.route('users/', methods=['GET'])
 @login_required
-def notifications():
+def users():
     if current_user.role.name != "admin":
         return abort(401)
 
