@@ -43,9 +43,9 @@ class ReservationTypes(Enum):
 
 
 class PaymentTypes(DescriptiveEnum):
-    no_payment = 0, "حجز غير مدفوع"
-    down_payment = 1, "حجز مدفوع جزئيا"
-    full_payment = 2, "حجز مدفوع"
+    no_payment = 0, "غير مدفوع"
+    down_payment = 1, "مدفوع جزئيا"
+    full_payment = 2, "مدفوع"
 
 
 class Gender(DescriptiveEnum):

@@ -1,15 +1,3 @@
-$(document).ready(function () {
-	$("#dataTable").DataTable();
-	$(".form_select").chosen();
-	ClassicEditor.create(document.querySelector("#description"), {
-		language: "ar",
-	});
-
-	ClassicEditor.create(document.querySelector("#guidelines"), {
-		language: "ar",
-	});
-});
-
 $(".form_select").chosen();
 const { createApp } = Vue;
 const app = createApp({
@@ -17,8 +5,6 @@ const app = createApp({
 		return {
 			spaces: [{ id: 0, name: " -- اختر المساحة  --" }],
 			selectedSpace: {},
-			users: [{ id: "", email: " --- " }],
-			selectedUserId: "",
 			tools: [],
 			tool_ids: [],
 			spaceUnits: [],
@@ -41,7 +27,7 @@ const app = createApp({
 	watch: {
 		tool_ids(newVal, oldVal) {
 			if (newVal.length !== oldVal.length) {
-				this.calculate();
+				this.calculate()
 			}
 		},
 		selectedSpace() {
@@ -86,7 +72,6 @@ const app = createApp({
 	},
 	mounted() {
 		this.getSpaces();
-		this.getUsers();
 	},
 	methods: {
 		getSpaces() {
@@ -94,20 +79,6 @@ const app = createApp({
 				.then((response) => response.json())
 				.then((data) => {
 					this.spaces = [...this.spaces, ...data];
-				});
-		},
-		getUsers() {
-			fetch("/api/users/", {
-				method: "GET",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRFToken": csrf_token,
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					this.users = [...this.users, ...data];
 				});
 		},
 		getSpaceTools(event) {
@@ -254,7 +225,7 @@ const app = createApp({
 							language: "ar",
 							multidate: true,
 							multidateSeparator: ",",
-							daysOfWeekDisabled: "",
+							daysOfWeekDisabled: "5,6",
 							daysOfWeekHighlighted: "5,6",
 							title: "إختر أيام الحجز",
 							// todayHighlight: true,

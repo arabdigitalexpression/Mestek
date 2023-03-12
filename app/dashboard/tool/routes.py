@@ -106,6 +106,7 @@ def update_tool(id):
                 form=form, isUpdate=True, tool=tool, categories=categories
             )
         elif request.method == "POST":
+            space_selected = form.space.data and not form.space.data == '0'
             if form.validate_on_submit() and not form.add_new_price.data:
                 tool.name = form.name.data
                 tool.has_operator = form.has_operator.data
@@ -119,7 +120,7 @@ def update_tool(id):
                     db.session.delete(cat_price)
                 db.session.commit()
                 tool.set_category_prices(
-                    form.category_prices.data, categories
+                    form.category_prices.data, categories, space_selected
                 )
 
                 images_objs = list()

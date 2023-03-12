@@ -97,7 +97,7 @@
 
 {% endblock %}
 
-{% block script %}
+{% block scripts %}
 {{ super() }}
 
 <script>
@@ -115,5 +115,6 @@
 		},
 		body: JSON.stringify(data),
 	}).then((response) => response.json()).then((data) => console.log(data));
+
 </script>
 {% endblock %}

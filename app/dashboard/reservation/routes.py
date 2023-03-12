@@ -1,5 +1,6 @@
 import datetime
 import math
+from flask_wtf import FlaskForm
 
 from flask import (
     render_template, redirect, url_for, request,
@@ -23,14 +24,12 @@ def get_reservations():
         reservations = Reservation.query.all()
         rows = int(Reservation.query.count())
 
-        
         if rows == 0:
             pages = 0
         elif rows % 10 == 0:
             pages = rows / 10
         else:
             pages = math.trunc(rows / 10) + 1
-        
 
         if request.method == 'POST':
             if request.form.get("b") != None:
@@ -70,6 +69,7 @@ def get_reservations():
 @bp.route('/create/space/', methods=["GET", "POST"])
 @login_required
 def create_reservation_space():
+    form = FlaskForm()
     reserve = Space.query.all()
     tool = Tool.query.all()
     users = User.query.all()
@@ -110,7 +110,7 @@ def create_reservation_space():
                                 ans = datetime.date(
                                     int(start_date[0]), int(start_date[1]), int(days))
                                 final_date = start_date[0] + "-" + \
-                                             start_date[1] + "-" + str(days)
+                                    start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -126,7 +126,7 @@ def create_reservation_space():
                                 print(request.form.get("check-sa"))
                                 if ans.strftime("%A") != "Saturday":
                                     final_date = start_date[0] + "-" + \
-                                                 start_date[1] + "-" + str(days)
+                                        start_date[1] + "-" + str(days)
                                     Dates = Calendar(
                                         day=final_date
                                     )
@@ -142,7 +142,7 @@ def create_reservation_space():
                                 print(request.form.get("check-sa"))
                                 if ans.strftime("%A") != "Friday":
                                     final_date = start_date[0] + "-" + \
-                                                 start_date[1] + "-" + str(days)
+                                        start_date[1] + "-" + str(days)
                                     Dates = Calendar(
                                         day=final_date
                                     )
@@ -158,7 +158,7 @@ def create_reservation_space():
                                 print(request.form.get("check-sa"))
                                 if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                     final_date = start_date[0] + "-" + \
-                                                 start_date[1] + "-" + str(days)
+                                        start_date[1] + "-" + str(days)
                                     Dates = Calendar(
                                         day=final_date
                                     )
@@ -252,7 +252,7 @@ def create_reservation_space():
                             print(ans.strftime("%A"))
                             if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                 final_date = start_date[0] + "-" + \
-                                             start_date[1] + "-" + str(days)
+                                    start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -289,7 +289,7 @@ def create_reservation_space():
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for('main.main_page'))
         return render_template('dashboard/reservation/form/adminReserve.html', reserve1=reserve, tools=tool,
-                               users=users)
+                               users=users, form=form)
 
 
 @bp.route('/create/tool/', methods=["GET", "POST"])
@@ -334,7 +334,7 @@ def create_reservation_tool():
                         print(ans.strftime("%A"))
                         if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                             final_date = start_date[0] + "-" + \
-                                         start_date[1] + "-" + str(days)
+                                start_date[1] + "-" + str(days)
                             Dates = Calendar(
                                 day=final_date
                             )
