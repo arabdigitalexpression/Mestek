@@ -207,6 +207,13 @@
 			>
 				تأكيد الحجز
 			</button>
+			<a
+				type="submit"
+				class="btn btn-outline-danger mx-2"
+				href="{{ url_for('dashboard.reservation.get_reservations')}}"
+			>
+				الغاء
+			</a>
 		</div>
 	</form>
 </div>
@@ -216,4 +223,5 @@
 </script>
 
 <script src="{{ url_for('static', filename='js/vue.global.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard-space-form.js') }}"></script>
 {{ super() }} {% endblock %}

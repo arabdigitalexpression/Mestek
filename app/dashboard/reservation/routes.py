@@ -297,6 +297,7 @@ def create_reservation_space():
 def create_reservation_tool():
     tool = Tool.query.all()
     users = User.query.all()
+    form = FlaskForm()
     if current_user.role.name == "admin":
         if request.method == 'POST':
             if request.form.get("username") == "noAccount":
@@ -346,7 +347,7 @@ def create_reservation_tool():
             db.session.add(tools)
             db.session.commit()
             return redirect(url_for("get_reservations"))
-        return render_template('dashboard/reservation/form/adminReserveTool.html', tools=tool, users=users)
+        return render_template('dashboard/reservation/form/tool.html', tools=tool, users=users, form=form)
 
 
 @bp.route('/<int:id>/delete', methods=["POST"])
