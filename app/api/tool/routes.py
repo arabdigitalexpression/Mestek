@@ -27,12 +27,17 @@ def get_tools():
         if user_id:
             user = User.query.get_or_404(user_id)
 
-    cat_tools = CategoryTool.query.filter_by(category_id=user.category_id)
+    cat_tools = CategoryTool.query.join(
+        CategoryTool.tool
+    ).filter(
+        CategoryTool.category_id == user.category_id,
+        Tool.space_id == None
+    ).all()
     res = list()
     for key, group in itertools.groupby(cat_tools, lambda x: x.tool_id):
         group = list(group)
         res.append({
-            "id": key, "name": group[0].space.name,
+            "id": key, "name": group[0].tool.name,
             "cat_prices": [
                 {
                     "id": cat_price.id,
@@ -45,7 +50,6 @@ def get_tools():
                 } for cat_price in group
             ]
         })
-
     return jsonify(res)
 
 
@@ -112,7 +116,8 @@ def reserve_tool(args):
     user = current_user
     status = PaymentTypes.no_payment
     if current_user.role.name == "admin":
-        tool_reservation_url = url_for("dashboard.reservation.create_reservation_tool")
+        tool_reservation_url = url_for(
+            "dashboard.reservation.create_reservation_tool")
         user_id = request.args.get("user_id", type=int)
         home_url = url_for("dashboard.dashboard")
         status = args.get("payment_status")
@@ -127,7 +132,6 @@ def reserve_tool(args):
     from_time = args.get("from_time", None)
     to_time = args.get("to_time", None)
     days_only = args.get("days_only") and not (from_time and to_time)
-
     # TODO: replace hardcoded time with app config settings
     org_day_start = 10
     org_day_end = 19
@@ -137,9 +141,9 @@ def reserve_tool(args):
         to_time = to_time.time()
         if from_time.hour < org_day_start or to_time.hour > org_day_end:
             abort(400)
-
     if any(Calendar.reserved_days(
-            days_only, days, from_time, to_time, to_reserve=True, space=False
+            tool_id, days_only, days, from_time,
+            to_time, to_reserve=True, space=False
     )):
         abort(400)
 
@@ -153,7 +157,7 @@ def reserve_tool(args):
         type=ReservationTypes.space, payment_status=status, user=user,
         tool=tool, full_price=total_price, description=description,
     )
-
+    print(days)
     for day in days:
         cal = Calendar.query.filter_by(day=day).first()
         if not days_only:
@@ -169,6 +173,7 @@ def reserve_tool(args):
             )
         if not cal:
             cale = Calendar(day=day, intervals=list())
+            print(cale)
             cale.intervals.append(interval)
             db.session.add(cale)
             cals.append(cale)

@@ -1,83 +1,30 @@
-// $(document).ready(function () {
-// 	$("#dataTable").DataTable();
-// 	$(".form_select").chosen();
-// 	ClassicEditor.create(document.querySelector("#description"), {
-// 		language: "ar",
-// 	});
-
-// 	ClassicEditor.create(document.querySelector("#guidelines"), {
-// 		language: "ar",
-// 	});
-// });
-
-$(".form_select").chosen();
 const { createApp } = Vue;
 const app = createApp({
 	data() {
 		return {
-			spaces: [],
-			selectedSpace: {},
-			users: [{ id: "", email: " --- " }],
-			selectedUserId: "",
 			tools: [],
-			tool_ids: [],
-			spaceUnits: [],
+			selectedTool: {},
+			toolUnits: [],
 			selectedUnit: "0",
 			fromTimeRange: [],
 			fromTime: "",
 			toTimeRange: [{ value: "", text: " إلى " }],
 			toTime: "",
-			attendance_num: 0,
 			description: "",
-			min_age: 0,
-			max_age: 0,
 			price_table: [],
 			dates: [],
-			payment_status: "",
 		};
 	},
 	computed: {},
 	watch: {
-		tool_ids(newVal, oldVal) {
-			if (newVal.length !== oldVal.length) {
-				this.calculate();
-			}
-		},
-		selectedUserId(newVal, oldVal) {
-			this.spaces = [];
-			this.selectedSpace = {};
-			this.getSpaces(newVal);
-		},
-		selectedSpace() {
+		selectedTool() {
 			this.fromTime = "";
 			this.toTime = "";
 			this.price_table = [];
-			this.tools = [];
 		},
 		selectedUnit() {
 			this.fromTime = "";
 			this.toTime = "";
-		},
-		attendance_num(newVal, oldVal) {
-			if (newVal < 0 || newVal === "") {
-				this.attendance_num = 0;
-			} else if (newVal % 1 !== 0) {
-				this.attendance_num = oldVal;
-			}
-		},
-		min_age(newVal, oldVal) {
-			if (newVal < 0 || newVal === "") {
-				this.min_age = 0;
-			} else if (newVal % 1 !== 0) {
-				this.min_age = oldVal;
-			}
-		},
-		max_age(newVal, oldVal) {
-			if (newVal < 0 || newVal === "") {
-				this.max_age = 0;
-			} else if (newVal % 1 !== 0) {
-				this.max_age = oldVal;
-			}
 		},
 		toTime(newVal, oldVal) {
 			if (oldVal !== newVal) {
@@ -86,64 +33,38 @@ const app = createApp({
 		},
 	},
 	mounted() {
-		this.getUsers();
+		this.getTools();
 	},
 	methods: {
-		getSpaces(user_id) {
-			if (!user_id) {
-				return;
-			}
-			fetch(`/api/spaces?user_id=${user_id}`)
+		getTools() {
+			fetch("/api/tools/")
 				.then((response) => response.json())
 				.then((data) => {
-					this.spaces = [{ id: "", name: " -- اختر المساحة  --" }, ...data];
+					this.tools = [{ id: 0, name: " -- اختر الاداة  --" }, ...data];
 				})
-				.then(console.log("Spaces", this.spaces));
 		},
-		getUsers() {
-			fetch("/api/users/", {
-				method: "GET",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-					"X-CSRFToken": csrf_token,
-				},
-			})
-				.then((response) => response.json())
-				.then((data) => {
-					this.users = [...this.users, ...data];
-				});
-		},
-		getSpaceTools(event) {
-			this.spaceUnits = [];
-			fetch(
-				`/api/spaces/${event.target.value}/tools?user_id=${this.selectedUserId}`
-			)
-				.then((response) => response.json())
-				.then((data) => {
-					this.tools = [...data];
-				})
-				.then((res) => console.log("Tools", this.tools));
-			this.selectedSpace = this.spaces.filter(
-				(space) => space.id === Number(event.target.value)
+		getTool(event) {
+			this.toolUnits = [];
+			this.selectedTool = this.tools.filter(
+				(tool) => tool.id === Number(event.target.value)
 			)[0];
-			this.selectedSpace.cat_prices &&
-				this.selectedSpace.cat_prices.forEach((price) => {
-					this.spaceUnits.push(price);
+			this.selectedTool.cat_prices &&
+				this.selectedTool.cat_prices.forEach((price) => {
+					this.toolUnits.push(price);
 				});
-			this.spaceUnits = [
+			this.toolUnits = [
 				...new Map(
-					this.spaceUnits.map((item) => [item["unit_id"], item])
+					this.toolUnits.map((item) => [item["unit_id"], item])
 				).values(),
 			];
-			this.selectedUnit = this.spaceUnits[0];
+			this.selectedUnit = this.toolUnits[0];
 			this.fromTimeRange = this.getFromTimeList(
 				10,
 				18 - this.getBoundaryTime()
 			);
 		},
 		changeUnit: function (event) {
-			this.selectedUnit = this.spaceUnits.filter(
+			this.selectedUnit = this.toolUnits.filter(
 				(unit) => Number(event.target.value) === unit.unit_id
 			)[0];
 			if (this.selectedUnit.unit_id === 0) {
@@ -190,8 +111,8 @@ const app = createApp({
 				this.toTimeRange = [];
 				let timeList = [];
 				const selectCategoryPrices =
-					this.selectedSpace.cat_prices &&
-					this.selectedSpace.cat_prices.filter((price) => {
+					this.selectedTool.cat_prices &&
+					this.selectedTool.cat_prices.filter((price) => {
 						return price.unit_id === this.selectedUnit.unit_id;
 					});
 				let option;
@@ -220,17 +141,14 @@ const app = createApp({
 		},
 		getBoundaryTime() {
 			let unitValues = [];
-			this.selectedSpace
-				? this.selectedSpace.cat_prices.forEach((price) => {
+			this.selectedTool
+				? this.selectedTool.cat_prices.forEach((price) => {
 						unitValues.push(price.unit_value);
 				  })
 				: 0;
 			return Math.min(...unitValues);
 		},
 		getReservedDays() {
-			if (!this.selectedSpace.id) {
-				return;
-			}
 			let data = {
 				from_time:
 					this.fromTime % 1 === 0
@@ -241,7 +159,7 @@ const app = createApp({
 						? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 						: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON(),
 			};
-			fetch(`/api/spaces/${this.selectedSpace.id}/reserved-days/`, {
+			fetch(`/api/tools/${this.selectedTool.id}/reserved-days/`, {
 				method: "POST",
 				credentials: "include",
 				headers: {
@@ -263,7 +181,7 @@ const app = createApp({
 							language: "ar",
 							multidate: true,
 							multidateSeparator: ",",
-							daysOfWeekDisabled: "",
+							daysOfWeekDisabled: "5,6",
 							daysOfWeekHighlighted: "5,6",
 							title: "إختر أيام الحجز",
 							// todayHighlight: true,
@@ -280,61 +198,34 @@ const app = createApp({
 				});
 		},
 		calculate() {
-			if (!this.selectedUserId) {
-				return;
-			}
 			let data = {
 				days: this.dates.length,
-				space_price_id: this.selectedSpace.cat_prices.filter(
+				tool_price_id: this.selectedTool.cat_prices.filter(
 					(price) => price.unit_value === this.toTime - this.fromTime
 				)[0].id,
-				tool_ids: [...this.tool_ids],
 			};
-			fetch(
-				`/api/spaces/${this.selectedSpace.id}/calculate-price?user_id=${this.selectedUserId}`,
-				{
-					method: "POST",
-					credentials: "include",
-					headers: {
-						"Content-Type": "application/json",
-						"X-CSRFToken": csrf_token,
-					},
-					body: JSON.stringify(data),
-				}
-			)
+			fetch(`/api/tools/${this.selectedTool.id}/calculate-price/`, {
+				method: "POST",
+				credentials: "include",
+				headers: {
+					"Content-Type": "application/json",
+					"X-CSRFToken": csrf_token,
+				},
+				body: JSON.stringify(data),
+			})
 				.then((response) => response.json())
 				.then((res) => (this.price_table = [...res]));
-		},
-
-		validateForm() {
-			return (
-				this.selectedSpace.name &&
-				this.selectedUnit.unit_title &&
-				this.fromTime &&
-				this.toTime &&
-				this.attendance_num &&
-				this.description &&
-				this.min_age &&
-				this.max_age &&
-				this.dates.length &&
-				this.selectedUserId &&
-				this.payment_status
-			);
 		},
 		submitForm() {
 			let data = {
 				description: this.description,
-				attendance_num: this.attendance_num,
-				min_age: this.min_age,
-				max_age: this.max_age,
-				space_id: this.selectedSpace.id,
-				space_price_id: this.selectedSpace.cat_prices.filter((price) => {
+				tool_id: this.selectedTool.id,
+				tool_price_id: this.selectedTool.cat_prices.filter((price) => {
 					return (
 						price.unit_value === this.toTime - this.fromTime &&
 						price.unit_id === this.selectedUnit.unit_id
 					);
 				})[0].id,
-				tools: [...this.tool_ids],
 				days_only:
 					this.selectedUnit.unit_id === 0
 						? false
@@ -354,10 +245,8 @@ const app = createApp({
 							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
 						: null,
-				user_id: this.selectedUserId,
-				payment_status: this.payment_status,
 			};
-			fetch(`/api/spaces/reserve/`, {
+			fetch(`/api/tools/reserve/`, {
 				method: "POST",
 				credentials: "include",
 				headers: {

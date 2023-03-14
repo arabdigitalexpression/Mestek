@@ -54,9 +54,11 @@ app.register_blueprint(auth_bp)
 
 from app.api import bp as api_bp
 from app.api.space import bp as space_api_bp
+from app.api.tool import bp as tool_api_bp
 from app.api.reservation import bp as reservation_api_bp
 
 api_bp.register_blueprint(space_api_bp)
+api_bp.register_blueprint(tool_api_bp)
 api_bp.register_blueprint(reservation_api_bp)
 app.register_blueprint(api_bp)
 

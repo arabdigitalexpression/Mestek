@@ -168,11 +168,18 @@ block content %}
 			<button
 				type="submit"
 				class="btn btn-primary bg-gradient-primary"
-				:disabled="validateForm"
+				:disabled="!price_table.length"
 				@click.prevent="submitForm"
 			>
 				تأكيد الحجز
 			</button>
+			<a
+				type="submit"
+				class="btn btn-outline-danger mx-2"
+				href="{{ url_for('main.main_page')}}"
+			>
+				الغاء
+			</a>
 		</div>
 	</form>
 </div>
@@ -182,4 +189,6 @@ block content %}
 </script>
 
 <script src="{{ url_for('static', filename='js/vue.global.js') }}"></script>
+<script src="{{ url_for('static',filename='js/space-form.js') }}"></script>
+
 {{ super() }} {% endblock %}

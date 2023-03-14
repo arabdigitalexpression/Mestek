@@ -309,13 +309,13 @@ class Calendar(db.Model):
             pk_filter = Reservation.space_id == pk
             if not space:
                 pk_filter = Reservation.tool_id == pk
-            filters += pk_filter
+            filters.append(pk_filter)
         res = None
         if days_only:
-            filters += Calendar.day.in_(days)
+            filters.append(Calendar.day.in_(days))
             res = cls.query.filter(*filters).distinct().all()
         else:
-            filters += or_(
+            filters.append(or_(
                 and_(
                     Interval.start_time < from_time,
                     from_time < Interval.end_time
@@ -324,7 +324,7 @@ class Calendar(db.Model):
                     from_time < Interval.start_time,
                     Interval.start_time < to_time
                 )
-            )
+            ))
             res = cls.query.join(Calendar.reservations, Calendar.intervals). \
                 filter(*filters).with_entities(Calendar.day).distinct().all()
         if to_reserve:

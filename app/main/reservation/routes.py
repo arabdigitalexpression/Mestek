@@ -19,6 +19,7 @@ def create_reservation_tool():
     tool = Tool.query.all()
     res = Reservation()
     cal = Calendar()
+    form = FlaskForm()
     if current_user.role.name == "user":
         if request.method == 'POST':
             if request.form.get("confirm") == "confirm":
@@ -50,7 +51,7 @@ def create_reservation_tool():
                             print(ans.strftime("%A"))
                             if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                 final_date = start_date[0] + "-" + \
-                                             start_date[1] + "-" + str(days)
+                                    start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -64,7 +65,7 @@ def create_reservation_tool():
                 return redirect(url_for("main.main_page"))
             elif request.form.get("cancel") == "cancel":
                 return redirect(url_for("main.main_page"))
-        return render_template('/default/reservation/tool.html', tools=tool)
+        return render_template('/default/reservation/tool.html', tools=tool, form=form)
 
 
 @bp.route('/create/space/', methods=["GET", "POST"])
@@ -106,7 +107,7 @@ def create_reservation_space():
                             print(ans.strftime("%A"))
                             if ans.strftime("%A") != "Saturday" and ans.strftime("%A") != "Friday":
                                 final_date = start_date[0] + "-" + \
-                                             start_date[1] + "-" + str(days)
+                                    start_date[1] + "-" + str(days)
                                 Dates = Calendar(
                                     day=final_date
                                 )
@@ -184,7 +185,7 @@ def create_reservation_space():
                     if start_date[0] == end_date[0] and start_date[2] == end_date[2]:
                         for count in range(counter + 1):
                             final_date = start_date[2] + "-" + \
-                                         start_date[0] + "-" + str(days)
+                                start_date[0] + "-" + str(days)
                             days += 1
                             Dates = Calendar(
                                 day=final_date
