@@ -44,6 +44,8 @@
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
 		/>
+		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/moment-timezone-with-data.js') }}"></script>
 		{% endblock %}
 	</head>
 
@@ -94,7 +96,6 @@
 			</div>
 		</div>
 		{% block scripts %}
-		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
 		<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
 		<script src="{{ url_for('static',filename='js/jquery.easing.min.js') }}"></script>
 		<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
