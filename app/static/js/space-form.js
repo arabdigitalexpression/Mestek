@@ -1,4 +1,3 @@
-$(".form_select").chosen();
 const { createApp } = Vue;
 const app = createApp({
 	data() {
@@ -81,8 +80,7 @@ const app = createApp({
 				.then((response) => response.json())
 				.then((data) => {
 					this.tools = [...data];
-				})
-				.then((res) => console.log("Tools", this.tools));
+				});
 			this.selectedSpace = this.spaces.filter(
 				(space) => space.id === Number(event.target.value)
 			)[0];
@@ -254,20 +252,6 @@ const app = createApp({
 			})
 				.then((response) => response.json())
 				.then((res) => (this.price_table = [...res]));
-		},
-
-		validateForm() {
-			return (
-				this.selectedSpace.name &&
-				this.selectedUnit.unit_title &&
-				this.fromTime &&
-				this.toTime &&
-				this.attendance_num &&
-				this.description &&
-				this.min_age &&
-				this.max_age &&
-				this.dates.length
-			);
 		},
 		submitForm() {
 			let data = {
