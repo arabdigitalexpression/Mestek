@@ -172,7 +172,7 @@ def reserve_space(args):
         user_id = request.args.get("user_id", type=int)
         home_url = url_for("dashboard.dashboard")
         space_reservation_url = url_for("dashboard.reservation.create_reservation_space")
-        status = args.get("payment_status")
+        status = args.get("payment_status", PaymentTypes.no_payment)
         if user_id:
             user = User.query.get_or_404(user_id)
 
