@@ -47,6 +47,10 @@ class PaymentTypes(DescriptiveEnum):
     down_payment = 1, "مدفوع جزئيا"
     full_payment = 2, "مدفوع"
 
+    @classmethod
+    def choices(cls):
+        return [(choice.name, choice.description) for choice in cls]
+
 
 class Gender(DescriptiveEnum):
     male = 0, "ذكر"

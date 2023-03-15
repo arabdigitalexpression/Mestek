@@ -9,6 +9,8 @@ from flask_login import current_user, login_required
 
 from app import db
 from app.dashboard.reservation import bp
+from app.dashboard.reservation.forms import ReservationUpdateForm
+from app.enums import PaymentTypes
 from app.models import (
     Reservation, Space, Tool, User,
     Calendar, Interval
@@ -64,6 +66,33 @@ def get_reservations():
             "dashboard/reservation/index.html",
             reservations=reservations, i=i, j=j, pages=pages)
     return redirect(url_for("main.main_page"))
+
+
+@bp.route('/<int:pk>/', methods=["GET", "POST"])
+@login_required
+def update_reservation(pk):
+    if current_user.role.name == "admin":
+        form = ReservationUpdateForm(request.form)
+        reservation = Reservation.query.get_or_404(pk)
+        form.payment_status.choices = PaymentTypes.choices()
+        if request.method == "GET":
+            form.transaction_num.data = reservation.transaction_num
+            form.payment_status.data = str(reservation.payment_status.name)
+            form.discount.data = reservation.discount
+            return render_template(
+                'dashboard/reservation/details.html',
+                form=form, reservation=reservation
+            )
+        elif request.method == "POST":
+            if form.validate_on_submit():
+                form.populate_obj(reservation)
+                db.session.commit()
+                return redirect(url_for("dashboard.reservation.get_reservations"))
+            return render_template(
+                'dashboard/reservation/details.html',
+                form=form, reservation=reservation
+            )
+    return redirect(url_for('main.main_page'))
 
 
 @bp.route('/create/space/', methods=["GET", "POST"])

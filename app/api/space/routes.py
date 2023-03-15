@@ -209,7 +209,9 @@ def reserve_space(args):
     days_num = float(len(days))
     tools_total_price = float()
 
-    cals = tools = list()
+    cals = list()
+    tools = list()
+    intervals = list()
     if space_with_tools:
         tools_cat_prices = Tool.query.join(Tool.category_prices).filter(
             Tool.id.in_(tool_ids), Tool.space_id == space_id,
@@ -251,9 +253,11 @@ def reserve_space(args):
         else:
             cal.intervals.append(interval)
             cals.append(cal)
+        intervals.append(interval)
 
     reservation.tools = tools
     reservation.calendars = cals
+    reservation.intervals = intervals
     db.session.add(reservation)
     db.session.commit()
     return jsonify({

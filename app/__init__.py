@@ -13,7 +13,7 @@ app.config["APP_PATH"] = app.root_path
 
 # The Sqlite database file is in '../test.db' relative path
 # 'sqlite:///' is database with '../test.db' is the project directory
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://root:toor@localhost/adef_srs"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://adefsrs:pass_123@localhost/adef_srs"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)

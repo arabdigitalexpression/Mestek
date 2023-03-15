@@ -1,0 +1,174 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} حجز {% endblock %}
+{%block heading %} حجز {% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h6 class="d-inline">الأسم</h6>
+            :
+            <span>
+                {{ reservation.user.first_name + ' '
+                    + reservation.user.last_name }}
+            </span>
+        </div>
+        <div class="col-md-6">
+            <h6 class="d-inline">أسم المستخدم</h6>
+            :
+            <span>{{ reservation.user.username }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h6 class="d-inline">البريد الإلكترونى</h6>
+            :
+            <span>{{ reservation.user.email }}</span>
+        </div>
+        <div class="col-md-6">
+            <h6 class="d-inline">رقم الهاتف</h6>
+            :
+            <span>
+                {{ reservation.user.phone }}
+            </span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h6 class="d-inline">تصنيف المالك</h6>
+            :
+            <span>{{ reservation.user.category.name }}</span>
+        </div>
+        <div class="col-md-6">
+            <h6 class="d-inline">تاريخ الحجز</h6>
+            :
+            <span>{{ reservation.created_at }}</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h6 class="d-inline">الدفع النقدى</h6>
+            : {% if reservation.payment_status.name == 'no_payment'
+            %}<span class="badge  text-bg-danger"
+        >{{ reservation.payment_status.name }}</span
+        >
+            {% elif reservation.payment_status.name ==
+            'down_payment' %}
+            <span class="badge  text-bg-warning"
+            >{{ reservation.payment_status.name }}</span
+            >
+            {% else %}
+            <span class="badge  text-bg-success"
+            >{{ reservation.payment_status.name }}</span
+            >
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h6 class="d-inline">حجز لـ</h6>
+            :
+            <span
+            >{% if reservation.type.name == 'tool' %} أداة {% else
+                    %} مساحة {% endif %}</span
+            >
+            <span
+            >{% if reservation.type.name == 'tool' %}
+                    {{reservation.tool.name}} {% else %}
+                    {{reservation.space.name}} {% endif %}</span
+            >
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h6 class="d-inline">رقم المعاملة البنكية</h6>
+            :
+            <span class="text-muted">
+                    {{ reservation.transaction_num if not
+                    reservation.transaction_num == None else "لم يتم
+                    التحويل النقدى"}}</span
+            >
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <h6 class="d-inline">قيمة الحجز</h6>
+            :
+            <span class="text-muted"
+            >{{ reservation.full_price }} جنيه مصرى</span
+            >
+        </div>
+        {% if reservation.discount %}
+        <div class="col">
+            <h6 class="d-inline">قيمة الحجز بعد الخصم</h6>
+            :
+            <span class="text-muted"
+            >{{ reservation.discounted_price }} جنيه مصرى</span
+            >
+        </div>
+        {% endif %}
+    </div>
+    <div class="row mb-3">
+        {% if reservation.has_intervals %}
+        <div class="col">
+            <h6 class="">ميعاد الحجز</h6>
+            <ul class="lead text-muted">
+                <li>
+                    <span class="fw-bold me-2">
+                    من {{ reservation.intervals[0].start_time }} إلى {{
+                    reservation.intervals[reservation.intervals|length-1].end_time
+                    }}
+                    </span>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+        <div class="col">
+            <h6 class="">أيام الحجز</h6>
+            <ul class="lead text-muted">
+                {% for calendar in reservation.calendars %}
+                <li>
+                    <span class="fw-bold me-2">{{calendar.day}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <form
+            method="POST"
+            action="{{url_for('dashboard.reservation.update_reservation', pk=reservation.id)}}"
+        >
+            {{ form.csrf_token }}
+            <div class="row d-flex align-items-center mb-5">
+                <div class="col-md-4">
+                    {% if form.transaction_num.errors %}
+                    {%for error in form.transaction_num.errors %}
+                    <span class="form_error">{{ error }}</span>
+                    {%endfor%}
+                    {% endif%}
+                    {{form.transaction_num.label}}
+                    {{form.transaction_num}}
+                </div>
+                <div class="col-md-4">
+                    {% if form.discount.errors %}
+                    {%for error in form.discount.errors %}
+                    <span class="form_error">{{ error }}</span>
+                    {%endfor%}
+                    {% endif%}
+                    {{form.discount.label}}
+                    {{form.discount}}
+                </div>
+                <div class="col-md-4">
+                    {% if form.payment_status.errors %}
+                    {%for error in form.payment_status.errors %}
+                    <span class="form_error">{{ error }}</span>
+                    {%endfor%}
+                    {% endif%}
+                    {{form.payment_status.label}}
+                    {{form.payment_status}}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">تعديل</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
