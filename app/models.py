@@ -269,6 +269,7 @@ class Reservation(db.Model):
         nullable=False
     )
     full_price = db.Column(db.Float, nullable=False)
+    discount = db.Column(db.Float, default=float(), nullable=False)
     description = db.Column(db.String(2048), nullable=False)
     attendance_num = db.Column(db.Integer, nullable=True)
     min_age = db.Column(db.Integer, nullable=True)
@@ -286,6 +287,14 @@ class Reservation(db.Model):
     intervals = db.relationship(
         'Interval', cascade="all, delete", backref='reservation', lazy=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+    @property
+    def has_intervals(self):
+        return self.intervals is not None
+
+    @property
+    def discounted_price(self):
+        return self.full_price - self.discount
 
 
 class Calendar(db.Model):
@@ -317,12 +326,12 @@ class Calendar(db.Model):
         else:
             filters.append(or_(
                 and_(
-                    Interval.start_time < from_time,
-                    from_time < Interval.end_time
+                    Interval.start_time <= from_time,
+                    from_time <= Interval.end_time
                 ),
                 and_(
-                    from_time < Interval.start_time,
-                    Interval.start_time < to_time
+                    from_time <= Interval.start_time,
+                    Interval.start_time <= to_time
                 )
             ))
             res = cls.query.join(Calendar.reservations, Calendar.intervals). \

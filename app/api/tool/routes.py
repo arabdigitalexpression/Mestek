@@ -151,10 +151,11 @@ def reserve_tool(args):
     days_num = float(len(days))
 
     cals = list()
+    intervals = list()
     total_price = days_num * tool_cat_price.price
 
     reservation = Reservation(
-        type=ReservationTypes.space, payment_status=status, user=user,
+        type=ReservationTypes.tool, payment_status=status, user=user,
         tool=tool, full_price=total_price, description=description,
     )
     print(days)
@@ -173,15 +174,16 @@ def reserve_tool(args):
             )
         if not cal:
             cale = Calendar(day=day, intervals=list())
-            print(cale)
             cale.intervals.append(interval)
             db.session.add(cale)
             cals.append(cale)
         else:
             cal.intervals.append(interval)
             cals.append(cal)
+        intervals.append(interval)
 
     reservation.calendars = cals
+    reservation.intervals = intervals
     db.session.add(reservation)
     db.session.commit()
     return jsonify({
