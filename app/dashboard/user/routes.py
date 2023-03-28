@@ -8,6 +8,7 @@ from app import db
 from app.dashboard.forms import ConfirmForm
 from app.dashboard.user import bp
 from app.dashboard.user.forms import UserForm, ChangePasswordForm
+from app.enums import Gender
 from app.models import User, Category, Role, Organization
 from app.utils import save_file, remove_file
 
@@ -50,6 +51,11 @@ def create_user():
     categories = Category.query.all()
     roles = Role.query.all()
     form = UserForm()
+    form.gender.choices = [
+        (Gender.male.name, Gender.male.description),
+        (Gender.female.name, Gender.female.description),
+        (Gender.prefer_not_answer.name, Gender.prefer_not_answer.description)
+    ]
     form.category.choices = [(c.id, c.name) for c in categories]
     form.category.choices.insert(0, (0, "-- اختر تصنيف --"))
     form.role.choices = [(r.id, r.name) for r in roles]

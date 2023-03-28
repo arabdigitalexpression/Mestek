@@ -44,6 +44,13 @@ class SignupForm(FlaskForm):
                                "class": "form-control form-control-user",
                                "placeholder": "إسم المستخدم"
                            })
+    phone = StringField(
+        'رقم الهاتف', validators=[DataRequired(), Length(min=11, max=20)],
+        render_kw={
+            "class": "form-control form-control-user",
+            "placeholder": "رقم الهاتف"
+        }
+    )
     email = EmailField('البريد الإلكترونى', validators=[DataRequired()],
                        render_kw={
                            "class": "form-control form-control-user text-start",
