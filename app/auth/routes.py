@@ -31,15 +31,16 @@ def signup_page():
             email = form.email.data
             password = form.password.data
             category = form.category.data
-            role = form.role.data
+            phone = form.phone.data
             user = User.query.get(email)
             if user is None:
                 user = User(
                     first_name=first_name,
                     last_name=last_name,
                     username=username,
+                    phone=phone,
                     email=email,
-                    role=Role.query.get(1),
+                    role=Role.query.get(2),
                     category=Category.query.get(category)
                 )
                 user.make_password(password)
