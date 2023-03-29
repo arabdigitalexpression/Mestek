@@ -19,11 +19,14 @@ content %}
                             <div class="alert alert-danger">{{ errors }}</div>
                             {% endif %}
                             <div class="form-group row">
-                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
                                     {{ form.firstName }}
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
                                     {{ form.lastName }}
+                                </div>
+                                 <div class="col-sm-4 mb-3 mb-sm-0">
+                                    {{ form.gender }}
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -33,8 +36,7 @@ content %}
                                 <div class="col-sm-6">
                                     {% if form.category.errors %} {%for error in form.category.errors %}
                                     <span class="form_error">{{ error }}</span>
-                                    {%endfor%} {% endif%} {{ form.category}} {{
-                                    form.role(hidden_=True)}}
+                                    {%endfor%} {% endif%} {{ form.category}}
                                 </div>
                             </div>
                             <div class="form-group row">

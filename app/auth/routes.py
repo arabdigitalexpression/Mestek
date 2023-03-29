@@ -19,16 +19,15 @@ def signup_page():
         return redirect(url_for("main.main_page"))
     form = SignupForm()
     categories = Category.query.all()
-    roles = Role.query.all()
     form.category.choices = [(c.id, c.name) for c in categories]
     form.category.choices.insert(0, ("", "-- اختر تصنيف --"))
-    form.role.choices = [(r.id, r.name) for r in roles]
     if request.method == "POST":
         if form.validate_on_submit():
             first_name = form.firstName.data
             last_name = form.lastName.data
             username = form.userName.data
             email = form.email.data
+            gender = form.gender.data
             password = form.password.data
             category = form.category.data
             phone = form.phone.data
@@ -40,6 +39,7 @@ def signup_page():
                     username=username,
                     phone=phone,
                     email=email,
+                    gender=gender,
                     role=Role.query.get(2),
                     category=Category.query.get(category)
                 )
