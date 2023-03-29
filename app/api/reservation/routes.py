@@ -38,8 +38,3 @@ def get_reservations_data():
                 data["end"] = max(dates).strftime("%Y-%m-%dT%H:%M:%S")
             result.append(data)
         return jsonify(result)
-
-
-@bp.route('/<int:id>/change-payment-status')
-def change_payment_status(id):
-    pass
