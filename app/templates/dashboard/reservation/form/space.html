@@ -133,10 +133,9 @@
 								name="payment"
 								v-model="payment_status"
 							>
-								<option value="">---</option>
-								<option value="0">لم يتم الدفع</option>
-								<option value="1">تم دفع مبلغ من الحجز</option>
-								<option value="2">تم دفع المبلغ بالكامل</option>
+									<option value="no_payment">لم يتم الدفع</option>
+								<option value="down_payment">تم دفع مبلغ من الحجز</option>
+								<option value="full_payment">تم دفع المبلغ بالكامل</option>
 							</select>
 						</div>
 					</div>
@@ -155,7 +154,7 @@
 				</div>
 				<div
 					class="col-md-4 mb-3"
-					v-if="selectedUnit.unit_id === 1 || toTime || toTime"
+					v-if="toTime || isDatepickerShow"
 				>
 					<div id="datepicker"></div>
 				</div>

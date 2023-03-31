@@ -1,14 +1,14 @@
-// $(document).ready(function () {
-// 	$("#dataTable").DataTable();
-// 	$(".form_select").chosen();
-// 	ClassicEditor.create(document.querySelector("#description"), {
-// 		language: "ar",
-// 	});
+$(document).ready(function () {
+	$("#dataTable").DataTable();
+	$(".form_select").chosen();
+	ClassicEditor.create(document.querySelector("#description"), {
+		language: "ar",
+	});
 
-// 	ClassicEditor.create(document.querySelector("#guidelines"), {
-// 		language: "ar",
-// 	});
-// });
+	ClassicEditor.create(document.querySelector("#guidelines"), {
+		language: "ar",
+	});
+});
 const { createApp } = Vue;
 const app = createApp({
 	data() {
@@ -31,7 +31,8 @@ const app = createApp({
 			max_age: 0,
 			price_table: [],
 			dates: [],
-			payment_status: "",
+			payment_status: "no_payment",
+			isDatepickerShow: false
 		};
 	},
 	computed: {},
@@ -52,9 +53,12 @@ const app = createApp({
 			this.price_table = [];
 			this.tools = [];
 		},
-		selectedUnit() {
+		selectedUnit(newVal, oldVal) {
 			this.fromTime = "";
 			this.toTime = "";
+			if (newVal.unit_id === 1) {
+				this.getReservedDays();
+			}
 		},
 		attendance_num(newVal, oldVal) {
 			if (newVal < 0 || newVal === "") {
@@ -81,7 +85,7 @@ const app = createApp({
 			if (oldVal !== newVal) {
 				this.getReservedDays();
 			}
-		},
+		}
 	},
 	mounted() {
 		this.getUsers();
@@ -150,6 +154,10 @@ const app = createApp({
 					10,
 					18 - this.getBoundaryTime()
 				);
+			} else if (this.selectedUnit.unit_id === 1) {
+				this.fromTime = "";
+				this.toTime = "";
+				this.isDatepickerShow = true
 			}
 		},
 		getFromTimeList(start, end) {
@@ -230,7 +238,9 @@ const app = createApp({
 			if (!this.selectedSpace.id) {
 				return;
 			}
-			let data = {
+			let data
+			if (this.selectedUnit.unit_id === 0) {
+				data = {
 				from_time:
 					this.fromTime % 1 === 0
 						? new Date(Date.UTC(0, 0, 0, this.fromTime, 0, 0)).toJSON()
@@ -240,6 +250,12 @@ const app = createApp({
 						? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 						: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON(),
 			};
+			} else if (this.selectedUnit.unit_id === 1) {
+				data = {
+					days_only : true
+				}
+			}
+			
 			fetch(`/api/spaces/${this.selectedSpace.id}/reserved-days/`, {
 				method: "POST",
 				credentials: "include",
@@ -337,7 +353,6 @@ const app = createApp({
 							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
 						: null,
-				user_id: this.selectedUserId,
 				payment_status: this.payment_status,
 			};
 			fetch(`/api/spaces/reserve?user_id=${this.selectedUserId}`, {
