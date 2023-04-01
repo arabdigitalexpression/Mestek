@@ -1,18 +1,14 @@
-let events = []
 
 let getReservations = async () => {
+    let events = []
     const res = await fetch("/api/reservations/");
     const data = await res.json();
     events = data
-}
-
-document.addEventListener('DOMContentLoaded', async function () {
-    await getReservations()
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
 
-        timeZone: 'locale',
+        timeZone: 'Africa/Cairo',
         locale: 'ar',
 
         headerToolbar: {
@@ -33,4 +29,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     });
     calendar.render();
+}
+
+
+document.addEventListener('DOMContentLoaded', async function () {
+    await getReservations()
 });
