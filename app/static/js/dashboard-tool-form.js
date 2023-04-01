@@ -1,14 +1,14 @@
-// $(document).ready(function () {
-// 	$("#dataTable").DataTable();
-// 	$(".form_select").chosen();
-// 	ClassicEditor.create(document.querySelector("#description"), {
-// 		language: "ar",
-// 	});
+$(document).ready(function () {
+	$("#dataTable").DataTable();
+	$(".form_select").chosen();
+	ClassicEditor.create(document.querySelector("#description"), {
+		language: "ar",
+	});
 
-// 	ClassicEditor.create(document.querySelector("#guidelines"), {
-// 		language: "ar",
-// 	});
-// });
+	ClassicEditor.create(document.querySelector("#guidelines"), {
+		language: "ar",
+	});
+});
 const { createApp } = Vue;
 const app = createApp({
 	data() {
@@ -26,7 +26,7 @@ const app = createApp({
 			description: "",
 			price_table: [],
 			dates: [],
-			payment_status: "",
+			payment_status: "no_payment",
 		};
 	},
 	computed: {},
@@ -290,7 +290,6 @@ const app = createApp({
 							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
 							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
 						: null,
-				user_id: this.selectedUserId,
 				payment_status: this.payment_status,
 			};
 			fetch(`/api/tools/reserve?user_id=${this.selectedUserId}`, {
