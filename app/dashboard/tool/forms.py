@@ -30,6 +30,7 @@ class ToolCategoryPriceForm(Form):
             (ToolUnit.trivial, ToolUnit.trivial.description)
         ]
     )
+    delete = SubmitField('حذف التسعيرة')
     price_list = FieldList(FormField(PriceListForm))
 
 

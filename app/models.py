@@ -305,8 +305,8 @@ class Calendar(db.Model):
 
     @classmethod
     def reserved_days(
-            cls, pk, days_only, days, from_time, to_time,
-            to_reserve=False, space=True
+            cls, pk, days_only, from_time, to_time,
+            to_reserve=False, space=True, days=None
     ):
         # TODO: Change hardcoded months to be in App Config
         three_month_limit = datetime.today() + relativedelta(months=3)
@@ -321,7 +321,8 @@ class Calendar(db.Model):
             filters.append(pk_filter)
         res = None
         if days_only:
-            filters.append(Calendar.day.in_(days))
+            if days:
+                filters.append(Calendar.day.in_(days))
             res = cls.query.filter(*filters).distinct().all()
         else:
             filters.append(or_(
@@ -336,7 +337,7 @@ class Calendar(db.Model):
             ))
             res = cls.query.join(Calendar.reservations, Calendar.intervals). \
                 filter(*filters).with_entities(Calendar.day).distinct().all()
-        if to_reserve:
+        if to_reserve and days:
             res = [
                 day for day in res if day in days
             ]

@@ -45,6 +45,7 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
         >
             <thead class="fst-normal text-center align-middle">
             <tr class="bg-primary text-white">
+                <th></th>
                 <th scope="col">
                     سعر/تصنيف
                 </th>
@@ -56,6 +57,36 @@ else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %
             <tbody>
             {% for cp in form.category_prices %}
             <tr>
+                <th>
+                {% if loop.length > 1 %}
+                    {% if not isUpdate %}
+                        {% if not loop.last %}
+                <button class="btn"
+                        id="{{cp.delete.name}}"
+                        name="{{cp.delete.name}}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                        {% endif %}
+                    {% else %}
+                <button class="btn"
+                        id="{{ cp.delete.name}}"
+                        name="{{cp.delete.name}}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                    {% endif %}
+                {% else %}
+                    {% if not loop.first %}
+                <button class="btn"
+                        id="{{ cp.delete.name }}"
+                        name="{{ cp.delete.name }}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                    {% endif %}
+                {% endif %}
+                </th>
                 <th>
                     {{ cp.unit_value }}
                     <div class="mt-1">{{ cp.unit }}</div>

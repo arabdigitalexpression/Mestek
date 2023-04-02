@@ -46,7 +46,19 @@ def create_tool():
     form.space.choices.insert(0, (0, "-- اختر المساحة --"))
     if current_user.role.name == "admin":
         space_selected = form.space.data and not form.space.data == '0'
-        if form.validate_on_submit() and not form.add_new_price.data:
+        cp_tmp = list(form.category_prices.data)
+        has_deleted_entries = any([True for cp in cp_tmp if cp['delete']])
+        if has_deleted_entries:
+            form.category_prices.process(None)
+            for cp in cp_tmp:
+                if cp['delete']:
+                    continue
+                form.category_prices.append_entry(cp)
+        if (
+                form.validate_on_submit() and
+                not form.add_new_price.data and
+                not has_deleted_entries
+        ):
             tool = Tool(
                 name=form.name.data,
                 has_operator=form.has_operator.data,
@@ -73,7 +85,7 @@ def create_tool():
             {"category_id": cat.id}
             for cat in categories
         ]
-        if not space_selected:
+        if not space_selected and not has_deleted_entries:
             form.category_prices.append_entry({"price_list": cat_prices})
         return render_template("dashboard/tool/form.html", form=form, categories=categories)
     else:
@@ -90,6 +102,16 @@ def update_tool(id):
         form.space.choices.insert(0, (0, "-- اختر المساحة --"))
         tool = Tool.query.get(id)
         categories = Category.query.all()
+
+        cp_tmp = list(form.category_prices.data)
+        has_deleted_entries = any([True for cp in cp_tmp if cp['delete']])
+        if has_deleted_entries:
+            form.category_prices.process(None)
+            for cp in cp_tmp:
+                if cp['delete']:
+                    continue
+                form.category_prices.append_entry(cp)
+
         if request.method == "GET":
             form.name.data = tool.name
             form.quantity.data = tool.quantity
@@ -107,7 +129,11 @@ def update_tool(id):
             )
         elif request.method == "POST":
             space_selected = form.space.data and not form.space.data == '0'
-            if form.validate_on_submit() and not form.add_new_price.data:
+            if (
+                    form.validate_on_submit() and
+                    not form.add_new_price.data and
+                    not has_deleted_entries
+            ):
                 tool.name = form.name.data
                 tool.has_operator = form.has_operator.data
                 tool.description = form.description.data
@@ -133,7 +159,10 @@ def update_tool(id):
                 db.session.add_all(images_objs)
                 db.session.commit()
                 return redirect(url_for("dashboard.tool.tool_list"))
-            if form.validate_on_submit() and form.add_new_price.data:
+            if (
+                    form.validate_on_submit() and form.add_new_price.data and
+                    not has_deleted_entries and not space_selected
+            ):
                 cat_prices = [
                     {"category_id": cat.id}
                     for cat in categories

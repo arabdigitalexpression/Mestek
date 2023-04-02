@@ -45,7 +45,19 @@ def create_space():
     form = SpaceForm()
     categories = Category.query.all()
     if current_user.role.name == "admin":
-        if form.validate_on_submit() and not form.add_new_price.data:
+        cp_tmp = list(form.category_prices.data)
+        has_deleted_entries = any([True for cp in cp_tmp if cp['delete']])
+        if has_deleted_entries:
+            form.category_prices.process(None)
+            for cp in cp_tmp:
+                if cp['delete']:
+                    continue
+                form.category_prices.append_entry(cp)
+        if (
+                form.validate_on_submit() and
+                not form.add_new_price.data and
+                not has_deleted_entries
+        ):
             space = Space(
                 name=form.name.data,
                 has_operator=form.has_operator.data,
@@ -70,7 +82,8 @@ def create_space():
             {"category_id": cat.id}
             for cat in categories
         ]
-        form.category_prices.append_entry({"price_list": cat_prices})
+        if not has_deleted_entries:
+            form.category_prices.append_entry({"price_list": cat_prices})
         return render_template("dashboard/space/form.html", form=form, categories=categories)
     else:
         return redirect(url_for("main.main_page"))
@@ -83,6 +96,16 @@ def update_space(id):
         form = SpaceForm()
         space = Space.query.get(id)
         categories = Category.query.all()
+
+        cp_tmp = list(form.category_prices.data)
+        has_deleted_entries = any([True for cp in cp_tmp if cp['delete']])
+        if has_deleted_entries:
+            form.category_prices.process(None)
+            for cp in cp_tmp:
+                if cp['delete']:
+                    continue
+                form.category_prices.append_entry(cp)
+
         if request.method == "GET":
             form.name.data = space.name
             form.capacity.data = space.capacity
@@ -97,7 +120,11 @@ def update_space(id):
                 form=form, isUpdate=True, space=space, categories=categories
             )
         elif request.method == "POST":
-            if form.validate_on_submit() and not form.add_new_price.data:
+            if (
+                form.validate_on_submit() and
+                not form.add_new_price.data and
+                not has_deleted_entries
+            ):
                 space.name = form.name.data
                 space.has_operator = form.has_operator.data
                 space.description = form.description.data
@@ -120,7 +147,10 @@ def update_space(id):
                 db.session.add_all(images_objs)
                 db.session.commit()
                 return redirect(url_for("dashboard.space.space_list"))
-            if form.validate_on_submit() and form.add_new_price.data:
+            if (
+                    form.validate_on_submit() and form.add_new_price.data and
+                    not has_deleted_entries
+            ):
                 cat_prices = [
                     {"category_id": cat.id}
                     for cat in categories

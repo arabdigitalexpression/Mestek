@@ -60,14 +60,8 @@ def tool_reserved_days(pk):
     if not data:
         abort(400)
     days_only = data.get("days_only", None)
-    days = data.get("days", None)
     from_time = data.get("from_time", None)
     to_time = data.get("to_time", None)
-    if days_only:
-        days = [
-            datetime.strptime(day, '%Y-%m-%dT%H:%M:%S.%fZ').date()
-            for day in days
-        ]
     if not days_only and from_time and to_time:
         from_time = datetime.strptime(
             from_time, '%Y-%m-%dT%H:%M:%S.%fZ'
@@ -82,7 +76,7 @@ def tool_reserved_days(pk):
             abort(400)
 
     reserved_days = Calendar.reserved_days(
-        pk, days_only, days, from_time, to_time, space=False
+        pk, days_only, from_time, to_time, space=False
     )
     return jsonify([cal.day.isoformat() for cal in reserved_days])
 

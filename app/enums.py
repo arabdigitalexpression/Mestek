@@ -11,6 +11,10 @@ class DescriptiveEnum(Enum):
     def __init__(self, _: str, description: str = None):
         self._description_ = description
 
+    @classmethod
+    def choices(cls):
+        return [(choice.name, choice.description) for choice in cls]
+
     # def __str__(self):
     #     return self.value
 
@@ -46,10 +50,6 @@ class PaymentTypes(DescriptiveEnum):
     no_payment = 0, "غير مدفوع"
     down_payment = 1, "مدفوع جزئيا"
     full_payment = 2, "مدفوع"
-
-    @classmethod
-    def choices(cls):
-        return [(choice.name, choice.description) for choice in cls]
 
 
 class Gender(DescriptiveEnum):

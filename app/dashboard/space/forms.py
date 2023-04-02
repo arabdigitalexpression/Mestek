@@ -28,6 +28,7 @@ class SpaceCategoryPriceForm(Form):
             (SpaceUnit.day, SpaceUnit.day.description)
         ]
     )
+    delete = SubmitField('حذف التسعيرة')
     price_list = FieldList(FormField(PriceListForm))
 
 

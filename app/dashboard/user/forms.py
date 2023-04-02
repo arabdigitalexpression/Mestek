@@ -13,7 +13,7 @@ from app.enums import Gender
 images = 'jpg jpe jpeg png gif svg bmp webp'.split()
 
 
-class UserForm(FlaskForm):
+class CreateUserForm(FlaskForm):
     firstName = StringField('الاسم الأول', validators=[DataRequired(), Length(min=3, max=20)],
                             render_kw={
                                 "class": "form-control ",
@@ -45,10 +45,7 @@ class UserForm(FlaskForm):
                             "class": "form-control",
                             "placeholder": "الهاتف"
                         })
-    gender = SelectField('الجنس', validators=[DataRequired()],
-                         choices=[(Gender.male.name, Gender.male.description),
-                                  (Gender.female.name, Gender.female.description),
-                                  (Gender.prefer_not_answer.name, Gender.prefer_not_answer.description)],
+    gender = SelectField('الجنس', choices=Gender.choices(),
                          render_kw={
                              "class": "form-control",
                              "placeholder": "النوع"
@@ -77,9 +74,6 @@ class UserForm(FlaskForm):
     category = SelectField('التصنيف', render_kw={
         "class": "form-select ",
     })
-    organization = SelectField('المؤسسة', render_kw={
-        "class": "form-select ",
-    })
     activated = BooleanField('مفعل',
                              render_kw={
                                  "class": "form-check-input"
@@ -88,6 +82,12 @@ class UserForm(FlaskForm):
                          render_kw={
                              "class": "w-100 btn btn-lg btn-primary",
                          })
+
+
+class UpdateUserForm(CreateUserForm):
+    organization = SelectField('المؤسسة', render_kw={
+        "class": "form-select ",
+    })
 
 
 class ChangePasswordForm(FlaskForm):

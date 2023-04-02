@@ -7,7 +7,9 @@ from flask_login import current_user, login_required
 from app import db
 from app.dashboard.forms import ConfirmForm
 from app.dashboard.user import bp
-from app.dashboard.user.forms import UserForm, ChangePasswordForm
+from app.dashboard.user.forms import (
+    CreateUserForm, UpdateUserForm, ChangePasswordForm
+)
 from app.enums import Gender
 from app.models import User, Category, Role, Organization
 from app.utils import save_file, remove_file
@@ -50,12 +52,8 @@ def delete_user(username):
 def create_user():
     categories = Category.query.all()
     roles = Role.query.all()
-    form = UserForm()
-    form.gender.choices = [
-        (Gender.male.name, Gender.male.description),
-        (Gender.female.name, Gender.female.description),
-        (Gender.prefer_not_answer.name, Gender.prefer_not_answer.description)
-    ]
+    form = CreateUserForm()
+    form.gender.choices = Gender.choices()
     form.category.choices = [(c.id, c.name) for c in categories]
     form.category.choices.insert(0, (0, "-- اختر تصنيف --"))
     form.role.choices = [(r.id, r.name) for r in roles]
@@ -111,7 +109,7 @@ def update_user(username):
         categories = Category.query.all()
         roles = Role.query.all()
         user = User.query.filter_by(username=username).first_or_404()
-        form_user = UserForm()
+        form_user = UpdateUserForm()
         form_password = ChangePasswordForm()
         form_user.category.choices = [(c.id, c.name) for c in categories]
         form_user.category.choices.insert(0, (0, "-- اختر تصنيف --"))
