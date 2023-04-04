@@ -30,7 +30,7 @@ def get_reservations_data():
                 result.append({
                     "title": title, "id": reservation.id, "type": reservation.type.name,
                     "start": interval.calendar.day.strftime("%Y-%m-%dT%H:%M:%S"),
-                    "startTime": interval.start_time.strftime("%Y-%m-%dT%H:%M:%S"),
-                    "endTime": interval.end_time.strftime("%Y-%m-%dT%H:%M:%S")
+                    "startTime": interval.start_time.strftime("%H:%M:%S"),
+                    "endTime": interval.end_time.strftime("%H:%M:%S")
                 })
         return jsonify(result)
