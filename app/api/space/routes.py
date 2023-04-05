@@ -142,7 +142,8 @@ def calculate_price(pk):
                 tool_cat_price.name, float(days) * tool_cat_price.price,
                 tool_cat_price.price_unit.description
             ])
-        tools_total_price = sum([float(days) * p.price for p in tools_cat_prices])
+        tools_total_price = sum(
+            [float(days) * p.price for p in tools_cat_prices])
     total_price = total_price + tools_total_price
     res.append(["المجموع", total_price])
     return jsonify(res)
@@ -165,7 +166,8 @@ def reserve_space(args):
     if current_user.role.name == "admin":
         user_id = request.args.get("user_id", type=int)
         home_url = url_for("dashboard.dashboard")
-        space_reservation_url = url_for("dashboard.reservation.create_reservation_space")
+        space_reservation_url = url_for(
+            "dashboard.reservation.create_reservation_space")
         status = args.get("payment_status", PaymentTypes.no_payment)
         if user_id:
             user = User.query.get_or_404(user_id)
@@ -195,7 +197,8 @@ def reserve_space(args):
             abort(400)
 
     if any(Calendar.reserved_days(
-            space_id, days_only, days, from_time, to_time, to_reserve=True
+            space_id, days_only, from_time, to_time,
+            days=days, to_reserve=True
     )):
         abort(400)
 

@@ -136,8 +136,8 @@ def reserve_tool(args):
         if from_time.hour < org_day_start or to_time.hour > org_day_end:
             abort(400)
     if any(Calendar.reserved_days(
-            tool_id, days_only, days, from_time,
-            to_time, to_reserve=True, space=False
+            tool_id, days_only, from_time, to_time,
+            days=days, to_reserve=True, space=False
     )):
         abort(400)
 
