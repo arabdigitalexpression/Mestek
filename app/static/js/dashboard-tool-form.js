@@ -1,14 +1,3 @@
-$(document).ready(function () {
-	$("#dataTable").DataTable();
-	$(".form_select").chosen();
-	ClassicEditor.create(document.querySelector("#description"), {
-		language: "ar",
-	});
-
-	ClassicEditor.create(document.querySelector("#guidelines"), {
-		language: "ar",
-	});
-});
 const { createApp } = Vue;
 const app = createApp({
 	data() {
@@ -42,8 +31,11 @@ const app = createApp({
 			this.price_table = [];
 		},
 		selectedUnit() {
+			this.getReservedDays();
+			this.price_table = []
 			this.fromTime = "";
 			this.toTime = "";
+			$("#datepicker").datepicker("destroy");
 		},
 		toTime(newVal, oldVal) {
 			if (oldVal !== newVal) {
@@ -242,9 +234,15 @@ const app = createApp({
 			}
 			let data = {
 				days: this.dates.length,
-				tool_price_id: this.selectedTool.cat_prices.filter(
-					(price) => price.unit_value === this.toTime - this.fromTime
-				)[0].id,
+				tool_price_id:
+					this.selectedUnit.unit_id === 0
+						? this.selectedTool.cat_prices.filter(
+								(price) => price.unit_value === this.toTime - this.fromTime
+							)[0].id
+						: this.selectedUnit.unit_id === 1 
+						&& this.selectedTool.cat_prices.filter(
+								(price) => price.unit_id === 1
+						)[0].id
 			};
 			fetch(
 				`/api/tools/${this.selectedTool.id}/calculate-price?user_id=${this.selectedUserId}`,
@@ -262,15 +260,35 @@ const app = createApp({
 				.then((res) => (this.price_table = [...res]));
 		},
 		submitForm() {
+			const from_time = 
+					this.fromTime && this.selectedUnit.unit_id === 0
+						? this.fromTime % 1 === 0
+							? new Date(Date.UTC(0, 0, 0, this.fromTime, 0, 0)).toJSON()
+							: new Date(Date.UTC(0, 0, 0, this.fromTime - 0.5, 30, 0)).toJSON()
+						: null
+			const to_time = 
+					this.toTime && this.selectedUnit.unit_id === 0
+						? this.toTime % 1 === 0
+							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
+							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
+						: null
 			let data = {
 				description: this.description,
 				tool_id: this.selectedTool.id,
-				tool_price_id: this.selectedTool.cat_prices.filter((price) => {
-					return (
-						price.unit_value === this.toTime - this.fromTime &&
-						price.unit_id === this.selectedUnit.unit_id
-					);
-				})[0].id,
+				tool_price_id:
+					this.selectedUnit.unit_id === 0
+					? this.selectedTool.cat_prices.filter((price) => {
+						return (
+							price.unit_value === this.toTime - this.fromTime &&
+							price.unit_id === this.selectedUnit.unit_id
+						)
+					})[0].id
+						: this.selectedUnit.unit_id === 1 
+						&& this.selectedTool.cat_prices.filter((price) => {
+						return (
+							price.unit_id === this.selectedUnit.unit_id
+						)
+						})[0].id,
 				days_only:
 					this.selectedUnit.unit_id === 0
 						? false
@@ -278,20 +296,11 @@ const app = createApp({
 						? true
 						: false,
 				days: this.dates,
-				from_time:
-					this.fromTime && this.selectedUnit.unit_id === 0
-						? this.fromTime % 1 === 0
-							? new Date(Date.UTC(0, 0, 0, this.fromTime, 0, 0)).toJSON()
-							: new Date(Date.UTC(0, 0, 0, this.fromTime - 0.5, 30, 0)).toJSON()
-						: null,
-				to_time:
-					this.toTime && this.selectedUnit.unit_id === 0
-						? this.toTime % 1 === 0
-							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
-							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
-						: null,
 				payment_status: this.payment_status,
 			};
+			if (from_time && to_time) {
+				data = { ...data, from_time, to_time}
+			}
 			fetch(`/api/tools/reserve?user_id=${this.selectedUserId}`, {
 				method: "POST",
 				credentials: "include",
@@ -302,7 +311,25 @@ const app = createApp({
 				body: JSON.stringify(data),
 			})
 				.then((response) => response.json())
-				.then((res) => alert(res.message));
+				.then((res) => {
+					Toastify({
+						text: res.message,
+						duration: 3000,
+						newWindow: true,
+						close: true,
+						gravity: "top", 
+						position: "left",
+						stopOnFocus: true, // Prevents dismissing of toast on hover
+						style: {
+							background: "linear-gradient(to right, #00b09b, #96c93d)",
+						},
+						onClick: function () {
+							window.location.href = res.tool_reservation_url;
+						} , callback: function () {
+							window.location.href = res.tool_reservation_url;
+						}
+					}).showToast();
+				});
 		},
 	},
 	delimiters: ["{", "}"],

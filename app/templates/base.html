@@ -44,6 +44,10 @@
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
 		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/toastify.min.css') }}"
+		/>
 		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
 		<script src="{{ url_for('static',filename='js/moment-timezone-with-data.js') }}"></script>
 		{% endblock %}
@@ -110,6 +114,7 @@
 			crossorigin="anonymous"
 			async
 		></script>
+		<script src="{{ url_for('static',filename='vendor/toastify.js') }}"></script>
 		{% endblock %}
 	</body>
 </html>

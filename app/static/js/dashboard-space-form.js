@@ -1,14 +1,3 @@
-$(document).ready(function () {
-	$("#dataTable").DataTable();
-	$(".form_select").chosen();
-	ClassicEditor.create(document.querySelector("#description"), {
-		language: "ar",
-	});
-
-	ClassicEditor.create(document.querySelector("#guidelines"), {
-		language: "ar",
-	});
-});
 const { createApp } = Vue;
 const app = createApp({
 	data() {
@@ -53,12 +42,12 @@ const app = createApp({
 			this.price_table = [];
 			this.tools = [];
 		},
-		selectedUnit(newVal, oldVal) {
+		selectedUnit() {
+			this.getReservedDays();
+			this.price_table = []
 			this.fromTime = "";
 			this.toTime = "";
-			if (newVal.unit_id === 1) {
-				this.getReservedDays();
-			}
+			$("#datepicker").datepicker("destroy");
 		},
 		attendance_num(newVal, oldVal) {
 			if (newVal < 0 || newVal === "") {
@@ -286,9 +275,6 @@ const app = createApp({
 							rtl: true,
 						})
 						.on("changeDate", function (e) {
-							//$('#other-input').val(e.format(0,"dd/mm/yyyy"));
-							//alert(e.date);
-							//alert(e.format(0,"dd/mm/yyyy"));
 							app.dates = [...e.dates];
 							app.calculate();
 						});
@@ -300,9 +286,15 @@ const app = createApp({
 			}
 			let data = {
 				days: this.dates.length,
-				space_price_id: this.selectedSpace.cat_prices.filter(
-					(price) => price.unit_value === this.toTime - this.fromTime
-				)[0].id,
+				space_price_id: this.selectedUnit.unit_id === 0
+						? this.selectedSpace.cat_prices.filter(
+								(price) => price.unit_value === this.toTime - this.fromTime
+							)[0].id
+						: this.selectedUnit.unit_id === 1 
+						&& this.selectedSpace.cat_prices.filter(
+								(price) => price.unit_id === 1
+							)[0].id
+						,
 				tool_ids: [...this.tool_ids],
 			};
 			fetch(
@@ -321,18 +313,37 @@ const app = createApp({
 				.then((res) => (this.price_table = [...res]));
 		},
 		submitForm() {
+			const from_time = 
+					this.fromTime && this.selectedUnit.unit_id === 0
+						? this.fromTime % 1 === 0
+							? new Date(Date.UTC(0, 0, 0, this.fromTime, 0, 0)).toJSON()
+							: new Date(Date.UTC(0, 0, 0, this.fromTime - 0.5, 30, 0)).toJSON()
+						: null
+			const to_time = 
+					this.toTime && this.selectedUnit.unit_id === 0
+						? this.toTime % 1 === 0
+							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
+							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
+						: null
 			let data = {
 				description: this.description,
 				attendance_num: this.attendance_num,
 				min_age: this.min_age,
 				max_age: this.max_age,
 				space_id: this.selectedSpace.id,
-				space_price_id: this.selectedSpace.cat_prices.filter((price) => {
-					return (
-						price.unit_value === this.toTime - this.fromTime &&
-						price.unit_id === this.selectedUnit.unit_id
-					);
-				})[0].id,
+				space_price_id: this.selectedUnit.unit_id === 0
+					? this.selectedSpace.cat_prices.filter((price) => {
+						return (
+							price.unit_value === this.toTime - this.fromTime &&
+							price.unit_id === this.selectedUnit.unit_id
+						)
+					})[0].id
+						: this.selectedUnit.unit_id === 1 
+						&& this.selectedSpace.cat_prices.filter((price) => {
+						return (
+							price.unit_id === this.selectedUnit.unit_id
+						)
+					})[0].id,
 				tools: [...this.tool_ids],
 				days_only:
 					this.selectedUnit.unit_id === 0
@@ -340,21 +351,12 @@ const app = createApp({
 						: this.selectedUnit.unit_id === 1
 						? true
 						: false,
-				days: this.dates,
-				from_time:
-					this.fromTime && this.selectedUnit.unit_id === 0
-						? this.fromTime % 1 === 0
-							? new Date(Date.UTC(0, 0, 0, this.fromTime, 0, 0)).toJSON()
-							: new Date(Date.UTC(0, 0, 0, this.fromTime - 0.5, 30, 0)).toJSON()
-						: null,
-				to_time:
-					this.toTime && this.selectedUnit.unit_id === 0
-						? this.toTime % 1 === 0
-							? new Date(Date.UTC(0, 0, 0, this.toTime, 0, 0)).toJSON()
-							: new Date(Date.UTC(0, 0, 0, this.toTime - 0.5, 30, 0)).toJSON()
-						: null,
+				days: this.dates,	
 				payment_status: this.payment_status,
 			};
+			if (from_time && to_time) {
+				data = { ...data, from_time, to_time}
+			}
 			fetch(`/api/spaces/reserve?user_id=${this.selectedUserId}`, {
 				method: "POST",
 				credentials: "include",
@@ -365,7 +367,23 @@ const app = createApp({
 				body: JSON.stringify(data),
 			})
 				.then((response) => response.json())
-				.then((res) => alert(res.message));
+				.then((res) => {
+					Toastify({
+						text: res.message,
+						duration: 3000,
+						newWindow: true,
+						close: true,
+						gravity: "top", 
+						position: "left",
+						stopOnFocus: true,
+						style: {
+							background: "linear-gradient(to right, #00b09b, #96c93d)",
+						},
+						onClick: function () {
+							window.location.href = res.space_reservation_url;
+						} 
+					}).showToast();
+				});
 		},
 	},
 	delimiters: ["{", "}"],
