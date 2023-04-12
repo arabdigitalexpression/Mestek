@@ -314,12 +314,13 @@ class Calendar(db.Model):
             Calendar.day < three_month_limit.date(),
             Calendar.intervals.any(),
         ]
-        if not to_reserve:
+        if to_reserve:
             pk_filter = Reservation.space_id == pk
             if not space:
                 pk_filter = Reservation.tool_id == pk
             filters.append(pk_filter)
         res = None
+        # days = [day.date().isoformat() for day in days]
         if days_only:
             if days:
                 filters.append(Calendar.day.in_(days))
@@ -337,10 +338,13 @@ class Calendar(db.Model):
             ))
             res = cls.query.join(Calendar.reservations, Calendar.intervals). \
                 filter(*filters).with_entities(Calendar.day).distinct().all()
+        res_filtered = list()
         if to_reserve and days:
-            res = [
-                day for day in res if day in days
-            ]
+            for res_day in res:
+                for day in days:
+                    if res_day[0] == day.date():
+                        res_filtered.append(res_day)
+            res = res_filtered
         return res
 
 

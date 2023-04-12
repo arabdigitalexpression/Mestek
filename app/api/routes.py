@@ -23,6 +23,18 @@ def users():
         } for u in users
     ])
 
+
+@bp.errorhandler(400)
+def bad_req(error):
+    response = jsonify({
+        'code': 400,
+        'message': 'حدث خطأ ما.',
+        'error': error.description
+    })
+    response.status_code = 400
+    return response
+
+
 #
 # @bp.route('notifications/', methods=['GET'])
 # @login_required
