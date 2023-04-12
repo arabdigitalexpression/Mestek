@@ -64,7 +64,7 @@ def get_reservations():
 
         return render_template(
             "dashboard/reservation/index.html",
-            reservations=reservations, i=i, j=j, pages=pages)
+            reservations=reservations, i=i, j=j, pages=int(pages))
     return redirect(url_for("main.main_page"))
 
 
