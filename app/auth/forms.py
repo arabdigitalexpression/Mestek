@@ -75,9 +75,11 @@ class SignupForm(FlaskForm):
                                          "class": "form-control form-control-user",
                                          "placeholder": "تأكيد كلمة المرور"
     })
-    category = SelectField('التصنيف', render_kw={
-        "class": "form-select form-control-user p-3",
-    })
+    category = SelectField(
+        'التصنيف', validators=[DataRequired()], render_kw={
+            "class": "form-select form-control-user p-3"
+        }
+    )
     submit = SubmitField('تسجيل الحساب',
                          render_kw={
                              "class": "btn btn-primary btn-user btn-block",

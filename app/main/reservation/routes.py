@@ -66,6 +66,8 @@ def create_reservation_tool():
             elif request.form.get("cancel") == "cancel":
                 return redirect(url_for("main.main_page"))
         return render_template('/default/reservation/tool.html', tools=tool, form=form)
+    elif current_user.role.name == "admin":
+        return redirect(url_for("dashboard.reservation.create_reservation_tool"))
 
 
 @bp.route('/create/space/', methods=["GET", "POST"])
@@ -230,3 +232,5 @@ def create_reservation_space():
             if request.form.get("cancel") == "cancel":
                 return redirect(url_for("main.main_page"))
         return render_template('/default/reservation/space.html', reserve1=reserve, tools=tool, form=form)
+    elif current_user.role.name == "admin":
+        return redirect(url_for("dashboard.reservation.create_reservation_space"))
