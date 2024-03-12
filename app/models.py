@@ -3,6 +3,7 @@ from datetime import datetime, time
 from dateutil.relativedelta import relativedelta
 from itertools import groupby
 
+from flask import url_for
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint, or_, and_
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,7 +11,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 from app.enums import (
     ReservationTypes, PriceUnit, PaymentTypes,
-    SpaceUnit, ToolUnit, Gender
+    SpaceUnit, ToolUnit, Gender, SpaceType
 )
 
 
@@ -57,6 +58,20 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def avatar(self):
+        if self.avatar_url:
+            return self.avatar_url
+        else:
+            if self.gender.name == 'female':
+                return url_for('static', filename='images/female_avatar.svg')
+            elif self.gender.name == 'male':
+                return url_for('static', filename='images/male_avatar.svg')
 
     def make_password(self, password):
         self.password = generate_password_hash(password)
@@ -155,6 +170,7 @@ class Space(db.Model):
         'CategorySpace', back_populates='space', lazy='subquery'
     )
     images = db.relationship('Image', backref='space', lazy=True)
+    type = db.Column(db.Enum(SpaceType), default=SpaceType.undefined)
     reservations = db.relationship(
         'Reservation', cascade="all", backref='space', lazy=True)
     tools = db.relationship('Tool', backref='space', lazy=True)

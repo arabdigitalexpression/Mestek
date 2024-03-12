@@ -29,6 +29,17 @@ class PriceUnit(DescriptiveEnum):
     usd = 1, "$"
 
 
+class SpaceType(DescriptiveEnum):
+    undefined = 0, "غير محدد"
+    meeting_room = 1, "غرفة إجتماعات"
+    coworking = 2, "مساحة عمل مشترك"
+    residency = 3, "إقامات"
+    workshop = 4, "ورشة"
+    atelier = 5, "أتيليه"
+    studio = 6, "ستوديو"
+    lab = 7, "معمل"
+
+
 class SpaceUnit(DescriptiveEnum):
     hour = 0, "ساعة"
     day = 1, "يوم"
