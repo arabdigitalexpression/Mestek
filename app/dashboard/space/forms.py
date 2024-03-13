@@ -60,6 +60,9 @@ class SpaceForm(FlaskForm):
                                    "placeholder": "قواعد", "class": "form-control", "rows": "5", "id": "guidelines"
                                }
                                )
+    type = SelectField('نوع المساحة', render_kw={
+        "class": "form-select",
+    })
     images = MultipleFileField(
         'الصور', name="images", validators=[  # FileRequired(),
             FileAllowed(images, 'الرجاء إدخال صور فقط!')

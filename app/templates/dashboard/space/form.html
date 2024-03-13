@@ -15,7 +15,7 @@
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%} {{form.name}}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
             {% if form.capacity.errors %} {%for error in form.capacity.errors %}
             <span class="form_error">{{ error }}</span>
             {%endfor%} {% endif%}
@@ -24,7 +24,14 @@
                 <span class="input-group-text bg-primary text-white ">فرد</span>
             </div>
         </div>
-        <div class="col-md-4 d-flex justify-content-center">
+        <div class="col-md-4">
+            {% if form.type.errors %} {%for error in form.type.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%}
+            {{form.type.label(class_="form-check-label")}}
+            {{form.type}}
+        </div>
+        <div class="col-md-2 d-flex justify-content-center">
             {% if form.has_operator.errors %} {%for error in form.has_operator.errors
             %}
             <span class="form_error">{{ error }}</span>
