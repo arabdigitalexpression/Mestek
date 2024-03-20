@@ -133,4 +133,4 @@ dmypy.json
 .idea/
 
 # uploads
-app/uploads/*
+/app/uploads/
