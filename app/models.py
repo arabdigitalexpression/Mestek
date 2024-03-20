@@ -179,6 +179,13 @@ class Space(db.Model):
     def prices(self):
         return self.get_category_prices()
 
+    @property
+    def image_poster(self):
+        if len(self.images) > 0:
+            return self.images[0].url
+        else:
+            return url_for("static", filename="images/no_photo.svg")
+
     def set_category_prices(self, cat_prices, categories):
         for cat_price in cat_prices:
             for price in cat_price["price_list"]:

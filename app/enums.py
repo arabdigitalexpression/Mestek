@@ -31,13 +31,14 @@ class PriceUnit(DescriptiveEnum):
 
 class SpaceType(DescriptiveEnum):
     undefined = 0, "غير محدد"
-    meeting_room = 1, "غرفة إجتماعات"
-    coworking = 2, "مساحة عمل مشترك"
-    residency = 3, "إقامات"
-    workshop = 4, "ورشة"
-    atelier = 5, "أتيليه"
-    studio = 6, "ستوديو"
-    lab = 7, "معمل"
+    # Includes open work areas and community spaces
+    coworking = 1, "مساحة عمل مشتركة"
+    # For all types of residency accommodations
+    residency = 2, "إقامات"
+    # Combines all types of creative, tech, and heavy-duty workshops and studios (sound, video, arts, electronics)
+    workshop_studio = 3, "ورشة / ستوديو"
+    # For dance, theater, presentations, and any form of artistic or professional performances.
+    performance_space = 4, "مساحة للعروض"
 
 
 class SpaceUnit(DescriptiveEnum):
