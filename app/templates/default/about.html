@@ -1,0 +1,330 @@
+{% extends 'default/base.html' %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* Make the images wide and responsive. */
+    /*#spacesCarousel img {*/
+    /*  height: auto;*/
+    /*  max-width: 100%;*/
+    /*  width: 100%;*/
+    /*}*/
+
+    /*!* Change the order of the indicators.*/
+    /*   Return them to the center of the slide. *!*/
+    /*.carousel-indicators {*/
+    /*  width: auto;*/
+    /*  margin-left: 0;*/
+    /*  transform: translateX(-50%);*/
+    /*}*/
+
+
+    /*.carousel-indicators li {*/
+    /*  float: right;*/
+    /*  margin: 1px 4px;*/
+    /*}*/
+    /*.carousel-indicators .active {*/
+    /*  margin: 0 3px;*/
+    /*}*/
+
+    /*!* Change the direction of the transition. *!*/
+    /*@media all and (transform-3d), (-webkit-transform-3d) {*/
+    /*  .carousel-inner > .carousel-item.carousel-item-left.active,*/
+    /*  .carousel-inner > .carousel-item.carousel-item-left.carousel-item-next {*/
+    /*    left: 0;*/
+    /*    -webkit-transform: translate3d(-100%, 0, 0);*/
+    /*    transform: translate3d(-100%, 0, 0);*/
+    /*  }*/
+    /*}*/
+
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="mb-10 position-relative">
+    <!-- SVG Background -->
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none"
+         class="svg position-absolute d-none d-lg-block"
+         style="height: 560px; width: 100%; z-index: 0; overflow: hidden">
+        <defs>
+            <linearGradient id="sw-gradient-0" x1="0" x2="0" y1="1" y2="0">
+                <stop stop-color="hsl(217, 102%, 99%)" offset="0%"></stop>
+                <stop stop-color="hsl(217,88%, 93%)" offset="100%"></stop>
+            </linearGradient>
+        </defs>
+        <path fill="url(#sw-gradient-0)"
+              d="M 0.351 264.418 C 0.351 264.418 33.396 268.165 47.112 270.128 C 265.033 301.319 477.487 325.608 614.827 237.124 C 713.575 173.504 692.613 144.116 805.776 87.876 C 942.649 19.853 1317.845 20.149 1440.003 23.965 C 1466.069 24.779 1440.135 24.024 1440.135 24.024 L 1440 0 L 1360 0 C 1280 0 1120 0 960 0 C 800 0 640 0 480 0 C 320 0 160 0 80 0 L 0 0 L 0.351 264.418 Z"></path>
+    </svg>
+    <!-- Content -->
+    <div class="px-4 py-5 px-md-5 text-center text-lg-start">
+        <div class="container">
+            <div class="row gx-lg-5 align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 1">
+                    <h1 class="my-4 display-3 fw-bold ls-tight">
+                        <span>ما هي أضف؟</span>
+                        <br>
+                    </h1>
+                    <h3 class="text-primary">مؤسسة أهلية ،غير هادفة للربح تهدف إلى تنمية وتمكين الشباب العرب بتوفير بيئة
+                        مناسبة للتعلُّم والاستكشاف وتطوير المهارات وبناء أدوات معرفية باللغة العربية</h3>
+
+                </div>
+                <div style="z-index: 1" class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="bg-image">
+                        <img class="w-100 rounded-4 shadow-5" alt=""
+                             src="{{ url_for('static',filename='images/camp-2018.jpg') }}">
+                        <!-- Mask -->
+                        <div class="mask" style="
+          background: linear-gradient(
+            to bottom,
+            hsla(0, 0%, 0%, 0) 50%,
+            hsla(0, 0%, 0%, 0.5)
+          );
+        ">
+                            <div class="
+            bottom-0
+            d-flex
+            align-items-end
+            h-100
+            text-center
+            justify-content-center
+          ">
+                                <div>
+                                    <h5 class="fw-bold text-white mb-4">معسكر التعبير الرقمي العربي 2018</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container mt-5">
+
+
+    <h4>مؤسسة التعبير الرقمي العربي - أضف، تقوم أساسًا بأنشطة متنوعة ضمن عملها الأهلي غير الهادف للربح. نظرًا لما تتطلبه
+        خدماتنا من موارد بشرية نابغة ومتميزة في ممارساتها التقنية والفنية وفي ظل الوضع الاقتصادي المتقلب عالميًا وبحدود
+        الموارد المالية المتاحة للمؤسسات الأهلية، تطور أضف نموذج إدارة أعمالها من أجل الاستدامة المادية والمحافظة على
+        قدرتها على توفير الدخل الملائم لمطوري المحتوى والعاملين بالمؤسسة.</h4>
+    <div data-draggable="true" class="pt-5" style="position: relative;">
+        <section draggable="false" class="container">
+            <section class="mb-10">
+                <!-- Introduction and Mission -->
+                <div class="row gx-lg-5 align-items-center mb-5">
+                    <div class="col-md-6">
+                        <div class="bg-image">
+                            <img alt="Mission Image"
+                                 src="{{ url_for('static',filename='images/adef-school-2023.jpeg') }}"
+                                 class="w-100 shadow-4-strong rounded-4">
+                            <!-- Mask -->
+                            <div class="mask" style="
+          background: linear-gradient(
+            to bottom,
+            hsla(0, 0%, 0%, 0) 50%,
+            hsla(0, 0%, 0%, 0.5)
+          );
+        ">
+                                <div class="
+            bottom-0
+            d-flex
+            align-items-end
+            h-100
+            text-center
+            justify-content-center
+          ">
+                                    <div>
+                                        <h5 class="fw-bold text-white mb-4">مدارس أضف الصيفية 2023</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-3 mt-3 text-center">أهدافنا</h3>
+                        <ul class="list-unstyled">
+
+
+                            <li class="mb-3">
+                                <i class="fas fa-long-arrow-alt-left me-2 text-info"></i>
+                                <span class="fw-bold">تعزيز التفاهم والقبول بين الثقافات العربية من خلال الجمع بين الشباب من خلفيات مختلفة في منصة واحدة لعرض مواهبهم وإبداعاتهم.</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-long-arrow-alt-left me-2 text-info"></i>
+                                <span class="fw-bold">إنشاء مجتمع شامل للمراهقين والشباب العرب، حيث يمكنهم الوصول إلى مجموعة من البرامج والخدمات والموارد في وسائل الإعلام والفن والتكنولوجيا والثقافة وأكثر من ذلك بكثير.</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-long-arrow-alt-left me-2 text-info"></i>
+                                <span class="fw-bold">تدريب الشباب على تطوير المهارات الأساسية التي يحتاجونها للنجاح في العالم الحديث مثل التفكير النقدي وحل المشكلات والتواصل والتعبير والتعاون و كسر الصور النمطية، وتعزيز الشعور بالثقة بالنفس والتمكين.</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-long-arrow-alt-left me-2 text-info"></i>
+                                <span class="fw-bold">تزويد الشباب بالمهارات والمعرفة التي يحتاجونها لمتابعة حياتهم المهنية لكون الشباب قوة المستقبل الذي سيحدث فرق في العالم.</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-long-arrow-alt-left me-2 text-info"></i>
+                                <span class="fw-bold">الاحتفاء بالثقافة واللغة والتراث العربي.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="row gx-lg-5 align-items-center mb-5">
+                    <div class="col-md-6">
+                        <div class="bg-image">
+                            <img alt="Mission Image" src="{{ url_for('static',filename='images/Arabcompucamps16.jpg') }}"
+                                 class="w-100 shadow-4-strong rounded-4">
+                            <!-- Mask -->
+                            <div class="mask" style="
+          background: linear-gradient(
+            to bottom,
+            hsla(0, 0%, 0%, 0) 50%,
+            hsla(0, 0%, 0%, 0.5)
+          );
+        ">
+                                <div class="
+            bottom-0
+            d-flex
+            align-items-end
+            h-100
+            text-center
+            justify-content-center
+          ">
+                                    <div>
+                                        <h5 class="fw-bold text-white mb-4">معسكر الكمبيوتر العربي 1985</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-3 mt-3 text-center">فلسفة التمكين</h3>
+                        <p>ترى مؤسسة أضف أنه لا يُمكن للتمكينِ باستخدام تقنية المعلوماتية أن يتحقَّق إلا إن كانت الأدوات
+                            والمعرفة المتعلقة بها حرّة. التمكين بالتعريفِ لا يُمكن أن يقتصر على اكتساب القدرة على
+                            استخدام الأدوات، بل يتطلّب أن يقترن به تملّك الأدوات، والقدرة على دراستها للتعلّم منها عن
+                            كيفية عملها وصنعها، والقدرة على تعديلها بغرض تدارك قصورٍ فيها أو تحسينها أو تطويعها لأي غرضٍ
+                            حتى لو لم يَرِد على بال الصانع الأصلي للأداة، وكذلك القدرة على نقل الأدوات والمعرفة
+                            المتعلّقة بها، في شكلهما الأصلي أو المُطوَّر، إلى الآخرين لتمكينهم هم أيضا، بلا أي قيود
+                            قانونية أو تقنية أو ثقافية على أي من تلك المتطلبّات.</p>
+                        <p>مؤسسة أضف ليست مشغولةٌ «بالتمكين» حسب تعريفه في أدبيات التنمية التقليدية، بل هي مشغولةٌ
+                            «بالتحرّر» الذي هو في نظرها أقصى درجات التمكين.</p></div>
+
+                </div>
+                <div class="row gx-lg-5 align-items-center mb-5">
+                    <div class="col-md-6">
+                        <div class="bg-image">
+                            <img alt="Mission Image" src="{{ url_for('static',filename='images/800px-IMG_7529.JPG') }}"
+                                 class="w-100 shadow-4-strong rounded-4">
+                            <!-- Mask -->
+                            <div class="mask" style="
+          background: linear-gradient(
+            to bottom,
+            hsla(0, 0%, 0%, 0) 50%,
+            hsla(0, 0%, 0%, 0.5)
+          );
+        ">
+                                <div class="
+            bottom-0
+            d-flex
+            align-items-end
+            h-100
+            text-center
+            justify-content-center
+          ">
+                                    <div>
+                                        <h5 class="fw-bold text-white mb-4">مدارس أضف الصيفية 2017</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4 mb-md-0">
+                        <h3 class="fw-bold mb-3 mt-3 text-center">مهمتنا</h3>
+                        <p>مهمتنا هي تمكين المراهقين والشباب العرب من خلال توفير بيئات تعليمية تقدمية تعزز تطوير
+                            المهارات التقنية الإبداعية الأساسية في وسائل الإعلام والفن والتكنولوجيا والثقافة العربية
+                            وأكثر من ذلك بكثير.</p>
+                        <h2 class="fw-bold mb-3 mt-3 text-center">رؤيتنا</h2>
+                        <p>أن نصبح المجتمع الشامل المفضل للمبدعين والتقدميين من المراهقين والشباب العرب في جميع أنحاء
+                            الشرق الأوسط وشمال أفريقيا.</p></div>
+
+                </div>
+                <!-- Our Impact -->
+                <!-- Meet Our Team -->
+                <div class="text-center pt-3 mb-5">
+                    <h2 class="fw-bold mb-5">تعرف على فريقنا</h2>
+                    <div class="row">
+                        <!-- Team Member 1 -->
+                        <div class="col-md-3 mb-4">
+                            <img class="rounded-circle mb-3" alt="Team Member" style="width: 150px;"
+                                 src="{{ url_for('static',filename='images/ranwa_yehia.jpg') }}">
+                            <h5 class="mb-2">رنوة يحيى</h5>
+                            <p class="text-muted">شريك مؤسس</p>
+                            <p class="text-muted">أنا لبنانية عراقية ولدت في نيجيريا و كبرت في لبنان و تزوجت و اصبحت اما
+                                في مصر. خريجة أدب إنجليزي و سياسة مقارنة. مهنتي صحافية و خبرتي تتضمن العمل في عدة بلدان
+                                عربية. أسست انا و زوجي علي مع مجموعة من التقنيين والفنانين والتربويين مشروع معسكرات
+                                التعبير الرقمي العربي الذي عقد لاول مرة في 2007 و تطور الى ان اصبح مؤسسة التعبير الرقمي
+                                العربي (أضف) منذ 2009. اولادي نبيل و نديم و رامي.</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <img class="rounded-circle mb-3" alt="Team Member" style="width: 150px;"
+                                 src="{{ url_for('static',filename='images/rafat.png') }}">
+                            <h5 class="mb-2">رأفت بيومي</h5>
+                            <p class="text-muted">مدير وحدة الفتية و الشباب</p>
+                            <p class="text-muted"> بدأنا سوا من 8 سنوات، دربت رقص معاصر في المعسكرات. بحب التدريب والشغل
+                                مع الأعمار المختلفة وبحب السفر واللعب والاستكشاف. وحالياً مدير معسكرات أضف، وشاركت في
+                                عدد الأعمال الفنية بالسينما والتليفزيون. شغفي بالمسرح شجعني أني أدرس فنون مسرحية وأشارك
+                                في عروض المسرحية مختلفة في أوروبا والوطن العربي، بالتوازي مع عملي كمدرب رقص وتمثيل
+                                للأطفال وللشباب</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <img class="rounded-circle mb-3" alt="Team Member" style="width: 150px;"
+                                 src="{{ url_for('static',filename='images/Nadia_Mounir.jpg') }}">
+                            <h5 class="mb-2">نادية منير</h5>
+                            <p class="text-muted">مديرة وحدة الفن والثقافة</p>
+                            <p class="text-muted">نادية فنانة تشكيلية تعمل في التصوير الفوتوغرافي والفيديو. يهتم عملها
+                                بتمثيل الذات من خلال استكشاف جوانب الخصوصية والرقابة والمراحل الرقمية وأداء الجسم في
+                                المجالين العام والخاص. حيث تتولى برنامج إتاحة المساحة وكذلك برنامج الورشات</p>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <img class="rounded-circle mb-3" alt="Team Member" style="width: 150px;"
+                                 src="{{ url_for('static',filename='images/ahmed_mekkawy.jpg') }}">
+                            <h5 class="mb-2">أحمد مكاوي</h5>
+                            <p class="text-muted">مستشار تقني</p>
+                            <p class="text-muted">أسست شركة Spirula Systems لدعم بيئات الإنتاج على منصات لينكس للحوسبة السحابية،  ثم أسستSpirula OÜ لتوسيع خدماتنا في أوروبا، شاركت في تأسيس منظمة OpenEgypt غير الحكومية، و تأليف استراتيجية البرمجيات الحرة والمفتوحة المصدر لوزارة الاتصالات وتكنولوجيا المعلومات المصرية. عضو المجلس الاستشاري لمتون ومسار, صممت و أشرفت على تنفيذ البنية التحتية السحابية وتقييم الأمن وإدارة الحوادث للعديد من منصات الويب كالانتخابات المصرية و بوابات الأخبار عالية الحركة.</p>
+                        </div>
+                        <!-- Add more team members as needed -->
+                    </div>
+                </div>
+            </section>
+        </section>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    // $(document).ready(function(){
+    //   // Check if the page is in RTL mode
+    //   var isRTL = $('html').attr('dir') === 'rtl';
+    //
+    //   // If RTL, then reverse the carousel controls
+    //   if(isRTL) {
+    //     // Override the previous control to act like the next control
+    //     $('.carousel-control-prev').off('click').click(function() {
+    //       $(this).carousel('next');
+    //     });
+    //
+    //     // Override the next control to act like the previous control
+    //     $('.carousel-control-next').off('click').click(function() {
+    //       $(this).carousel('prev');
+    //     });
+    //   }
+    //
+    //   // Initialize the carousel
+    //   $('#spacesCarousel').carousel({
+    //     // You may need to adjust other options for RTL compatibility
+    //   });
+    // });
+</script>
+{% endblock %}

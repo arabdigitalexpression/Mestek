@@ -1,21 +1,542 @@
-{% extends 'default/base.html' %} {% block title%} أضف {% endblock%} {% block
-content %}
-<div class="d-flex w-100 h-100 justify-content-center align-items-center">
-	<div class="card text-center" style="width: 18rem">
-		<div class="card-body">
-			<a
-				href="{{url_for('main.reservation.create_reservation_space')}}"
-				class="w-100 btn btn-lg btn-primary"
-				>حجز مساحة</a
-			>
-			<div class="card-text my-4 text-primary">أو</div>
-			<a
-				href="{{url_for('main.reservation.create_reservation_tool')}}"
-				class="w-100 btn btn-lg btn-primary"
-				>حجز أداة</a
-			>
-		</div>
-	</div>
-</div>
+{% extends 'default/base.html' %}
 
+{% block styles %}
+{{ super() }}
+<style>
+    INPUT:-webkit-autofill, SELECT:-webkit-autofill, TEXTAREA:-webkit-autofill {
+        animation-name: onautofillstart
+    }
+
+    INPUT:not(:-webkit-autofill), SELECT:not(:-webkit-autofill), TEXTAREA:not(:-webkit-autofill) {
+        animation-name: onautofillcancel
+    }
+
+    @keyframes onautofillstart {
+    }
+
+    @keyframes onautofillcancel {
+    }
+
+    /* Carousel styling */
+    #introCarousel,
+    .carousel-inner,
+    .carousel-item,
+    .carousel-item.active {
+        height: 100vh;
+        width: 100%;
+    }
+
+    .carousel-item:nth-child(1) {
+        background-image: url('{{ url_for('static',filename='images/ADF09439.webp') }}');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .carousel-item:nth-child(2) {
+        background-image: url('{{ url_for('static',filename='images/ADF09309.webp') }}');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    .carousel-item:nth-child(3) {
+        background-image: url('{{ url_for('static',filename='images/ADF02071.webp') }}');
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center center;
+    }
+
+    /*.navbar .nav-link {*/
+    /*    color: #fff !important;*/
+    /*}*/
+
+    /*.card.bg-image {*/
+    /*    width: 100%; !* Set width to 100% *!*/
+    /*}*/
+
+    .card-link {
+        color: inherit; /* Inherit text color from parent */
+    }
+
+    .view.overlay {
+        position: relative;
+        overflow: hidden; /* Hide overflow to contain zoom */
+    }
+
+    .view.overlay .img-fluid {
+        transition: transform .5s ease-in-out;
+        /*width: 100%; !* Image takes full width of the card *!*/
+        height: auto; /* Height is set automatically */
+    }
+
+    .view.overlay .mask {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        /*width: 100%;*/
+        transition: background-color .5s ease-in-out;
+    }
+
+    .view.overlay:hover .img-fluid {
+        transform: scale(1.1); /* Zoom effect on hover */
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .card.bg-image {
+            height: auto; /* Keep height auto for responsive behavior */
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Carousel wrapper -->
+<div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-carousel-init=""
+     data-mdb-carousel-initialized="true">
+    <!-- Indicators -->
+    <div class="carousel-indicators">
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="0" class="active"></li>
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="1"></li>
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="2"></li>
+    </div>
+
+    <!-- Inner -->
+    <div class="carousel-inner">
+        <!-- Single item -->
+        <div class="carousel-item active">
+            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-white text-center" data-mdb-theme="dark">
+                        <h1 class="mb-3">مساحة العمل المميزة للمبدعين والتقنيين</h1>
+                        <h5 class="mb-4">استكشف وابتكر وتعاون في مرافقنا المجهزة بالكامل </h5>
+                        <a class="btn btn-outline-light btn-lg m-2" data-mdb-ripple-init=""
+                           href="/spaces" role="button">المساحات</a>
+                        <a class="btn btn-outline-light btn-lg m-2" data-mdb-ripple-init=""
+                           href="/tools" role="button">الأدوات</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single item -->
+        <div class="carousel-item"></div>
+
+        <!-- Single item -->
+        <div class="carousel-item"></div>
+    </div>
+    <!-- Inner -->
+
+    <!-- Controls -->
+    <a class="carousel-control-prev" href="#introCarousel" role="button" data-mdb-slide="prev">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#introCarousel" role="button" data-mdb-slide="next">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<!-- Carousel wrapper -->
+<div class="container">
+    <section class="container my-5">
+        <ul class="nav nav-pills mb-3" id="pills-tab2" role="tablist">
+            {% for type in types %}
+            <li class="nav-item" role="presentation">
+                <button data-mdb-pill-init class="nav-link fs-6 {% if loop.first %}active{% endif %}" id="pills-{{ type.value }}-tab" data-mdb-target="#pills-{{ type.value }}" type="button" role="tab" aria-controls="pills-{{ type.value }}" aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
+                    {{ type.description }}
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content" id="pills-tabContent2">
+            {% for type in types %}
+            <div class="tab-pane fade {% if loop.first %}show active{% endif %}" id="pills-{{ type.value }}" role="tabpanel" aria-labelledby="pills-{{ type.value }}-tab">
+                <div class="row">
+                    {% for space in spaces %}
+                    {% if space.type == type %}
+                    <div class="col-md-4 mb-4">
+                        <a href="{{ url_for('main.space_details', id=space.id) }}" class="card-link text-decoration-none">
+                            <div class="card bg-image">
+                                <div class="view overlay zoom">
+                                    <img src="{{ space.image_poster }}" class="img-fluid w-100" alt="{{ space.name }}">
+                                    <div class="mask flex-center" style="background: linear-gradient(0deg, rgba(30,30,30,0) 30%, rgba(30,30,30,1) 100%);">
+                                        <div class="text-white p-4">
+                                            <h5 class="card-title">{{ space.name }}</h5>
+                                            <p class="card-text">{{ space.description | truncate(50, true, '...') | striptags }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <hr class="my-5">
+
+    <h1 class="text-center mb-4">ميزات مساحة العمل</h1>
+    <section>
+        <div class="row">
+            <div class="col-md-4 gx-5 mb-4">
+                <div class="bg-image hover-overlay shadow-2-strong" data-mdb-ripple-init=""
+                     data-mdb-ripple-color="light">
+                    <img src="/static/images/adef-community.jpg" class="img-fluid">
+                    <a href="#!">
+                        <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-8 gx-5 mb-4">
+                <!--                    <h4><strong>Features</strong></h4>-->
+                <div class="row gx-lg-5">
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-wifi fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">انترنت عالي السرعة</p>
+                                <p class="text-muted mb-1">
+                                    ضروري لأي عمل عصري تقريبًا، وخاصة المهام الرقمية.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-desktop fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">مساحة مكتبية</p>
+                                <p class="text-muted mb-1">
+                                    خيارات متنوعة تبدأ من الطاولات المتاحة (أولوية الحضور) إلى الطاولات الخاصة.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-users fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">قاعات الإجتماعات</p>
+                                <p class="text-muted mb-1">
+                                    مساحات مجهزة للاجتماعات الخاصة أو مكالمات العملاء.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-print fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">مرافق الطباعة والمسح الضوئي</p>
+                                <p class="text-muted mb-1">
+                                    معدات مكتبية أساسية لتلبية الاحتياجات اليومية.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-utensils fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">مرافق المطبخ</p>
+                                <p class="text-muted mb-1">
+                                    تشمل آلات صنع القهوة وأجهزة الميكروويف والمشروبات وأحيانًا الوجبات الخفيفة.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-couch fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">المساحات المشتركة</p>
+                                <p class="text-muted mb-1">
+                                    صالات ومناطق استراحة للراحة والاجتماعات غير الرسمية
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-calendar-alt fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">الفعاليات المجتمعية</p>
+                                <p class="text-muted mb-1">
+                                    ورش العمل والفعاليات الشبكية والتجمعات الاجتماعية.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-tools fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">المعدات المتخصصة</p>
+                                <p class="text-muted mb-1">
+                                    مثل طابعات ثلاثية الأبعاد ومعدات التصوير والتسجيل الفوتوغرافي والفيديوي عالية الجودة
+                                    أو استديو التسجيل الصوتي.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-5">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0">
+                                <div class="p-3 badge-primary rounded-4">
+                                    <i class="fas fa-palette fa-lg text-primary fa-fw"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-4">
+                                <p class="fw-bold mb-1">المبادرات الثقافية والفنية</p>
+                                <p class="text-muted mb-1">
+                                    معارض الفنون والأحداث الموسيقية أو الندوات الثقافية.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--                        <div class="col-lg-4 mb-5">-->
+                    <!--                          <div class="d-flex align-items-start">-->
+                    <!--                            <div class="flex-shrink-0">-->
+                    <!--                              <div class="p-3 badge-primary rounded-4">-->
+                    <!--                                <i class="fas fa-leaf fa-lg text-primary fa-fw"></i>-->
+                    <!--                              </div>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="flex-grow-1 ms-4">-->
+                    <!--                              <p class="fw-bold mb-1">Sustainable Practices</p>-->
+                    <!--                              <p class="text-muted mb-1">-->
+                    <!--                                  Eco-friendly designs, recycling programs, or energy-saving technologies.-->
+                    <!--                              </p>-->
+                    <!--                            </div>-->
+                    <!--                          </div>-->
+                    <!--                        </div>-->
+
+                    <!--                        <div class="col-lg-4 mb-5">-->
+                    <!--                          <div class="d-flex align-items-start">-->
+                    <!--                            <div class="flex-shrink-0">-->
+                    <!--                              <div class="p-3 badge-primary rounded-4">-->
+                    <!--                                <i class="fas fa-snowflake fa-lg text-primary fa-fw"></i>-->
+                    <!--                              </div>-->
+                    <!--                            </div>-->
+                    <!--                            <div class="flex-grow-1 ms-4">-->
+                    <!--                              <p class="fw-bold mb-1">Air Conditioner</p>-->
+                    <!--&lt;!&ndash;                              <p class="text-muted mb-1"></p>&ndash;&gt;-->
+                    <!--&lt;!&ndash;                              <small><a href="">Learn more</a></small>&ndash;&gt;-->
+                    <!--                            </div>-->
+                    <!--                          </div>-->
+                    <!--                        </div>-->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--Section: Content-->
+    <!--        <section class="text-center">-->
+    <!--            <h4 class="mb-5"><strong>Facilis consequatur eligendi</strong></h4>-->
+
+    <!--            <div class="row">-->
+    <!--                <div class="col-lg-4 col-md-12 mb-4">-->
+    <!--                    <div class="card">-->
+    <!--                        <div class="bg-image hover-overlay" data-mdb-ripple-init="" data-mdb-ripple-color="light">-->
+    <!--                            <img src="https://mdbootstrap.com/img/new/standard/nature/184.jpg" class="img-fluid">-->
+    <!--                            <a href="#!">-->
+    <!--                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>-->
+    <!--                            </a>-->
+    <!--                        </div>-->
+    <!--                        <div class="card-body">-->
+    <!--                            <h5 class="card-title">Card title</h5>-->
+    <!--                            <p class="card-text">-->
+    <!--                                Some quick example text to build on the card title and make up the bulk of the-->
+    <!--                                card's content.-->
+    <!--                            </p>-->
+    <!--                            <a href="#!" class="btn btn-primary" data-mdb-ripple-init="">Button</a>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--                <div class="col-lg-4 col-md-6 mb-4">-->
+    <!--                    <div class="card">-->
+    <!--                        <div class="bg-image hover-overlay" data-mdb-ripple-init="" data-mdb-ripple-color="light">-->
+    <!--                            <img src="https://mdbootstrap.com/img/new/standard/nature/023.jpg" class="img-fluid">-->
+    <!--                            <a href="#!">-->
+    <!--                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>-->
+    <!--                            </a>-->
+    <!--                        </div>-->
+    <!--                        <div class="card-body">-->
+    <!--                            <h5 class="card-title">Card title</h5>-->
+    <!--                            <p class="card-text">-->
+    <!--                                Some quick example text to build on the card title and make up the bulk of the-->
+    <!--                                card's content.-->
+    <!--                            </p>-->
+    <!--                            <a href="#!" class="btn btn-primary" data-mdb-ripple-init="">Button</a>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+
+    <!--                <div class="col-lg-4 col-md-6 mb-4">-->
+    <!--                    <div class="card">-->
+    <!--                        <div class="bg-image hover-overlay" data-mdb-ripple-init="" data-mdb-ripple-color="light">-->
+    <!--                            <img src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="img-fluid">-->
+    <!--                            <a href="#!">-->
+    <!--                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>-->
+    <!--                            </a>-->
+    <!--                        </div>-->
+    <!--                        <div class="card-body">-->
+    <!--                            <h5 class="card-title">Card title</h5>-->
+    <!--                            <p class="card-text">-->
+    <!--                                Some quick example text to build on the card title and make up the bulk of the-->
+    <!--                                card's content.-->
+    <!--                            </p>-->
+    <!--                            <a href="#!" class="btn btn-primary" data-mdb-ripple-init="">Button</a>-->
+    <!--                        </div>-->
+    <!--                    </div>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--Section: Content-->
+
+    <!--Section: Content-->
+    <!--        <section class="mb-5">-->
+    <!--            <h4 class="mb-5 text-center"><strong>Facilis consequatur eligendi</strong></h4>-->
+
+    <!--            <div class="row d-flex justify-content-center">-->
+    <!--                <div class="col-md-6">-->
+    <!--                    <form>-->
+    <!--                        &lt;!&ndash; 2 column grid layout with text inputs for the first and last names &ndash;&gt;-->
+    <!--                        <div class="row mb-4">-->
+    <!--                            <div class="col">-->
+    <!--                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">-->
+    <!--                                    <input type="text" id="form3Example1" class="form-control">-->
+    <!--                                    <label class="form-label" for="form3Example1" style="margin-left: 0px;">First-->
+    <!--                                        name</label>-->
+    <!--                                    <div class="form-notch">-->
+    <!--                                        <div class="form-notch-leading" style="width: 9px;"></div>-->
+    <!--                                        <div class="form-notch-middle" style="width: 68.8px;"></div>-->
+    <!--                                        <div class="form-notch-trailing"></div>-->
+    <!--                                    </div>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                            <div class="col">-->
+    <!--                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">-->
+    <!--                                    <input type="text" id="form3Example2" class="form-control">-->
+    <!--                                    <label class="form-label" for="form3Example2" style="margin-left: 0px;">Last-->
+    <!--                                        name</label>-->
+    <!--                                    <div class="form-notch">-->
+    <!--                                        <div class="form-notch-leading" style="width: 9px;"></div>-->
+    <!--                                        <div class="form-notch-middle" style="width: 68px;"></div>-->
+    <!--                                        <div class="form-notch-trailing"></div>-->
+    <!--                                    </div>-->
+    <!--                                </div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                        &lt;!&ndash; Email input &ndash;&gt;-->
+    <!--                        <div class="form-outline mb-4" data-mdb-input-init="" data-mdb-input-initialized="true">-->
+    <!--                            <input type="email" id="form3Example3" class="form-control">-->
+    <!--                            <label class="form-label" for="form3Example3" style="margin-left: 0px;">Email-->
+    <!--                                address</label>-->
+    <!--                            <div class="form-notch">-->
+    <!--                                <div class="form-notch-leading" style="width: 9px;"></div>-->
+    <!--                                <div class="form-notch-middle" style="width: 88.8px;"></div>-->
+    <!--                                <div class="form-notch-trailing"></div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                        &lt;!&ndash; Password input &ndash;&gt;-->
+    <!--                        <div class="form-outline mb-4" data-mdb-input-init="" data-mdb-input-initialized="true">-->
+    <!--                            <input type="password" id="form3Example4" class="form-control">-->
+    <!--                            <label class="form-label" for="form3Example4" style="margin-left: 0px;">Password</label>-->
+    <!--                            <div class="form-notch">-->
+    <!--                                <div class="form-notch-leading" style="width: 9px;"></div>-->
+    <!--                                <div class="form-notch-middle" style="width: 64.8px;"></div>-->
+    <!--                                <div class="form-notch-trailing"></div>-->
+    <!--                            </div>-->
+    <!--                        </div>-->
+
+    <!--                        &lt;!&ndash; Checkbox &ndash;&gt;-->
+    <!--                        <div class="form-check d-flex justify-content-center mb-4">-->
+    <!--                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" checked="">-->
+    <!--                            <label class="form-check-label" for="form2Example3">-->
+    <!--                                Subscribe to our newsletter-->
+    <!--                            </label>-->
+    <!--                        </div>-->
+
+    <!--                        &lt;!&ndash; Submit button &ndash;&gt;-->
+    <!--                        <button type="submit" class="btn btn-primary btn-block mb-4" data-mdb-ripple-init="">-->
+    <!--                            Sign up-->
+    <!--                        </button>-->
+
+    <!--                        &lt;!&ndash; Register buttons &ndash;&gt;-->
+    <!--                        <div class="text-center">-->
+    <!--                            <p>or sign up with:</p>-->
+    <!--                            <button type="button" class="btn btn-primary btn-floating mx-1" data-mdb-ripple-init="">-->
+    <!--                                <i class="fab fa-facebook-f"></i>-->
+    <!--                            </button>-->
+
+    <!--                            <button type="button" class="btn btn-primary btn-floating mx-1" data-mdb-ripple-init="">-->
+    <!--                                <i class="fab fa-google"></i>-->
+    <!--                            </button>-->
+
+    <!--                            <button type="button" class="btn btn-primary btn-floating mx-1" data-mdb-ripple-init="">-->
+    <!--                                <i class="fab fa-twitter"></i>-->
+    <!--                            </button>-->
+
+    <!--                            <button type="button" class="btn btn-primary btn-floating mx-1" data-mdb-ripple-init="">-->
+    <!--                                <i class="fab fa-github"></i>-->
+    <!--                            </button>-->
+    <!--                        </div>-->
+    <!--                    </form>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--Section: Content-->
+</div>
 {% endblock %}

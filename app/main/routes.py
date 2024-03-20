@@ -1,15 +1,28 @@
 from flask import render_template
 from flask_login import login_required
 
+from app.enums import SpaceType
 from app.main import bp
 from app.models import Space, Category, Tool
 from app.utils import get_file_response
 
 
 @bp.route("/")
-@login_required
 def main_page():
-    return render_template('default/home.html', name="hello")
+    spaces = Space.query.filter(Space.type != SpaceType.undefined).all()
+    tools = Tool.query.all()
+    types = [spaceType for spaceType in SpaceType if spaceType.value != 0]
+    return render_template(
+        'default/home.html', types=types, spaces=spaces, tools=tools
+    )
+
+
+@bp.route("/about")
+# @login_required
+def about():
+    spaces = Space.query.all()
+    tools = Tool.query.all()
+    return render_template('default/about.html', spaces=spaces, tools=tools)
 
 
 @bp.route('/uploads/<directory>/<filename>')

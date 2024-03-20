@@ -7,6 +7,7 @@ from flask_login import current_user, login_required
 from app import db
 from app.dashboard.space import bp
 from app.dashboard.space.forms import SpaceForm
+from app.enums import SpaceType
 from app.models import Space, Tool, Image, Category
 from app.utils import save_file
 
@@ -43,6 +44,7 @@ def delete_space(id):
 @login_required
 def create_space():
     form = SpaceForm()
+    form.type.choices = SpaceType.choices()
     categories = Category.query.all()
     if current_user.role.name == "admin":
         cp_tmp = list(form.category_prices.data)
@@ -94,6 +96,7 @@ def create_space():
 def update_space(id):
     if current_user.role.name == "admin":
         form = SpaceForm()
+        form.type.choices = SpaceType.choices()
         space = Space.query.get(id)
         categories = Category.query.all()
 
@@ -113,6 +116,7 @@ def update_space(id):
             form.guidelines.data = space.guidelines
             form.description.data = space.description
             form.has_operator.data = space.has_operator
+            form.type.data = space.type.name
 
             form.process_cat_prices(space.get_category_prices())
             return render_template(
@@ -130,6 +134,7 @@ def update_space(id):
                 space.description = form.description.data
                 space.guidelines = form.guidelines.data
                 space.capacity = form.capacity.data
+                space.type = form.type.data
 
                 for cat_price in space.category_prices:
                     db.session.delete(cat_price)
