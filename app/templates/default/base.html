@@ -132,7 +132,7 @@
                 </ul>
                 </div>
                 {% else %}
-                <a data-mdb-ripple-init="" href="/auth/login/" role="button" class="btn btn-primary btn-rounded"
+                <a data-mdb-ripple-init="" href="{{ url_for ('auth.login_page') }}" role="button" class="btn btn-primary btn-rounded"
                    style="">تسجيل الدخول</a>
                 {% endif %}
 
