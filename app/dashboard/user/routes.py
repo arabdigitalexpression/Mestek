@@ -12,7 +12,7 @@ from app.dashboard.user.forms import (
 )
 from app.enums import Gender
 from app.models import User, Category, Role, Organization
-from app.utils import save_file, remove_file
+from app.utils import process_and_save_image, remove_file
 
 
 @bp.route('/')
@@ -84,7 +84,7 @@ def create_user():
                     website_url=website_url,
                     gender=gender,
                     birthday=birthday,
-                    avatar_url=save_file("user", form.avatar_url.data) if form.avatar_url.data else None,
+                    avatar_url=process_and_save_image("user", form.avatar_url.data) if form.avatar_url.data else None,
                     activated=True,
                     role=Role.query.get(role) if not role == 0 else None,
                     category=Category.query.get(
@@ -153,7 +153,7 @@ def update_user(username):
             if user.avatar_url:
                 remove_file("user", user.avatar_url.split("/")[-1])
             if form_user.avatar_url.data:
-                user.avatar_url = save_file("user", form_user.avatar_url.data)
+                user.avatar_url = process_and_save_image("user", form_user.avatar_url.data)
             user.role = Role.query.get(
                 form_user.role.data) if not form_user.role.data == 0 else None
             user.category = Category.query.get(

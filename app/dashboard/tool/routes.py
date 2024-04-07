@@ -8,7 +8,7 @@ from app import db
 from app.dashboard.tool import bp
 from app.dashboard.tool.forms import ToolForm
 from app.models import Space, Tool, Image, Category
-from app.utils import save_file
+from app.utils import process_and_save_image
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -75,7 +75,7 @@ def create_tool():
             for file in form.images.data:
                 if not file:
                     continue
-                url = save_file("tool", file)
+                url = process_and_save_image("tool", file)
                 images_objs.append(Image(tool=tool, url=url))
             tool.images = images_objs
             db.session.add(tool)
@@ -154,7 +154,7 @@ def update_tool(id):
                     print(file)
                     if not file:
                         continue
-                    url = save_file("tool", file)
+                    url = process_and_save_image("tool", file)
                     images_objs.append(Image(tool=tool, url=url))
                 db.session.add_all(images_objs)
                 db.session.commit()

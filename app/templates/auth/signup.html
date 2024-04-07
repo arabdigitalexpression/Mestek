@@ -25,7 +25,7 @@ content %}
                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                     {{ form.lastName }}
                                 </div>
-                                 <div class="col-sm-4 mb-3 mb-sm-0">
+                                <div class="col-sm-4 mb-3 mb-sm-0">
                                     {{ form.gender }}
                                 </div>
                             </div>
@@ -54,6 +54,26 @@ content %}
                                 <div class="col-sm-6">
                                     {{ form.confirm_password }}
                                 </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12 mb-3 mb-sm-0">
+                                    <input class="form-check-input" type="checkbox" value="" id="toc-privacy"
+                                           required="">
+                                    <label class="form-check-label" for="toc-privacy">
+                                        بالنقر فوق "تسجيل الحساب"، فإنك توافق على
+                                        <a href="{{ url_for ('main.toc') }}">الشروط</a>
+                                        و
+                                        <a href="{{ url_for ('main.privacy') }}">سياسة الخصوصية</a>
+                                        و
+                                        <a href="https://adef.xyz/wiki/%D9%85%D8%AF%D9%88%D9%86%D8%A9_%D8%A7%D9%84%D8%B3%D9%84%D9%88%D9%83#.D8.B3.D9.8A.D8.A7.D8.B3.D8.A9_.D9.85.D9.86.D8.A7.D9.87.D8.B6.D8.A9_.D8.A7.D9.84.D8.AA.D8.AD.D8.B1.D8.B4_.D9.88.D8.A7.D9.84.D8.AA.D9.85.D9.8A.D9.8A.D8.B2_.D9.88.D8.A7.D9.84.D8.B9.D9.86.D9.81">سياسة
+                                            مناهضة التحرش والتمييز والعنف</a>
+                                        و
+                                        <a href="https://adef.xyz/wiki/%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9:%D8%AF%D9%84%D9%8A%D9%84_%D8%B3%D9%8A%D8%A7%D8%B3%D8%A9_%D8%AD%D9%85%D8%A7%D9%8A%D8%A9_%D8%A7%D9%84%D8%B7%D9%81%D9%84_2022">دليل
+                                            سياسة حماية الطفل</a>
+                                        الخاصة بنا.
+                                    </label>
+                                </div>
+
                             </div>
                             {{ form.submit }}
                         </form>

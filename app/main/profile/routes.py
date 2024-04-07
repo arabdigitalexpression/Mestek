@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from app import db
 from app.main.profile import bp
 from app.main.profile.forms import EditUserForm, ChangePasswordForm
-from app.utils import save_file, remove_file
+from app.utils import process_and_save_image, remove_file
 
 
 @bp.route('/')
@@ -37,7 +37,7 @@ def profile_edit():
         if current_user.avatar_url:
             remove_file("user", current_user.avatar_url.split("/")[-1])
         if form.avatar_url.data:
-            current_user.avatar_url = save_file("user", form.avatar_url.data)
+            current_user.avatar_url = process_and_save_image("user", form.avatar_url.data)
         db.session.commit()
         return redirect(url_for("main.profile.profile"))
     form.firstName.data = current_user.first_name

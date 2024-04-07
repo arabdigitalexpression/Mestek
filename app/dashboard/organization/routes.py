@@ -9,7 +9,7 @@ from app.dashboard.forms import ConfirmForm
 from app.dashboard.organization import bp
 from app.dashboard.organization.forms import OrganizationForm
 from app.models import Organization, Category
-from app.utils import save_file, remove_file
+from app.utils import process_and_save_image, remove_file
 
 
 @bp.route('/')
@@ -68,7 +68,7 @@ def create_organization():
                     website_url=website_url,
                     address=address,
                     phone=phone,
-                    logo_url=save_file("organization", form.logo_url.data) if form.logo_url.data else None,
+                    logo_url=process_and_save_image("organization", form.logo_url.data) if form.logo_url.data else None,
                     category=Category.query.get(category) if not category == 0 else None
                 )
                 db.session.add(organization)
@@ -113,7 +113,7 @@ def update_organization(name):
             if organization.logo_url:
                 remove_file("organization", organization.logo_url.split("/")[-1])
             if form.logo_url.data:
-                organization.logo_url = save_file("organization", form.logo_url.data)
+                organization.logo_url = process_and_save_image("organization", form.logo_url.data)
             organization.category = Category.query.get(
                 form.category.data) if not form.category.data == 0 else None
             db.session.commit()

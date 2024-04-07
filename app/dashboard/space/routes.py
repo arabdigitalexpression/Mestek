@@ -9,7 +9,7 @@ from app.dashboard.space import bp
 from app.dashboard.space.forms import SpaceForm
 from app.enums import SpaceType
 from app.models import Space, Tool, Image, Category
-from app.utils import save_file
+from app.utils import process_and_save_image
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -74,7 +74,7 @@ def create_space():
             for file in form.images.data:
                 if not file:
                     continue
-                url = save_file("space", file)
+                url = process_and_save_image("space", file)
                 images_objs.append(Image(space=space, url=url))
             space.images = images_objs
             db.session.add(space)
@@ -147,7 +147,7 @@ def update_space(id):
                 for file in form.images.data:
                     if not file:
                         continue
-                    url = save_file("space", file)
+                    url = process_and_save_image("space", file)
                     images_objs.append(Image(space=space, url=url))
                 db.session.add_all(images_objs)
                 db.session.commit()

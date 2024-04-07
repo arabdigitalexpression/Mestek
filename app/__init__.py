@@ -1,3 +1,5 @@
+from os import path
+
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
@@ -7,9 +9,8 @@ app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "you-will-never-guess"
 
-app.config['MAX_CONTENT_LENGTH'] = 8 * 1000 * 1000
-app.config["UPLOAD_PATH"] = "uploads"
-app.config["APP_PATH"] = app.root_path
+app.config['MAX_CONTENT_LENGTH'] = 24 * 1000 * 1000
+app.config["UPLOAD_PATH"] = path.join(app.root_path, "uploads")
 
 # The Sqlite database file is in '../test.db' relative path
 # 'sqlite:///' is database with '../test.db' is the project directory
