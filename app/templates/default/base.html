@@ -54,13 +54,13 @@
             <div class="collapse navbar-collapse" id="navbarExample01" data-mdb-collapse-initialized="true">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/spaces">المساحات</a>
+                        <a class="nav-link" href="{{url_for('main.spaces_list')}}">المساحات</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/tools" rel="nofollow">الأدوات</a>
+                        <a class="nav-link" href="{{url_for('main.tools_list')}}" rel="nofollow">الأدوات</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/about">عن أضف</a>
+                        <a class="nav-link" href="{{url_for('main.about')}}">عن أضف</a>
                     </li>
                     <!--                    <li class="nav-item">-->
                     <!--                        <a class="nav-link" href="/contact">تواصل معنا</a>-->
@@ -280,8 +280,8 @@
                     <h6 class="text-uppercase fw-bold mb-4">
                         الخدمات
                     </h6>
-                    <p><a href="/spaces" class="text-reset">مساحات العمل المشتركة</a></p>
-                    <p><a href="/tools" class="text-reset">معدات متخصصة</a></p>
+                    <p><a href="{{url_for('main.spaces_list')}}" class="text-reset">مساحات العمل المشتركة</a></p>
+                    <p><a href="{{url_for('main.tools_list')}}" class="text-reset">معدات متخصصة</a></p>
                 </div>
                 <!-- Grid column -->
 
@@ -290,10 +290,10 @@
                     <h6 class="text-uppercase fw-bold mb-4">
                         الموارد
                     </h6>
-                    <p><a href="/about" class="text-reset">عن أضف</a></p>
+                    <p><a href="{{url_for('main.about')}}" class="text-reset">عن أضف</a></p>
                     <p><a href="/faq" class="text-reset">الأسئلة الشائعة</a></p>
-                    <p><a href="/privacy" class="text-reset">سياسة الخصوصية</a></p>
-                    <p><a href="/tos" class="text-reset">شروط الاستخدام</a></p>
+                    <p><a href="{{url_for('main.privacy')}}" class="text-reset">سياسة الخصوصية</a></p>
+                    <p><a href="{{url_for('main.toc')}}" class="text-reset">شروط الاستخدام</a></p>
                 </div>
                 <!-- Grid column -->
 
@@ -308,8 +308,8 @@
                         <i class="fas fa-envelope me-3"></i>
                         <a href="mailto:info@arabdigitalexpression.org">info@arabdigitalexpression.org</a>
                     </p>
-                    <p><i class="fas fa-phone me-3"></i>+20 2 25050105</p>
-                    <p><i class="fas fa-phone me-3"></i>+20 109 988 3369</p>
+                    <p><i class="fas fa-phone me-3"></i> <span dir="ltr">+202 25050105</span></p>
+                    <p><i class="fas fa-phone me-3"></i> <span dir="ltr">+20 109 988 3369</span></p>
                 </div>
                 <!-- Grid column -->
             </div>

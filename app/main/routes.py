@@ -25,6 +25,18 @@ def about():
     return render_template('default/about.html', spaces=spaces, tools=tools)
 
 
+@bp.route("/privacy")
+# @login_required
+def privacy():
+    return render_template('default/privacy.html')
+
+
+@bp.route("/toc")
+# @login_required
+def toc():
+    return render_template('default/toc.html')
+
+
 @bp.route('/uploads/<directory>/<filename>')
 def download_file(directory, filename):
     return get_file_response(directory, filename)
