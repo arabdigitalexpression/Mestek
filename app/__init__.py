@@ -1,4 +1,5 @@
 from os import path
+from decouple import config
 
 from flask import Flask
 from flask_login import LoginManager
@@ -7,9 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-app.config["SECRET_KEY"] = "you-will-never-guess"
-
-app.config['MAX_CONTENT_LENGTH'] = 24 * 1000 * 1000
+app.config.from_object(config("APP_SETTINGS"))
 app.config["UPLOAD_PATH"] = path.join(app.root_path, "uploads")
 
 # The Sqlite database file is in '../test.db' relative path

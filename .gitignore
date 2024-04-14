@@ -136,3 +136,4 @@ dmypy.json
 /app/uploads/
 /app/uploads/space/
 /app/uploads/tool/
+/*.run/

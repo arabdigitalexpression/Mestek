@@ -25,7 +25,7 @@ class DescriptiveEnum(Enum):
 
 
 class PriceUnit(DescriptiveEnum):
-    egp = 0, "E£"
+    egp = 0, "EGP"
     usd = 1, "$"
 
 
