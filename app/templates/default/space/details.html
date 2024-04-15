@@ -281,7 +281,7 @@ color: #4782d3;
 {% block content %}
 
 <div class="container pb50">
-    <div class="row">
+    <div class="row pt-3">
         <div class="col-md-9 mb40">
             <article>
                 <img {% if space.images|length> 0 %}
@@ -290,7 +290,12 @@ color: #4782d3;
                 src="{{ url_for('static',filename='images/no_photo.svg') }}"
                 {% endif %} alt="{{space.name}}" class="img-fluid mb30 hero-img">
                 <div class="post-content">
-                    <h2>{{space.name}}</h2>
+                    <div class="row">
+                        <div class="col-10"><h2>{{space.name}}</h2></div>
+                        <div class="col-1">
+                        <a data-mdb-ripple-init="" href="{{ url_for('main.reservation.create_reservation_space') }}" role="button" style="" class="btn btn-info btn-lg btn-rounded">حجز</a>
+                        </div>
+                    </div>
                     {% if space.description %}
                     <p class="lead mt-5">{{space.description | safe}} </p>
                     {% endif %}
