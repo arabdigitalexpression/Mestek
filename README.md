@@ -4,7 +4,7 @@
 
 <br />
 <div align="center">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="/app/static/images/adef.png" alt="Logo" width="80" height="80">
   <p align="center">
     <a href="https://github.com/arabdigitalexpression/Mestek/issues">Report Bug</a>
     ·
@@ -40,7 +40,7 @@
 
 ## About The Project
 
-The story of this project begins in Arab Digital Expression Foundation when we need to make our friends from non profit organizations and civil associations life easier with mangaging there own spaces and renting thier tools. We needed to find a online solution for spaces and tools reservations.
+The story of this project begins in Arab Digital Expression Foundation when we needed to make our friends from non-profit organizations and civil associations life easier with mangaging there own spaces and renting thier tools. We needed to find a online solution for spaces and tools reservations.
 
 We've quickly evaluated a couple of existing solutions, but they were either too big and complicated and/or too expensive. As We assumed that other people would have the same challenge We had, We decided to spend our after-hours time making an open-source tailored platform for the need and it is for free use.
 
@@ -51,7 +51,7 @@ What our platform can do:
 - Platform can deployed online or on a dedicated internal server inside your organization.
 - Administrators has a visually statistics for reservations.
 
-Of course, no platform will serve all organizations need since your needs may be different. So I'll be adding more soon. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks in advance to all the people who will contribute to expanding this platform!
+Of course, no platform will serve all organizations needs since your needs may be different. So I'll be adding more soon. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks in advance to all the people who will contribute to expanding this platform!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -156,14 +156,9 @@ You should:
    $ pip3 install -r requirements.txt
    ```
 
+   - Create environment variables (see <a href="/.env-example">example .env file</a>):
    ```sh
-   $ vi app/__init__.py
-   ```
-
-   - update this line with the database name and user information.
-
-   ```sh
-   $ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://<username>:<password>@<host>/<database_name>"
+   $ vi .env
    ```
 
    ```sh

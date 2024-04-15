@@ -16,6 +16,7 @@ from app.models import (
     Tool, Calendar, User, CategorySpace,
     CategoryTool, Space, Reservation, Interval
 )
+from app.utils import send_email
 
 
 @bp.route('/', methods=['GET'])
@@ -257,6 +258,16 @@ def reserve_space(args):
     reservation.intervals = intervals
     db.session.add(reservation)
     db.session.commit()
+
+    template_name = "emails/reservation_created.html"
+    reservations_url = url_for('main.profile.profile_reservation', _external=True)
+    template_data = {
+        'name': user.full_name,
+        'reservations_url': reservations_url,
+        'subject': 'لقد قمت بالحجز بنجاح.'
+    }
+    send_email(user.email, user.full_name, template_name, template_data)
+
     return jsonify({
         "status": "OK",
         "message": f"تم حجز المساحة",

@@ -15,6 +15,7 @@ from app.models import (
     Reservation, Space, Tool, User,
     Calendar, Interval
 )
+from app.utils import send_email
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -87,6 +88,19 @@ def update_reservation(pk):
             if form.validate_on_submit():
                 form.populate_obj(reservation)
                 db.session.commit()
+
+                template_name = "emails/reservation_updated.html"
+                reservations_url = url_for('main.profile.profile_reservation', _external=True)
+                template_data = {
+                    'name': reservation.user.full_name,
+                    'reservations_url': reservations_url,
+                    'subject': 'تم تحديث معلومات الحجز.'
+                }
+                send_email(
+                    reservation.user.email, reservation.user.full_name,
+                    template_name, template_data
+                )
+
                 return redirect(url_for("dashboard.reservation.get_reservations"))
             return render_template(
                 'dashboard/reservation/details.html',

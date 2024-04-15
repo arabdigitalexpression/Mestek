@@ -145,6 +145,20 @@
 
 <!--Main layout-->
 <main id="page-main-content">
+    <!-- messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="row" style="z-index: 9999;">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mb-0 alert-dismissible alert-relative fade show" role="alert" data-mdb-color="secondary">
+            {{message}}
+          <button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     {% block content %}{% endblock %}
 </main>
 <!--Main layout-->
@@ -355,6 +369,31 @@
         document.body.scrollTop = 0;
         document.documentElement.scrollTop = 0;
     }
+
+
+    window.setTimeout(function() {
+    // Select all elements with the class 'alert'
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            // Apply a fade out effect
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+
+            // Wait for the fade out to finish
+            setTimeout(() => {
+                // Slide up effect
+                alert.style.transition = 'height 0.5s, margin 0.5s, padding 0.5s';
+                alert.style.height = '0';
+                alert.style.margin = '0';
+                alert.style.padding = '0';
+
+                // Wait for the slide up to finish then remove the element
+                setTimeout(() => {
+                    alert.remove();
+                }, 500); // Matches the slide up duration
+            }, 500); // Matches the fade out duration
+        });
+    }, 4000);
 </script>
 {% block scripts %}
 {% endblock %}

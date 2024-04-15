@@ -11,7 +11,10 @@ from app.utils import get_file_response
 def main_page():
     spaces = Space.query.filter(Space.type != SpaceType.undefined).all()
     tools = Tool.query.all()
-    types = [spaceType for spaceType in SpaceType if spaceType.value != 0]
+    # Create a set of types that are actually used in spaces
+    used_types = {space.type for space in spaces if space.type.value != 0}
+    # Convert set to list if needed or use directly in template
+    types = list(used_types)
     return render_template(
         'default/home.html', types=types, spaces=spaces, tools=tools
     )

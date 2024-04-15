@@ -5,6 +5,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from mailjet_rest import Client
 
 app = Flask(__name__)
 
@@ -17,6 +18,13 @@ login = LoginManager(app)
 # force users to login if they visited protected page
 # that needs authentication
 login.login_view = "auth.login_page"
+login.login_message_category = "danger"
+
+mailjet = Client(
+    auth=(app.config['MAILJET_API_KEY'], app.config['MAILJET_API_SECRET']),
+    version='v3.1'
+)
+
 
 from app.main import bp as main_bp
 from app.main.profile import bp as profile_main_bp
