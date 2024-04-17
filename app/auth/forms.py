@@ -4,9 +4,10 @@ from wtforms import (
     SelectField
 )
 from wtforms.validators import (
-    DataRequired, Length, EqualTo
+    DataRequired, Length, EqualTo, ValidationError
 )
 from app.enums import Gender
+from app.models import User
 
 
 class LoginForm(FlaskForm):
@@ -84,3 +85,11 @@ class SignupForm(FlaskForm):
                          render_kw={
                              "class": "btn btn-primary btn-user btn-block",
                          })
+
+    def validate_userName(self, field):
+        if User.query.filter_by(username=field.data).first():
+            raise ValidationError('اسم المستخدم هذا تم استخدامه. الرجاء اختيار واحد مختلف.')
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data).first():
+            raise ValidationError('البريد الإلكتروني هذا تم استخدامه. الرجاء اختيار واحد مختلف.')

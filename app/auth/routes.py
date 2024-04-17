@@ -15,56 +15,47 @@ from app.utils import send_confirmation, confirm_token
 
 @bp.route("/signup", methods=["GET", "POST"])
 def signup_page():
-    if current_user.is_authenticated and current_user.role.name == 'admin':
-        return redirect(url_for("dashboard.dashboard"))
-    elif current_user.is_authenticated and current_user.role.name == 'user':
-        return redirect(url_for("main.main_page"))
+    if current_user.is_authenticated:
+        if current_user.role.name == 'admin':
+            return redirect(url_for("dashboard.dashboard"))
+        elif current_user.role.name == 'user':
+            return redirect(url_for("main.main_page"))
+
     form = SignupForm()
     categories = Category.query.all()
     form.category.choices = [(c.id, c.name) for c in categories]
     form.category.choices.insert(0, ("", "-- اختر تصنيف --"))
-    if request.method == "POST":
-        if form.validate_on_submit():
-            first_name = form.firstName.data
-            last_name = form.lastName.data
-            username = form.userName.data
-            email = form.email.data
-            gender = form.gender.data
-            password = form.password.data
-            category = form.category.data
-            phone = form.phone.data
-            user = User.query.get(email)
-            if user is None:
-                user = User(
-                    first_name=first_name,
-                    last_name=last_name,
-                    username=username,
-                    phone=phone,
-                    email=email,
-                    gender=gender,
-                    role=Role.query.get(2),
-                    category=Category.query.get(category)
-                )
-                user.make_password(password)
-                user.save()
-                login_user(user, remember=True)
-                # TODO: review the reservation/account flow
-                status_code, response = send_confirmation(user.email, user.full_name)
-                if status_code == 200:
-                    flash("A confirmation email has been sent via email.", "success")
-                    return redirect(url_for("main.main_page"))
-                else:
-                    e = "An error occurred: Failed to send confirmation email."
-                    current_app.logger.error(e)
-                    flash("An internal server error happened.", "danger")
-                    # return render_template('partials/500.html', error=e), 500
-                    return redirect(url_for("main.main_page"))
-            else:
-                # TODO: there's a logic error here, fix it!
-                errors = f"hey, There's a user with this email: {email}"
-                return render_template("auth/signup.html", form=form, errors=errors)
-        errors = f"Please check your form data again"
-        return render_template("auth/signup.html", form=form, errors=errors)
+
+    if form.validate_on_submit():
+        username = form.userName.data
+        email = form.email.data
+
+        user = User.query.filter((User.email == email) | (User.username == username)).first()
+        if user:
+            flash('An account already exists with this username or email.', 'error')
+            return render_template("auth/signup.html", form=form)
+
+        user = User(
+            first_name=form.firstName.data,
+            last_name=form.lastName.data,
+            username=username,
+            phone=form.phone.data,
+            email=email,
+            gender=form.gender.data,
+            role=Role.query.get(2),  # Assuming role with ID 2 is 'user'
+            category=Category.query.get(form.category.data)
+        )
+        user.make_password(form.password.data)
+        user.save()
+
+        status_code, response = send_confirmation(user.email, user.full_name)
+        if status_code == 200:
+            flash("تم إرسال رسالة تأكيد بالبريد الإلكتروني عبر البريد الإلكتروني.", "success")
+            return redirect(url_for("auth.login_page"))
+        else:
+            current_app.logger.error("Failed to send confirmation email")
+            flash("حدث خطأ أثناء إرسال رسالة التأكيد الإلكترونية.", "danger")
+            return redirect(url_for("auth.login_page"))
     return render_template("auth/signup.html", form=form)
 
 
@@ -109,19 +100,39 @@ def logout():
 
 
 @bp.route('/confirm/<token>')
-@login_required
 def confirm_email(token):
-    if current_user.activated:
-        flash("Account already confirmed.", "success")
-        return redirect(url_for("main.main_page"))
     email = confirm_token(token)
-    user = User.query.filter_by(email=current_user.email).first_or_404()
-    if user.email == email:
-        user.activated = True
-        db.session.add(user)
-        db.session.commit()
-        flash("You have confirmed your account. Thanks!", "success")
-    else:
-        flash("The confirmation link is invalid or has expired.", "danger")
-    return redirect(url_for('main.profile.profile'))
+    if not email:
+        flash("رابط التأكيد غير صالح أو انتهت صلاحيته.", "danger")
+        return redirect(url_for('auth.login_page'))
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.activated:
+        flash("لقد تم بالفعل تأكيد حسابك.", "success")
+        return redirect(url_for("main.main_page"))
 
+    user.activated = True
+    db.session.add(user)
+    db.session.commit()
+    login_user(user, remember=True)
+    flash("لقد أكدت حسابك. شكرًا!", "success")
+    return redirect(url_for('main.main_page'))
+
+
+@bp.route("/inactive")
+@login_required
+def inactive():
+    if current_user.activated:
+        return redirect(url_for("main.main_page"))
+    return render_template("profile/inactive.html")
+
+
+
+@bp.route("/resend")
+@login_required
+def resend_confirmation():
+    if current_user.activated:
+        flash("لقد تم بالفعل تأكيد حسابك.", "success")
+        return redirect(url_for("main.main_page"))
+    send_confirmation(current_user.email, current_user.full_name)
+    flash("تم إرسال رسالة تأكيد جديدة بالبريد الإلكتروني.", "success")
+    return redirect(url_for("auth.inactive"))

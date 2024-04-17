@@ -1,9 +1,11 @@
+from functools import wraps
 from os import path, remove, makedirs
 from itsdangerous import URLSafeTimedSerializer
 from uuid import uuid4
 from PIL import Image
 
-from flask import url_for, send_from_directory, current_app, render_template
+from flask import url_for, send_from_directory, current_app, render_template, flash, redirect
+from flask_login import current_user
 
 from app import app, mailjet
 
@@ -95,3 +97,14 @@ def send_confirmation(email, name):
         'subject': 'تأكيد بريدك الإلكتروني'
     }
     return send_email(email, name, template_name, template_data)
+
+
+def check_is_confirmed(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated and not current_user.activated:
+            flash("يرجى تأكيد حسابك!", "warning")
+            return redirect(url_for("auth.inactive"))
+        return func(*args, **kwargs)
+
+    return decorated_function
