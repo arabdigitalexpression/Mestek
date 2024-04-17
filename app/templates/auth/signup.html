@@ -1,23 +1,25 @@
-{% extends 'auth/base.html' %} {% block title %}signup{% endblock %} {% block
-content %}
+{% extends 'auth/base.html' %}
+
+{% block title %}تسجيل حساب جديد{% endblock %}
+
+{% block content %}
 <div class="container">
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
                 <div class="col-lg-5 d-none d-lg-block">
-                    <img src="{{ url_for('static',filename='images/sign_in.svg') }}" class="w-100 h-100 px-3">
+                    <img src="{{ url_for('static', filename='images/sign_in.svg') }}" class="w-100 h-100 px-3">
                 </div>
                 <div class="col-lg-7">
                     <div class="p-5">
                         <div class="text-center">
                             <h1 class="h4 text-primary mb-4">مرحباً بك</h1>
                         </div>
-                        <form class="user" action="{{ url_for('auth.signup_page') }}" class="form"
-                              method="POST">
-                            {{ form.hidden_tag() }} {{ form.csrf_token }}{% if errors%}
-                            <div class="alert alert-danger">{{ errors }}</div>
-                            {% endif %}
+                        <form class="user form" action="{{ url_for('auth.signup_page') }}" method="POST">
+                            {{ form.hidden_tag() }}
+                            {{ form.csrf_token }}
+
                             <div class="form-group row">
                                 <div class="col-sm-4 mb-3 mb-sm-0">
                                     {{ form.firstName }}
@@ -29,16 +31,33 @@ content %}
                                     {{ form.gender }}
                                 </div>
                             </div>
+
+                            {% if form.firstName.errors %}
+                                <div class="alert alert-danger">{{ form.firstName.errors[0] }}</div>
+                            {% endif %}
+                            {% if form.lastName.errors %}
+                                <div class="alert alert-danger">{{ form.lastName.errors[0] }}</div>
+                            {% endif %}
+                            {% if form.gender.errors %}
+                                <div class="alert alert-danger">{{ form.gender.errors[0] }}</div>
+                            {% endif %}
+
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     {{ form.userName }}
                                 </div>
                                 <div class="col-sm-6">
-                                    {% if form.category.errors %} {%for error in form.category.errors %}
-                                    <span class="form_error">{{ error }}</span>
-                                    {%endfor%} {% endif%} {{ form.category}}
+                                    {{ form.category }}
                                 </div>
                             </div>
+
+                            {% if form.userName.errors %}
+                                <div class="alert alert-danger">{{ form.userName.errors[0] }}</div>
+                            {% endif %}
+                            {% if form.category.errors %}
+                                <div class="alert alert-danger">{{ form.category.errors[0] }}</div>
+                            {% endif %}
+
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     {{ form.email }}
@@ -47,6 +66,14 @@ content %}
                                     {{ form.phone }}
                                 </div>
                             </div>
+
+                            {% if form.email.errors %}
+                                <div class="alert alert-danger">{{ form.email.errors[0] }}</div>
+                            {% endif %}
+                            {% if form.phone.errors %}
+                                <div class="alert alert-danger">{{ form.phone.errors[0] }}</div>
+                            {% endif %}
+
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
                                     {{ form.password }}
@@ -55,6 +82,14 @@ content %}
                                     {{ form.confirm_password }}
                                 </div>
                             </div>
+
+                            {% if form.password.errors %}
+                                <div class="alert alert-danger">{{ form.password.errors[0] }}</div>
+                            {% endif %}
+                            {% if form.confirm_password.errors %}
+                                <div class="alert alert-danger">{{ form.confirm_password.errors[0] }}</div>
+                            {% endif %}
+
                             <div class="form-group row">
                                 <div class="col-12 mb-3 mb-sm-0">
                                     <input class="form-check-input" type="checkbox" value="" id="toc-privacy"
@@ -79,9 +114,7 @@ content %}
                         </form>
                         <hr/>
                         <div class="text-center">
-                            <a class="small" href="{{ url_for ('auth.login_page') }}"
-                            >لديك حساب؟ - سجل دخولك</a
-                            >
+                            <a class="small" href="{{ url_for('auth.login_page') }}">لديك حساب؟ - سجل دخولك</a>
                         </div>
                     </div>
                 </div>

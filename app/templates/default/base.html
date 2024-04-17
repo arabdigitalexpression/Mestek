@@ -121,8 +121,7 @@
                             <hr class="dropdown-divider"/>
                         </li>
                         <li>
-                            <a class="dropdown-item text-danger" href="#" data-toggle="modal"
-                               data-target="#logoutModal">
+                            <a class="dropdown-item text-danger" href="#" data-mdb-modal-init data-mdb-target="#logoutModal">
                                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
                                 تسجيل الخروج
                             </a>
@@ -192,30 +191,19 @@
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
 >
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">
                     هل أنت متأكد من تسجيل الخروج؟
                 </h5>
-                <button
-                        class="close"
-                        type="button"
-                        data-dismiss="modal"
-                        aria-label="Close"
-                >
-                    <span aria-hidden="true">×</span>
-                </button>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 حدد "تسجيل الخروج" أدناه إذا كنت مستعدًا لإنهاء جلستك الحالية.
             </div>
             <div class="modal-footer">
-                <button
-                        class="btn btn-secondary"
-                        type="button"
-                        data-dismiss="modal"
-                >
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
                     إلغاء
                 </button>
                 <a class="btn btn-danger" href="{{ url_for('auth.logout') }}"
@@ -373,7 +361,7 @@
 
     window.setTimeout(function() {
     // Select all elements with the class 'alert'
-        const alerts = document.querySelectorAll('.alert');
+        const alerts = document.querySelectorAll('.alert:not(.perm-alert)');
         alerts.forEach(alert => {
             // Apply a fade out effect
             alert.style.transition = 'opacity 0.5s';

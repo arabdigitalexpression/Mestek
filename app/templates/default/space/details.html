@@ -292,9 +292,9 @@ color: #4782d3;
                 <div class="post-content">
                     <div class="row">
                         <div class="col-10"><h2>{{space.name}}</h2></div>
-                        <div class="col-1">
-                        <a data-mdb-ripple-init="" href="{{ url_for('main.reservation.create_reservation_space') }}" role="button" style="" class="btn btn-info btn-lg btn-rounded">حجز</a>
-                        </div>
+                        <a data-mdb-ripple-init="" href="{{ url_for('main.reservation.create_reservation_space') }}" role="button" class="btn btn-primary col-2 btn-rounded">
+                            <span class="h5"> حجز </span>
+                        </a>
                     </div>
                     {% if space.description %}
                     <p class="lead mt-5">{{space.description | safe}} </p>

@@ -2,6 +2,11 @@
 block profile_content %}
 <div class="container my-3">
     <div class="row">
+        {% if not current_user.reservations %}
+        <div class="alert alert-info perm-alert mb-0 alert-relative fade show " role="alert" data-mdb-color="secondary">
+            لا يوجد حجوزات لديك حالياً
+        </div>
+        {% endif %}
         {% for reservation in current_user.reservations %}
         <div class="col-12 mb-4">
             <div  {% if reservation.type.name == 'tool' %}
