@@ -51,6 +51,7 @@ class User(UserMixin, db.Model):
         db.DateTime(), default=datetime.utcnow(),
         nullable=False
     )
+    deleted_at = db.Column(db.DateTime(), nullable=True)
 
     reservations = db.relationship('Reservation', backref='user', lazy=True)
     # notifications = db.relationship('Notification', backref='user',

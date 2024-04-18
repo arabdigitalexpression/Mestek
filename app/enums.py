@@ -36,7 +36,7 @@ class SpaceType(DescriptiveEnum):
     # For all types of residency accommodations
     residency = 2, "إقامات"
     # Combines all types of creative, tech, and heavy-duty workshops and studios (sound, video, arts, electronics)
-    workshop_studio = 3, "ورشة / ستوديو"
+    workshop_studio = 3, "معمل / ستوديو"
     # For dance, theater, presentations, and any form of artistic or professional performances.
     performance_space = 4, "مساحة للعروض"
 
@@ -44,6 +44,7 @@ class SpaceType(DescriptiveEnum):
 class SpaceUnit(DescriptiveEnum):
     hour = 0, "ساعة"
     day = 1, "يوم"
+    minute = 2, "دقيقة"
 
 
 class ToolUnit(DescriptiveEnum):

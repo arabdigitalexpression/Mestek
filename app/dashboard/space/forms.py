@@ -25,7 +25,8 @@ class SpaceCategoryPriceForm(Form):
         render_kw={"class": "form-select"},
         choices=[
             (SpaceUnit.hour, SpaceUnit.hour.description),
-            (SpaceUnit.day, SpaceUnit.day.description)
+            (SpaceUnit.day, SpaceUnit.day.description),
+            (SpaceUnit.minute, SpaceUnit.minute.description),
         ]
     )
     delete = SubmitField('حذف التسعيرة')
