@@ -1,0 +1,21 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+<div class="container pb-5">
+
+    <div class="row">
+
+        <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <img alt="404 not found" src="{{ url_for('static', filename='images/404.png') }}" class="img-fluid w-50">
+                <p class="fs-3"> <span class="text-danger">عفواً!</span> الصفحة غير موحودة.</p>
+                <p class="lead">
+الصفحة التي تبحث عنها غير موجودة.
+تأكد من الرابط المراد الدخول عليه أو ربما تم نقل هذه الصفحة.
+                  </p>
+                <a href="{{ url_for('main.main_page')}}" class="btn btn-primary">الرجوع الى الصفحة الرئيسية</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

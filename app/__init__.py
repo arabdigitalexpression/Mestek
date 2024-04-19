@@ -66,4 +66,6 @@ api_bp.register_blueprint(tool_api_bp)
 api_bp.register_blueprint(reservation_api_bp)
 app.register_blueprint(api_bp)
 
+from app.main.error_routes import page_not_found, internal_server_error
+
 from app import models

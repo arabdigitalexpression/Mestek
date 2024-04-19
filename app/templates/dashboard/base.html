@@ -17,12 +17,12 @@
         <!-- Sidebar - Brand -->
         <a
                 class="sidebar-brand d-flex align-items-center justify-content-center"
-                href="{{url_for('dashboard.dashboard')}}"
+                href="{{url_for('main.main_page')}}"
         >
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-puzzle-piece"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">{{'مساحتى'}}</div>
+            <div class="sidebar-brand-text mx-3">{{'مساحات أضف'}}</div>
         </a>
 
         <!-- Divider -->
@@ -455,14 +455,18 @@
                                 <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                 الصفحة الشخصية
                             </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                الإعدادات
+                            <a class="dropdown-item" href="{{url_for('main.main_page')}}">
+                                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                الصفحة الرئيسية
                             </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                سجل الأنشطة
-                            </a>
+<!--                            <a class="dropdown-item" href="#">-->
+<!--                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>-->
+<!--                                الإعدادات-->
+<!--                            </a>-->
+<!--                            <a class="dropdown-item" href="#">-->
+<!--                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>-->
+<!--                                سجل الأنشطة-->
+<!--                            </a>-->
                             <div class="dropdown-divider"></div>
                             <a
                                     class="dropdown-item text-danger"

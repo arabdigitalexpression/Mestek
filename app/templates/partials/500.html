@@ -1,0 +1,20 @@
+{% extends 'default/base.html' %}
+
+{% block content %}
+<div class="container pb-5">
+
+    <div class="row">
+
+        <div class="d-flex align-items-center justify-content-center vh-100">
+            <div class="text-center">
+                <img alt="404 not found" src="{{ url_for('static', filename='images/500.png') }}" class="img-fluid w-50">
+                <p class="fs-3"> <span class="text-danger">عفواً!</span> حدث خطأ فني في موقعنا.</p>
+                <p class="lead">
+                    يرجى المحاولة مرة أخرى لاحقًا أو لا تتردد في الاتصال بنا إذا استمرت المشكلة.
+                  </p>
+                <a href="{{ url_for('main.main_page')}}" class="btn btn-primary">الرجوع الى الصفحة الرئيسية</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
