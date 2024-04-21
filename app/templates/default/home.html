@@ -67,7 +67,9 @@
     .view.overlay .img-fluid {
         transition: transform .5s ease-in-out;
         /*width: 100%; !* Image takes full width of the card *!*/
-        height: auto; /* Height is set automatically */
+        height: 35vh;
+        background-size: auto;
+        background-position: center;
     }
 
     .view.overlay .mask {
@@ -85,10 +87,14 @@
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .card.bg-image {
-            object-fit: cover;
-            aspect-ratio: 4 / 3;
             height: auto; /* Keep height auto for responsive behavior */
         }
+    }
+
+    .card.bg-image {
+        /*object-fit: cover;*/
+        /*aspect-ratio: 4 / 3;*/
+        height: 100%;
     }
 </style>
 {% endblock %}
