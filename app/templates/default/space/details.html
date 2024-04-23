@@ -278,6 +278,12 @@ color: #4782d3;
 </style>
 {% endblock %}
 
+{% block fb_analytics %}
+<script>
+    fbq('track', 'ViewContent');
+</script>
+{% endblock %}
+
 {% block content %}
 
 <div class="container pb50">

@@ -1,4 +1,17 @@
 {% extends 'auth/base.html' %} {% block title %} تسجيل الدخول {% endblock %}
+
+{% block auth_analytics %}
+{{ super() }}
+{% block fb_analytics %}
+{% if signup_success %}
+<script>
+    fbq('track', 'CompleteRegistration');
+</script>
+{% endif %}
+{% endblock %}
+{% endblock %}
+
+
 {% block content %}
 <div class="container">
     <!-- Outer Row -->

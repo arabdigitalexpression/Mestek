@@ -51,7 +51,9 @@ def signup_page():
         status_code, response = send_confirmation(user.email, user.full_name)
         if status_code == 200:
             flash("تم إرسال رسالة تأكيد بالبريد الإلكتروني عبر البريد الإلكتروني.", "success")
-            return redirect(url_for("auth.login_page"))
+            return render_template(
+                "auth/login.html", form=LoginForm(), signup_success=True
+            )
         else:
             current_app.logger.error("Failed to send confirmation email")
             flash("حدث خطأ أثناء إرسال رسالة التأكيد الإلكترونية.", "danger")
