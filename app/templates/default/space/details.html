@@ -298,15 +298,9 @@ color: #4782d3;
                 <div class="post-content">
                     <div class="row">
                         <div class="col-10"><h2>{{space.name}}</h2></div>
-                        {% if not current_user.is_authenticated %}
                         <a data-mdb-ripple-init="" href="{{ url_for('main.reservation.create_reservation_space') }}" role="button" class="btn btn-primary col-2 btn-rounded">
                             <span class="h5"> حجز </span>
                         </a>
-                        {% else %}
-                        <a data-mdb-ripple-init="" href="https://forms.gle/bdu9QWRqkjFMPSm79" role="button" class="btn btn-primary col-2 btn-rounded">
-                            <span class="h5"> حجز </span>
-                        </a>
-                        {% endif %}
                     </div>
                     {% if space.description %}
                     <p class="lead mt-5">{{space.description | safe}} </p>

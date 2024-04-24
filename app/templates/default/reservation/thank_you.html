@@ -1,0 +1,16 @@
+{% extends 'default/base.html' %}
+
+{% block title %} شكراً لك {% endblock %}
+
+{% block fb_analytics %}
+<script>
+    fbq('track', 'SubmitApplication');
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1>شكراً لحجزك معنا!</h1>
+    <p>لقد تلقينا طلب الحجز الخاص بك وسنتواصل معك قريبًا.</p>
+</div>
+{% endblock %}

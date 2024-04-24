@@ -2,6 +2,40 @@
 
 {% block title %}تسجيل حساب جديد{% endblock %}
 
+{% block auth_analytics %}
+<!-- Meta Pixel Code -->
+<script>
+    !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+            n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '396155903331206');
+    fbq('track', 'PageView');
+
+</script>
+
+<noscript>
+    <img height="1" width="1"
+         src="https://www.facebook.com/tr?id=396155903331206&ev=PageView
+&noscript=1"/>
+</noscript>
+
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -114,7 +148,14 @@
                         </form>
                         <hr/>
                         <div class="text-center">
-                            <a class="small" href="{{ url_for('auth.login_page') }}">لديك حساب؟ - سجل دخولك</a>
+                            <a class="small" href="{{ url_for('auth.login_page') }}">
+                                لديك حساب؟ - سجل دخولك
+                            </a>
+                        </div>
+                        <div class="text-center">
+                            <a class="small" href="{{ url_for ('main.main_page')}}">
+                                العودة إلى الصفحة الرئيسية
+                            </a>
                         </div>
                     </div>
                 </div>
