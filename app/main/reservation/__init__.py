@@ -8,7 +8,6 @@ from app.main.reservation import routes
 
 
 @bp.before_request
-@login_required
 @check_is_confirmed
 def before_request():
     # This function doesn't need to do anything, as it's just a placeholder
