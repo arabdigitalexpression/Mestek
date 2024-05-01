@@ -237,7 +237,6 @@ from app.models import (
 
 
 @bp.route('/create/tool/', methods=["GET", "POST"])
-@login_required
 def create_reservation_tool():
     # if current_user.role.name == "user":
     #     return render_template('default/reservation/form.html')
@@ -247,7 +246,6 @@ def create_reservation_tool():
 
 
 @bp.route('/create/space/', methods=["GET", "POST"])
-@login_required
 def create_reservation_space():
     # if current_user.role.name == "user":
     #     return render_template('default/reservation/form.html')
