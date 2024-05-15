@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html' %} {% block title %} اﻷدوات {% endblock %} {%
+block heading %} المؤسسات {% endblock %}
+{% block content %}
+<div class="card shadow my-4">
+<div class="card-header py-3">
+	<h6 class="m-0 font-weight-bold text-primary">
+		المؤسسات
+	</h6>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+	<table
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
+	>
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">إسم المؤسسة</th>
+				<th scope="col">تصنيف المؤسسة</th>
+				<th scope="col">إعدادات التحكم</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for organization in organizations %}
+			<tr>
+				<td>{{organization.id}}</td>
+				<td>{{organization.name}}</td>
+				<td>{{organization.category.name}}</td>
+				<td class="d-flex">
+					<button
+						type="button"
+						class="btn btn-info btn-sm text-white mx-1 "
+					>
+						<i class="bi bi-info-circle"></i>
+					</button>
+					<a
+						href="{{url_for('dashboard.organization.update_organization', name=organization.name)}}"
+						class="text-white btn btn-warning btn-sm mx-1 "
+					>
+						<i class="bi bi-pencil"></i>
+					</a>
+					<form method="POST" action="{{url_for('dashboard.organization.delete_organization', name=organization.name)}}">
+						<button
+							type="button"
+							class="text-white btn btn-danger btn-sm mx-1 "
+							data-toggle="modal"
+							data-target="#deleteModal-{{organization.id}}"
+							data-placement="top"
+							title="حذف"
+						>
+							<i class="bi bi-trash3"></i>
+						</button>
+						<div
+							class="modal fade"
+							id="deleteModal-{{organization.id}}"
+							tabindex="-1"
+							aria-labelledby="deleteModalLabel"
+							aria-hidden="true"
+						>
+							<div class="modal-dialog">
+								<div class="modal-content ">
+									<div class="modal-header">
+										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+										<button
+											type="button"
+											class="btn-close"
+											data-dismiss="modal"
+											aria-label="Close"
+										></button>
+									</div>
+									<div class="modal-body">
+										هل أنت متأكد من حذف المؤسسة: {{organization.name}}
+									</div>
+									<div class="modal-footer">
+										<button
+											type="button"
+											class="btn  btn-outline-secondary"
+											data-dismiss="modal"
+										>
+											رجوع
+										</button>
+										<button
+											type="submit"
+											class="btn  btn-danger"
+										>
+											تأكيد الحذف
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{% endblock %}

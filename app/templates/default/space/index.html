@@ -1,0 +1,145 @@
+{% extends 'default/base.html' %}
+{% block title %}المساحات{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .card-img {
+        height:250px !important;
+        width:100% !important;
+        object-fit:cover;
+     }
+    .card-title{
+        color:#FFF;
+    }
+    .overlay{
+        background: rgb(0,0,0);
+        background: linear-gradient(0deg, rgba(0,0,0,0.927608543417367) 0%, rgba(0,15,18,0.7567401960784313) 47%, rgba(0,212,255,0) 100%);
+        z-index:999
+    }
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.relative {
+    position: relative;
+}
+
+.badge-corner:empty {
+    display: inline-block;
+}
+.badge-corner {
+    position: absolute;
+    top: 15px;
+    right: 0;
+    max-width: 50%;
+    height: 50px;
+    padding: 10px 20px;
+    background-color: rgba(0,0,0,0.6);
+    border-radius: 0;
+    display:flex;
+    align-items:center;
+}
+.badge-corner span {
+    font-size: 16px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container bootstrap snippets bootdey mb-5">
+    <h2 class="text-primary mt-5 mb-3">المساحات</h2>
+
+    <div class="row justify-content-center">
+        {%for space in spaces%}
+        <div class="col-md-6 col-sm-12 p-2"><a href="{{ url_for ('main.space_details', id=space.id )}}">
+            <div class="relative">
+                <img {% if space.images|length> 0 %}
+                src="{{space.images[0].url}}"
+                {% else %}
+                src="{{ url_for('static',filename='images/no_photo.svg') }}"
+                {% endif %} class="img-responsive card-img" alt="{{space.name}}">
+                <span class="badge-corner">
+                <span>{{space.name}}</span>
+
+                </span>
+            </div>
+        </a>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">عذراً لا يوجد مساحات مسجلة</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

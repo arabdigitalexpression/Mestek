@@ -1,0 +1,166 @@
+{% extends 'dashboard/base.html' %} {% block title %} الحجوزات {% endblock %} {%
+block heading %} الحجوزات {% endblock %} {% block actions %}
+<div class="d-flex flex-row">
+    <a
+            class="btn btn-primary  d-flex align-items-center me-2"
+            type="button"
+            href="{{url_for('dashboard.reservation.create_reservation_space')}}"
+    >
+        <i class="bi bi-plus-circle me-1"></i>
+        <span class=""> حجز مساحة </span>
+    </a>
+    <a
+            class="btn btn-primary  d-flex align-items-center"
+            type="button"
+            href="{{url_for('dashboard.reservation.create_reservation_tool')}}"
+    >
+        <i class="bi bi-plus-circle me-1"></i>
+        <span class=""> حجز أداة </span>
+    </a>
+</div>
+
+{% endblock %} {% block content %}
+<div class="table-responsive">
+    <table
+            class="table align-middle text-center table-bordered"
+    >
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">نوع الحجز</th>
+            <th scope="col">حجز لـ</th>
+            <th scope="col" class="text-center">الدفع النقدى</th>
+            <th scope="col">التاريخ</th>
+            <th scope="col">اسم المالك</th>
+            <th scope="col">قيمة الحجز</th>
+            <th scope="col">إعدادات التحكم</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for reservation in reservations %}
+        {% if loop.index <= j and loop.index >= i%}
+        <tr>
+            <td>{{loop.index }}</td>
+            <td>
+                {% if reservation.type.name == 'tool' %} أداة {% else %} مساحة {%
+                endif %}
+            </td>
+            <td>
+                {% if reservation.type.name == 'tool' %} {{reservation.tool.name}} {%
+                else %} {{reservation.space.name}} {% endif %}
+            </td>
+            <td class="text-center">
+                {% if reservation.payment_status.name == 'no_payment' %}<span
+                    class="badge text-bg-danger"
+            >{{ reservation.payment_status.description }}</span
+            >
+                {% elif reservation.payment_status.name == 'down_payment' %}
+                <span class="badge text-bg-warning">{{ reservation.payment_status.description }}</span>
+                {% else %}
+                <span class="badge text-bg-success">{{ reservation.payment_status.description }}</span>
+                {% endif %}
+            </td>
+            <td>{{reservation.created_at}}</td>
+            <td>
+                {{ reservation.user.first_name + ' ' +reservation.user.last_name }}
+            </td>
+            <td>{{ reservation.full_price }} جنيه مصرى</td>
+            <td class="d-flex">
+                <a
+                        href="{{url_for('dashboard.reservation.update_reservation', pk=reservation.id)}}"
+                        class="text-white btn btn-info btn-sm mx-1 "
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="تفاصيل"
+                >
+                    <i class="bi bi-info-circle"></i>
+                </a>
+<!--                <a-->
+<!--                        href="{{url_for('dashboard.reservation.change_payment_status', id=reservation.id)}}"-->
+<!--                        class="text-white btn btn-warning btn-sm mx-1 "-->
+<!--                        data-toggle="tooltip"-->
+<!--                        data-placement="top"-->
+<!--                        title="تغيير حالة"-->
+<!--                >-->
+<!--                    <i class="bi bi-pencil"></i>-->
+<!--                </a>-->
+                <form
+                        method="POST"
+                        action="{{url_for('dashboard.reservation.delete_reservation', id=reservation.id)}}"
+                >
+                    <button
+                            type="button"
+                            class="text-white btn btn-danger btn-sm  mx-1"
+                            data-toggle="modal"
+                            data-target="#deleteModal-{{reservation.id}}"
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            title="حذف"
+                    >
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                    <div
+                            class="modal fade"
+                            id="deleteModal-{{reservation.id}}"
+                            tabindex="-1"
+                            aria-labelledby="deleteModalLabel"
+                            aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content ">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+                                    <button
+                                            type="button"
+                                            class="btn-close"
+                                            data-dismiss="modal"
+                                            aria-label="Close"
+                                    ></button>
+                                </div>
+                                <div class="modal-body">هل أنت متأكد من حذف الحجز:</div>
+                                <div class="modal-footer">
+                                    <button
+                                            type="button"
+                                            class="btn  btn-outline-secondary"
+                                            data-dismiss="modal"
+                                    >
+                                        رجوع
+                                    </button>
+                                    <button type="submit" class="btn  btn-danger">
+                                        تأكيد الحذف
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </td>
+        </tr>
+
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <form
+            method="POST"
+            action="{{url_for('dashboard.reservation.get_reservations')}}"
+    >
+        <nav aria-label="Page navigation example" class="d-flex float-end">
+            <ul class="pagination ">
+                <li class="page-item">
+                    <button class="page-link" name="Previous" value="Previous" type="submit">Previous</button>
+                </li>
+                {% for page in range(1 , pages+1) %}
+                <li class="page-item">
+                    <button class="page-link" name="b" value="{{page}}">{{page}}</button>
+                </li>
+                {% endfor %}
+                <li class="page-item">
+                    <button class="page-link" name="next" value="next">next</button>
+                </li>
+            </ul>
+        </nav>
+    </form>
+</div>
+{% endblock %}

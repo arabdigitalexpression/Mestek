@@ -1,0 +1,168 @@
+{% extends 'dashboard/base.html' %} {% block title %}حجز أداة{% endblock %} {%
+block content %}
+
+<div class="border m-5 p-5" id="app">
+	<form class="row">
+		<div class="col-md-8">
+			<div class="row mb-3">
+				<div class="col-md-6 mb-3">
+					<template v-if="users.length">
+						<label for="users">مستخدم المساحة</label>
+						<select
+							id="users"
+							class="form-select w-100 text-center"
+							v-model="selectedUserId"
+						>
+							<template v-for="user in users">
+								<option v-if="user" :key="user.id" :value="user.id">
+									{user.email }
+								</option>
+							</template>
+						</select>
+					</template>
+				</div>
+				<div class="col-md-6 mb-3">
+					<template v-if="tools.length">
+						<label for="tools">إختر الأداة </label>
+						<select
+							id="tools"
+							class="form-select w-100"
+							@change="getTool($event)"
+						>
+							<template v-for="tool in tools">
+								<option v-if="tool" :key="tool.id" :value="tool.id">
+									{tool.name}
+								</option>
+							</template>
+						</select>
+					</template>
+				</div>
+				<div class="col-md-6 mb-3" v-if="toolUnits.length">
+					<label for="units">إختر نظام الحجز</label>
+					<select
+						id="units"
+						class="form-select w-100"
+						@change="changeUnit($event)"
+					>
+						<template v-for="unit in toolUnits">
+							<option v-if="unit" :key="unit.unit_id" :value="unit.unit_id">
+								{ unit.unit_title}
+							</option>
+						</template>
+					</select>
+				</div>
+				<div class="col-md-6 mb-3">
+					<label for="">الحساب</label>
+					<select
+						class="form-select text-center w-100"
+						style="width: 200px"
+						name="payment"
+						v-model="payment_status"
+					>
+						<option value="no_payment">لم يتم الدفع</option>
+								<option value="down_payment">تم دفع مبلغ من الحجز</option>
+								<option value="full_payment">تم دفع المبلغ بالكامل</option>
+					</select>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col-md-12 mb-3">
+					<div class="row" v-if="selectedUnit.unit_id===0">
+						<div class="col-md-6 mb-3">
+							<label for="tools">مواعيد</label>
+							<select
+								id="time-picker"
+								class="form-select text-center w-100"
+								@change="fromTime=$event.target.value;getToTimeList($event.target.value,18)"
+								v-model="fromTime"
+							>
+								<template v-for="time in fromTimeRange">
+									<option :value="time.value">{time.text}</option>
+								</template>
+							</select>
+						</div>
+						<div class="col-md-6 mb-3">
+							<div>
+								<label for="tools" class="text-right w-100 text-danger"
+									>*</label
+								>
+								<select
+									id="time2-picker"
+									class="form-select text-center w-100"
+									:disabled="fromTime === ''"
+									v-model="toTime"
+								>
+									<template v-for="time in toTimeRange">
+										<option :value="time.value">{time.text}</option>
+									</template>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="row">
+				<div
+					class="col-md-4 mb-3"
+					v-if="selectedUnit.unit_id === 1 || toTime"
+				>
+					<div id="datepicker"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<label for="description">قولنا ناوى تستخدم الأداة فى إيه ؟</label>
+					<textarea
+						class="form-control"
+						id="description"
+						v-model="description"
+						cols="30"
+						rows="10"
+					></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 my-3">
+			<table class="table" v-if="price_table.length">
+				<tbody>
+					<tr v-for="(price, index) in price_table" :key="index">
+						<th scope="row">
+							{index !== price_table.length - 1 ? index + 1 : "" }
+						</th>
+						<td>{price[0]}</td>
+						<td>{price[1]}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col mt-3">
+			<button
+				type="submit"
+				class="btn btn-primary bg-gradient-primary"
+				:disabled="!price_table.length"
+				@click.prevent="submitForm"
+			>
+				تأكيد الحجز
+			</button>
+			<a
+				type="submit"
+				class="btn btn-outline-danger mx-2"
+				href="{{ url_for('dashboard.reservation.get_reservations')}}"
+			>
+				الغاء
+			</a>
+		</div>
+	</form>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+	let csrf_token = "{{ form.csrf_token.current_token }}";
+</script>
+<script src="{{ url_for('static', filename='js/vue.global.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard-tool-form.js') }}"></script>
+
+{{ super() }} {% endblock %}

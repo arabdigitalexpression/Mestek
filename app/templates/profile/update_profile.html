@@ -1,0 +1,103 @@
+{% extends 'profile/base.html' %} {% block tab_title %} تعديل البيانات {% endblock
+%} {% block profile_content %}
+
+<div class="tab-pane active show" id="account-general">
+    <form action="{{ url_for('main.profile.profile_edit') }}" class="form" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="card-body">
+            <p class="text-danger">{% if errors%}{{ errors }}{% endif %}</p>
+            <h6 class="text-muted">المعلومات الشخصية</h6>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.firstName }} {{ form.firstName.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{form.lastName}}{{ form.lastName.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.gender }}{{ form.gender.label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <div class="input-group d-flex flex-row">
+                            <div class="form-floating flex-grow-1">
+                                {{form.userName}}{{ form.userName.label }}
+                            </div>
+                            <span class="input-group-text  my-2 bg-primary text-white"
+                            >@</span
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.birthday }} {{ form.birthday.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <div class="input-group d-flex flex-row">
+                            <div class="form-floating flex-grow-1">
+                                {{ form.avatar_url }} {{ form.avatar_url.label }}
+                            </div>
+                            <span class="input-group-text  bg-primary text-white"
+                            ><i class="bi bi-image"></i
+                            ></span>
+                        </div>
+                    </div>
+                </div>
+                <h6 class="text-muted mt-3">معلومات التواصل</h6>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            <div class="form-floating">
+                                {{ form.email }}{{ form.email.label }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.website_url }} {{ form.website_url.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.phone }}{{ form.phone.label }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-floating">
+                            {{ form.address }} {{ form.address.label }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ form.submit }}
+        </div>
+    </form>
+</div>
+{% endblock %}

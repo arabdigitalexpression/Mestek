@@ -1,0 +1,15 @@
+{% extends 'default/base.html' %}
+
+{% block title %} استمارة الحجز {% endblock %}
+
+{% block fb_analytics %}
+<script>
+    fbq('track', 'Lead');
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdYqaxg1xZqLKXVzHKiv0AwnFVeBeaKMVbOQFq7-Ne3XeNSQg/viewform?embedded=true" style="height: 60em; width: 100%;" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+</div>
+{% endblock %}

@@ -1,0 +1,435 @@
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}أضف{% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static',filename='styles/font.awesome.6.1.1.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static',filename='styles/Tajwal.font.css') }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static',filename='styles/mdb.rtl.min.css') }}">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #btn-back-to-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: none;
+            background: rgba(90, 92, 105, 0.5);
+        }
+
+        @media (min-width: 992px) {
+            #page-main-content {
+                margin-top: 60px;
+            }
+        }
+    </style>
+    {% block styles %}
+
+    <!-- Meta Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ?
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '396155903331206');
+        fbq('track', 'PageView');
+    </script>
+
+    {% block fb_analytics %} {% endblock %}
+
+    <noscript>
+        <img height="1" width="1"
+             src="https://www.facebook.com/tr?id=396155903331206&ev=PageView
+    &noscript=1"/>
+    </noscript>
+    <!-- End Meta Pixel Code -->
+
+    {% endblock %}
+</head>
+
+<body>
+<header>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light d-lg-block fixed-top"
+         style="background-color: #e3f2fd; z-index: 2000;" data-mdb-theme="light">
+        <div class="container-fluid">
+            <!-- Navbar brand -->
+            {% if request.endpoint == "main.main_page" %}
+            <a href="https://adef.xyz/" role="button" class="text-white mx-2 fw-bold fs-4">
+                <img src="{{ url_for('static',filename='images/adef.png') }}" width="50em" alt="ADEF">
+            </a>
+            {% else %}
+            <a href="/" role="button" class="text-white mx-2 fw-bold fs-4">
+                <img src="{{ url_for('static',filename='images/adef.png') }}" width="50em" alt="Mestek Home">
+            </a>
+            {% endif %}
+            <button class="navbar-toggler collapsed" type="button" data-mdb-collapse-init=""
+                    data-mdb-target="#navbarExample01" aria-contr="" ols="navbarExample01" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarExample01" data-mdb-collapse-initialized="true">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{url_for('main.spaces_list')}}">المساحات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('main.tools_list')}}" rel="nofollow">الأدوات</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{url_for('main.about')}}">عن أضف</a>
+                    </li>
+                    <!--                    <li class="nav-item">-->
+                    <!--                        <a class="nav-link" href="/contact">تواصل معنا</a>-->
+                    <!--                    </li>-->
+                </ul>
+
+                {% if current_user.is_authenticated %}
+                <!--                        nav-link d-sm-flex align-items-sm-center-->
+                <!--                        d-flex align-items-center-->
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown me-3 me-lg-1">
+                        <!-- Avatar -->
+                        <a
+                                data-mdb-dropdown-init
+                                class="nav-link dropdown-toggle hidden-arrow"
+                                href="#"
+                                id="navbarAvatarMenu"
+                                role="button"
+                                aria-expanded="false"
+                        >
+                            <img
+                                    src="{{ current_user.avatar }}"
+                                    class="rounded-circle"
+                                    height="25"
+                                    alt="{{ current_user.full_name }}"
+                                    loading="lazy"
+                            />
+                            <strong class="ms-1 text-muted">{{ current_user.full_name }}</strong>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarAvatarMenu">
+                            <li>
+                                <a class="dropdown-item" href="{{url_for('main.profile.profile')}}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    الصفحة الشخصية
+                                </a>
+                            </li>
+                            {% if current_user.role.name == "admin" %}
+                            <li>
+                                <a class="dropdown-item" href="{{url_for('dashboard.dashboard')}}">
+                                    <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    لوحة التحكم
+                                </a>
+                            </li>
+                            <!--                        <li>-->
+                            <!--                            <a class="dropdown-item" href="#">-->
+                            <!--                                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>-->
+                            <!--                                الإعدادات-->
+                            <!--                            </a>-->
+                            <!--                        </li>-->
+                            <!--                        <li>-->
+                            <!--                            <a class="dropdown-item" href="#">-->
+                            <!--                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>-->
+                            <!--                                سجل الأنشطة-->
+                            <!--                            </a>-->
+                            <!--                        </li>-->
+                            {% endif %}
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger" href="#" data-mdb-modal-init
+                                   data-mdb-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i>
+                                    تسجيل الخروج
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            {% else %}
+            <a data-mdb-ripple-init="" href="{{ url_for ('auth.login_page') }}" role="button"
+               class="btn btn-primary btn-rounded"
+               style="">تسجيل الدخول</a>
+            {% endif %}
+
+        </div>
+        </div>
+    </nav>
+    <!-- Navbar -->
+</header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main id="page-main-content">
+    <!-- messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="row" style="z-index: 9999;">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} mb-0 alert-dismissible alert-relative fade show" role="alert"
+             data-mdb-color="secondary">
+            {{message}}
+            <button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+</main>
+<!--Main layout-->
+
+<!--<div class="container p-4 pb-0">-->
+<!--      &lt;!&ndash; Section: CTA &ndash;&gt;-->
+<!--  <section class="">-->
+<!--    <p class="d-flex justify-content-center align-items-center">-->
+<!--      <span class="me-3">سجل حسابك معنا</span>-->
+<!--      <button data-mdb-ripple-init type="button" class="btn btn-outline-light btn-rounded">-->
+<!--        انضم إلينا!-->
+<!--      </button>-->
+<!--    </p>-->
+<!--  </section>-->
+<!--  &lt;!&ndash; Section: CTA &ndash;&gt;-->
+<!--</div>-->
+
+<button
+        type="button"
+        class="btn btn-danger btn-floating btn-lg"
+        id="btn-back-to-top"
+>
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<div
+        class="modal fade"
+        id="logoutModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    هل أنت متأكد من تسجيل الخروج؟
+                </h5>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                حدد "تسجيل الخروج" أدناه إذا كنت مستعدًا لإنهاء جلستك الحالية.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">
+                    إلغاء
+                </button>
+                <a class="btn btn-danger" href="{{ url_for('auth.logout') }}"
+                >تسجيل الخروج</a
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-secondary bg-opacity-25 text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-evenly p-3 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+            <h5>تواصل معنا عبر شبكات التواصل الاجتماعي:</h5>
+        </div>
+        <!-- Left -->
+
+        <!-- Right -->
+        <section>
+            <!-- Facebook -->
+            <a
+                    data-mdb-ripple-init
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #3b5998;"
+                    href="https://www.facebook.com/ADEF.xyz/"
+                    role="button"
+            ><i class="fab fa-facebook-f"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a
+                    data-mdb-ripple-init
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #ac2bac;"
+                    href="https://www.instagram.com/adef.xyz/"
+                    role="button"
+            ><i class="fab fa-instagram"></i
+            ></a>
+
+            <!-- Linkedin -->
+            <a
+                    data-mdb-ripple-init
+                    class="btn text-white btn-floating m-1"
+                    style="background-color: #0082ca;"
+                    href="https://www.linkedin.com/company/arab-digital-expression-foundation"
+                    role="button"
+            ><i class="fab fa-linkedin-in"></i
+            ></a>
+        </section>
+        <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+        <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                    <!-- Content -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <i class="fas fa-gem me-3"></i>أضف
+                    </h6>
+                    <p>
+                        مؤسسة غير ربحية متخصصة في تمكين الشباب وتعزيز الثقافة الحرة وتطوير أدوات المعرفة باللغة العربية.
+                    </p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        الخدمات
+                    </h6>
+                    <p><a href="{{url_for('main.spaces_list')}}" class="text-reset">مساحات العمل المشتركة</a></p>
+                    <p><a href="{{url_for('main.tools_list')}}" class="text-reset">معدات متخصصة</a></p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        الموارد
+                    </h6>
+                    <p><a href="{{url_for('main.about')}}" class="text-reset">عن أضف</a></p>
+                    <p><a href="/faq" class="text-reset">الأسئلة الشائعة</a></p>
+                    <p><a href="{{url_for('main.privacy')}}" class="text-reset">سياسة الخصوصية</a></p>
+                    <p><a href="{{url_for('main.toc')}}" class="text-reset">شروط الاستخدام</a></p>
+                </div>
+                <!-- Grid column -->
+
+                <!-- Grid column -->
+                <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                    <!-- Links -->
+                    <h6 class="text-uppercase fw-bold mb-4">
+                        <a href="/contact" class="text-reset">تواصل معنا</a>
+                    </h6>
+                    <p><i class="fas fa-home me-3"></i>7 شارع 23، الأباجية، المقطم، محافظة القاهرة</p>
+                    <p>
+                        <i class="fas fa-envelope me-3"></i>
+                        <a href="mailto:info@arabdigitalexpression.org">info@arabdigitalexpression.org</a>
+                    </p>
+                    <p><i class="fas fa-phone me-3"></i> <span dir="ltr">+202 25050105</span></p>
+                    <p><i class="fas fa-phone me-3"></i> <span dir="ltr">+20 109 988 3369</span></p>
+                </div>
+                <!-- Grid column -->
+            </div>
+            <!-- Grid row -->
+        </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        هذا العمل مرخص بموجب رخصة المشاع الإبداعي
+        <i class="fa-brands fa-creative-commons-nc"></i>
+        <a href="http://creativecommons.org/licenses/by-nc/3.0/">CC BY-NC 3.0</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
+<script src="{{ url_for('static',filename='js/mdb.umd.min.js') }}"></script>
+<script>
+    //Get the button
+    let mybutton = document.getElementById("btn-back-to-top");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction();
+    };
+
+    function scrollFunction() {
+        if (
+            document.body.scrollTop > 20 ||
+            document.documentElement.scrollTop > 20
+        ) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    mybutton.addEventListener("click", backToTop);
+
+    function backToTop() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+
+
+    window.setTimeout(function () {
+        // Select all elements with the class 'alert'
+        const alerts = document.querySelectorAll('.alert:not(.perm-alert)');
+        alerts.forEach(alert => {
+            // Apply a fade out effect
+            alert.style.transition = 'opacity 0.5s';
+            alert.style.opacity = '0';
+
+            // Wait for the fade out to finish
+            setTimeout(() => {
+                // Slide up effect
+                alert.style.transition = 'height 0.5s, margin 0.5s, padding 0.5s';
+                alert.style.height = '0';
+                alert.style.margin = '0';
+                alert.style.padding = '0';
+
+                // Wait for the slide up to finish then remove the element
+                setTimeout(() => {
+                    alert.remove();
+                }, 500); // Matches the slide up duration
+            }, 500); // Matches the fade out duration
+        });
+    }, 4000);
+</script>
+{% block scripts %}
+{% endblock %}
+<!--<script type="text/javascript" src="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/js/plugins/mdb-plugins-gathered.min.js"></script>-->
+
+</body>
+</html>

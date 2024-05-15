@@ -1,0 +1,27 @@
+{% extends 'dashboard/base.html' %}
+{% block title %} التقويم {% endblock %}
+{% block heading %} التقويم {% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link
+        href="{{ url_for('static',filename='vendor/fullcalendar/main.min.css') }}"
+        rel="stylesheet"
+/>
+<link
+        href="{{ url_for('static',filename='styles/cstyle.css') }}"
+        rel="stylesheet"
+/>
+{% endblock %}
+
+{% block content %}
+<div id="calendar"></div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static',filename='vendor/fullcalendar/main.min.js') }}"></script>
+<script src="{{ url_for('static',filename='vendor/fullcalendar/locales-all.min.js') }}"></script>
+<script src="{{ url_for('static',filename='js/calender.js') }}"></script>
+{% endblock %}

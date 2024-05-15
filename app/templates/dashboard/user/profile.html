@@ -1,0 +1,52 @@
+{% extends 'dashboard/base.html' %} {% block title %} {{user.first_name}}
+{{user.last_name}} {% endblock %} {% block content %}
+<div class="row">
+	<div class="col-md-4">
+		<img src="https://i.pravatar.cc/300" alt="avatar" class="img-thumbnail" />
+	</div>
+	<div class="col">
+		<table
+			class="table table-borderless"
+		>
+			<tbody>
+				<tr>
+					<th scope="row">الاسم الأول</th>
+					<td>{{user.first_name}}</td>
+				</tr>
+				<tr>
+					<th scope="row">الاسم الأخير</th>
+					<td>{{user.last_name}}</td>
+				</tr>
+				<tr>
+					<th scope="row">اسم المستخدم</th>
+					<td>{{user.username}}</td>
+				</tr>
+				<tr>
+					<th scope="row">البريد الإلكترونى</th>
+					<td>{{user.email}}</td>
+				</tr>
+				<tr>
+					<th scope="row">الصلاحية</th>
+					<td>
+						<span
+							class="badge "
+							style="background-color: {{user.role.color_code}};"
+							>{{ user.role.name }}</span
+						>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">التصنيف</th>
+					<td>
+						<span
+							class="badge "
+							style="background-color: {{user.category.color_code}};"
+							>{{ user.category.name }}</span
+						>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock %}

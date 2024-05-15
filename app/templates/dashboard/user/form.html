@@ -1,0 +1,159 @@
+{% extends 'dashboard/base.html' %} {% block title %} {% if isUpdate %} تعديل
+مستخدم {% else %} إنشاء مستخدم {% endif %} {% endblock %} {% block content %}
+<h2>{% if isUpdate %} تعديل مستخدم {% else %} إنشاء مستخدم {% endif %}</h2>
+
+{% if isUpdate %} {% set form_action = url_for('dashboard.user.update_user',
+username=user.username) %} {% else %} {% set form_action =
+url_for('dashboard.user.create_user') %} {% endif %}
+
+<form method="POST" action="{{ form_action }}" enctype="multipart/form-data">
+    {{ form_user.csrf_token }}
+    <h6 class="text-muted mt-5">المعلومات الشخصية</h6>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            {% if form_user.firstName.errors %} {%for error in form_user.firstName.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.firstName.label}} {{form_user.firstName}}
+        </div>
+        <div class="col-md-4">
+            {% if form_user.lastName.errors %} {%for error in form_user.lastName.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.lastName.label}} {{form_user.lastName}}
+        </div>
+        <div class="col-md-4">
+            {% if form_user.userName.errors %} {%for error in form_user.userName.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.userName.label}} {{form_user.userName}}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            {% if form_user.gender.errors %} {%for error in form_user.gender.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.gender.label}} {{form_user.gender}}
+        </div>
+        <div class="col-md-4">
+            {% if form_user.birthday.errors %} {%for error in form_user.birthday.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.birthday.label}} {{form_user.birthday}}
+        </div>
+        <div class="col-md-4">
+            {% if form_user.avatar_url.errors %} {%for error in form_user.avatar_url.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.avatar_url.label}} {{form_user.avatar_url}}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-2">
+            {% if form_user.role.errors %} {%for error in form_user.role.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.role.label}} {{form_user.role}}
+        </div>
+        <div class="col-md-4">
+            {% if form_user.category.errors %} {%for error in form_user.category.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.category.label}} {{form_user.category}}
+        </div>
+        {% if isUpdate and user.category.is_organization %}
+        <div class="col-md-4">
+            {% if form_user.organization.errors %} {%for error in form_user.organization.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.organization.label}} {{form_user.organization}}
+        </div>
+        {% endif %}
+        <div class="col-md-2 justify-content-center d-flex align-items-end">
+            <div>
+                {% if form_user.activated.errors %} {%for error in form_user.activated.errors
+                %}
+                <span class="form_error">{{ error }}</span>
+                {%endfor%} {% endif%}
+                <div class="form-check form-switch">
+                    {{form_user.activated}}
+                    {{form_user.activated.label(class_="form-check-label")}}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if not isUpdate %}
+    <h6 class="text-muted mt-5">تعيين كلمة المرور</h6>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            {% if form_user.password.errors %} {%for error in form_user.password.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.password.label}} {{form_user.password}}
+        </div>
+        <div class="col-md-6">
+            {% if form_user.confirm_password.errors %} {%for error in
+            form_user.confirm_password.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.confirm_password.label}}
+            {{form_user.confirm_password}}
+        </div>
+    </div>
+    {% endif %}
+    <h6 class="text-muted mt-5">معلومات التواصل</h6>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            {% if form_user.email.errors %} {%for error in form_user.email.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.email.label}} {{form_user.email}}
+        </div>
+        <div class="col-md-5">
+            {% if form_user.address.errors %} {%for error in form_user.address.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.address.label}} {{form_user.address}}
+        </div>
+        <div class="col-md-3">
+            {% if form_user.phone.errors %} {%for error in form_user.phone.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.phone.label}} {{form_user.phone}}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-4">
+            {% if form_user.website_url.errors %} {%for error in form_user.website_url.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_user.website_url.label}} {{form_user.website_url}}
+        </div>
+    </div>
+    <div class="d-flex justify-content-end gap-2 my-3">
+        <a
+                href="{{url_for('dashboard.user.user_list')}}"
+                type="button"
+                class="btn btn-outline-danger"
+        >الغاء</a
+        >
+        <button type="submit" class="btn btn-primary">
+            {% if isUpdate %} تعديل مستخدم {% else %} إضافة مستخدم {% endif %}
+        </button>
+    </div>
+</form>
+{% if isUpdate %}
+<hr>
+<form method="POST" enctype="multipart/form-data"
+      action="{{ url_for('dashboard.user.change_password', username=user.username) }}">
+    {{ form_password.csrf_token }}
+    <h6 class="text-muted mt-2">تعيين كلمة المرور</h6>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            {% if form_password.password.errors %} {%for error in form_password.password.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_password.password.label}} {{form_password.password}}
+        </div>
+        <div class="col-md-6">
+            {% if form_password.confirm_password.errors %} {%for error in
+            form_password.confirm_password.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form_password.confirm_password.label}}
+            {{form_password.confirm_password}}
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end my-3">
+        <button type="submit" class="btn btn-primary">
+            تغيير كلمة المرور
+        </button>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

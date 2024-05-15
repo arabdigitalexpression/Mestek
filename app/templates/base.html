@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="shortcut icon" href="#" type="image/x-icon" />
+		<title>{% block title %}أضف{% endblock %}</title>
+		{% block styles %}
+		<link
+			href="{{ url_for('static',filename='styles/fontawesome.min.css') }}"
+			rel="stylesheet"
+		/>
+		<link
+			href="{{ url_for('static',filename='styles/css2.css') }}"
+			rel="stylesheet"
+		/>
+
+		<link
+			href="{{ url_for('static',filename='styles/bootstrap.rtl.min.css') }}"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/bootstrap-icons.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/bootstrap-datepicker.min.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/chosen.css') }}"
+		/>
+		<link
+			href="{{ url_for('static',filename='styles/dashboard.min.css') }}"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/style.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('static',filename='styles/toastify.min.css') }}"
+		/>
+		<script src="{{ url_for('static',filename='js/moment.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/moment-timezone-with-data.js') }}"></script>
+		{% endblock %}
+
+    {% block auth_analytics %} {% endblock %}
+	</head>
+
+	<body id="page-top" style="min-height: 100vh">
+		<!-- messages -->
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+		<div class="row" style="z-index: 9999;">
+			{% for category, message in messages %}
+			<div class="alert alert-{{ category }} mb-0 alert-dismissible alert-relative fade show" role="alert" data-mdb-color="secondary">
+				{{message}}
+			  <button type="button" class="btn-close ms-2" data-mdb-dismiss="alert" aria-label="Close"></button>
+			</div>
+			{% endfor %}
+		</div>
+		{% endif %}
+		{% endwith %}
+		{% block body %} {% endblock %}
+		<a class="scroll-to-top rounded" href="#page-top" style="z-index: 999">
+			<i class="fas fa-angle-up"></i>
+		</a>
+		<div
+			class="modal fade"
+			id="logoutModal"
+			tabindex="-1"
+			role="dialog"
+			aria-labelledby="exampleModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">
+							هل أنت متأكد من تسجيل الخروج؟
+						</h5>
+						<button
+							class="close"
+							type="button"
+							data-dismiss="modal"
+							aria-label="Close"
+						>
+							<span aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						حدد "تسجيل الخروج" أدناه إذا كنت مستعدًا لإنهاء جلستك الحالية.
+					</div>
+					<div class="modal-footer">
+						<button
+							class="btn btn-secondary"
+							type="button"
+							data-dismiss="modal"
+						>
+							إلغاء
+						</button>
+						<a class="btn btn-danger" href="{{ url_for('auth.logout') }}"
+							>تسجيل الخروج</a
+						>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% block scripts %}
+		<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/jquery.easing.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/bootstrap.bundle.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/bootstrap-datepicker.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/bootstrap-datepicker.ar.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/admin.min.js') }}"></script>
+		<script src="{{ url_for('static',filename='js/select2.min.js') }}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.min.js"></script>
+		<script
+			src="{{ url_for('static',filename='js/masonry.pkgd.min.js') }}"
+			integrity="sha384-GNFwBvfVxBkLMJpYMOABq3c+d3KnQxudP/mGPkzpZSTYykLBNsZEnG2D9G/X/+7D"
+			crossorigin="anonymous"
+			async
+		></script>
+		<script src="{{ url_for('static',filename='vendor/toastify.js') }}"></script>
+		{% endblock %}
+	</body>
+</html>

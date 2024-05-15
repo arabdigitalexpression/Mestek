@@ -1,0 +1,142 @@
+{% extends 'dashboard/base.html' %} {% block title %} المستخدمين {% endblock %}
+{% block heading %} المستخدمين {% endblock %} {% block content %}
+<div class="card shadow my-4">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">
+									المستخدمين
+								</h6>
+							</div>
+							<div class="card-body">
+<div class="table-responsive">
+	<table
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
+	>
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">الاسم الأول</th>
+				<th scope="col">الاسم الأخير</th>
+				<th scope="col">اسم المستخدم</th>
+				<th scope="col">البريد الإلكترونى</th>
+				<th scope="col">التصنيف</th>
+				<th scope="col">الصلاحية</th>
+				<th scope="col" class="text-center">مفعَل؟</th>
+				<th scope="col">إعدادات التحكم</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+			<tr>
+				<td>{{user.id}}</td>
+				<td>{{user.first_name}}</td>
+				<td>{{user.last_name}}</td>
+				<td>{{user.username}}</td>
+				<td>{{user.email}}</td>
+				<td>
+					<span
+						class="badge "
+						style="background-color: {{user.category.color_code}};"
+						>{{ user.category.name }}</span
+					>
+				</td>
+				<td>
+					<span
+						class="badge "
+						style="background-color: {{user.role.color_code}};"
+						>{{ user.role.name }}</span
+					>
+				</td>
+				<td class="text-center">
+					{% if user.activated %}
+					<i class="bi bi-check2-circle text-success"></i> {% else %}
+					<i class="bi bi-x-circle text-danger"></i> {% endif %}
+				</td>
+				<td class="d-flex">
+					<a
+						href="{{url_for('dashboard.user.get_user', username=user.username)}}"
+						type="button"
+						class="btn btn-info btn-sm text-white mx-1 "
+					>
+						<i class="bi bi-info-circle"></i>
+					</a>
+					<a
+						href="{{url_for('dashboard.user.update_user', username=user.username)}}"
+						class="text-white btn btn-warning btn-sm mx-1 "
+					>
+						<i class="bi bi-pencil"></i>
+					</a>
+					{% if not current_user.username == user.username %}
+					<form
+						method="POST"
+						action="{{url_for('dashboard.user.delete_user', username=user.username)}}"
+					>
+						{{ form.csrf_token }}
+						<button
+							type="button"
+							class="text-white btn btn-danger btn-sm mx-1 "
+							data-toggle="modal"
+							data-target="#deleteModal-{{user.id}}"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="حذف"
+						>
+							<i class="bi bi-trash3"></i>
+						</button>
+						<div
+							class="modal fade"
+							id="deleteModal-{{user.id}}"
+							tabindex="-1"
+							aria-labelledby="deleteModalLabel"
+							aria-hidden="true"
+						>
+							<div class="modal-dialog">
+								<div class="modal-content ">
+									<div class="modal-header">
+										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+										<button
+											type="button"
+											class="btn-close"
+											data-dismiss="modal"
+											aria-label="Close"
+										></button>
+									</div>
+									<div class="modal-body">
+										إذا كنت متأكد من حذف المستخدم
+										<br />
+										اعد كتابة إسم المستخدم فى المربع أدناه:
+										<p class="lead d-inline-block">
+											<mark class="badge  text-muted h2"
+												>{{user.username}}</mark
+											>
+										</p>
+										{{ form.value}}
+									</div>
+									<div class="modal-footer">
+										<button
+											type="button"
+											class="btn  btn-outline-secondary"
+											data-dismiss="modal"
+										>
+											رجوع
+										</button>
+										<button
+											type="submit"
+											class="btn  btn-danger"
+										>
+											تأكيد الحذف
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+					{% endif %}
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

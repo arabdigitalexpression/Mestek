@@ -1,0 +1,84 @@
+{% extends 'profile/base.html' %} {% block title %} حجوزاتي {% endblock %} {%
+block profile_content %}
+<div class="container my-3">
+    <div class="row">
+        {% if not current_user.reservations %}
+        <div class="alert alert-info perm-alert mb-0 alert-relative fade show " role="alert" data-mdb-color="secondary">
+            لا يوجد حجوزات لديك حالياً
+        </div>
+        {% endif %}
+        {% for reservation in current_user.reservations %}
+        <div class="col-12 mb-4">
+            <div  {% if reservation.type.name == 'tool' %}
+            class="card border-left-success shadow h-100 py-2"
+            {% else %}
+            class="card border-left-primary shadow h-100 py-2"
+            {% endif %}
+            >
+                <div class="card-body pe-0 overflow-hidden">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="d-flex justify-content-between mb-1d">
+
+                                    {% if reservation.type.name == 'tool' %}
+                                   <h5 class="fw-bold text-success"> {{reservation.tool.name}} </h5>
+                                    {% else %}
+                                     <h5 class="fw-bold text-primary">  {{reservation.space.name}}</h5>
+                                    {% endif %}
+
+                                <p class="h4 fw-bold text-dark">
+                                    {{ reservation.full_price }}
+                                    <span class="h5"> جنيه مصرى </span>
+                                </p>
+                            </div>
+                            {% if reservation.tools|length > 1 %}
+                            <div class="font-weight-bold text-gray-800 d-flex align-items-center flex-wrap my-2">
+                                {% for tool in reservation.tools %}
+                                <span class="badge text-bg-primary me-1"
+                                >
+                                    {{ tool.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            <div class="my-2 font-weight-bold text-gray-800">
+                                {% if reservation.payment_status.name == 'no_payment' %}<span
+                                    class="badge text-bg-danger"
+                            >{{ reservation.payment_status.description }}</span
+                            >
+                                {% elif reservation.payment_status.name == 'down_payment' %}
+                                <span class="badge text-bg-warning"
+                                >{{ reservation.payment_status.description }}</span
+                                >
+                                {% else %}
+                                <span class="badge text-bg-success">{{ reservation.payment_status.description }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <p class="text-muted mb-0">
+                                    <i class="bi bi-clock me-2"></i>{{ reservation.created_at }}
+                                </p>
+                                {% if reservation.payment_status.name == 'no_payment' %}
+                                <button class="btn btn-sm btn-circle" title="إلغاء الحجز">
+                                    <i class="fas fa-times-circle fa-2x text-danger"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="col-auto justify-content-end">
+                            <i
+                            {% if reservation.type.name == 'tool' %}
+                            class="fas fa-tools fa-9x text-success opacity-50"
+                            {% else %}
+                            class="fas fa-puzzle-piece fa-9x text-primary opacity-50"
+                            {% endif %}
+                            ></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

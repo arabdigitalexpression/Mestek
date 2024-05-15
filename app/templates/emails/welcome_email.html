@@ -1,0 +1,135 @@
+{% extends 'emails/base.html' %}
+
+{% block preloader %}
+شكرا لإضافة عنوان بريدك الإلكتروني على موقعنا. يرجى تأكيد بريدك الإلكتروني.
+{% endblock %}
+
+{% block content %}
+
+<!-- start hero -->
+<tr>
+    <td bgcolor="#e9ecef" align="center">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+            <tr>
+                <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+            <tbody>
+            <tr>
+                <td bgcolor="#ffffff"
+                    style="padding: 36px 24px 0; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; border-top: 3px solid #d4dadf;"
+                    align="right">
+                    <h1 style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -1px; line-height: 48px;">
+                        تأكيد بريدك الإلكتروني</h1>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+    </td>
+</tr>
+<!-- end hero -->
+
+<!-- start copy block -->
+<tr>
+    <td align="center" bgcolor="#e9ecef">
+        <!--[if (gte mso 9)|(IE)]>
+        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
+            <tr>
+                <td align="center" valign="top" width="600">
+        <![endif]-->
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
+
+            <!-- start copy -->
+            <tbody>
+            <tr>
+                <td bgcolor="#ffffff"
+                    style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
+                    align="right">
+                    <p style="margin: 0;">
+                        مرحباً {{ name }},
+                    </p>
+                    <p style="margin: 0;">
+                        شكرا لإضافة عنوان بريدك الإلكتروني على موقعنا. يرجى تأكيد بريدك الإلكتروني أدناه، بحيث يمكنك
+                        استعادة
+                        حسابك إذا نسيت كلمة المرور
+                        الخاصة بك!
+                    </p>
+                </td>
+            </tr>
+            <!-- end copy -->
+
+            <!-- start button -->
+            <tr>
+                <td align="left" bgcolor="#ffffff">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody>
+                        <tr>
+                            <td align="center" bgcolor="#ffffff" style="padding: 12px;">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                    <tr>
+                                        <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
+                                            <a href="{{ confirm_url }}" target="_blank"
+                                               style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">تأكيد
+                                                البريد الإلكتروني</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            <!-- end button -->
+
+            <!-- start copy -->
+            <tr>
+                <td bgcolor="#ffffff"
+                    style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;"
+                    align="right">
+                    <p style="margin: 0;">إذا لم ينجح ذلك، انسخ الرابط التالي والصقه في متصفحك:
+                    </p>
+                    <p style="margin: 0;"><a target="_blank" href="{{ confirm_url }}">{{ confirm_url }}</a></p>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" bgcolor="#ffffff"
+                    style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;color: #666;">
+                    <p style="margin: 0;">لقد تلقيت هذا البريد الإلكتروني لأننا تلقينا طلبًا للتحقق من البريد
+                        الإلكتروني لحسابك. إذا لم تطلب التحقق من البريد الإلكتروني، فيمكنك حذف هذا البريد الإلكتروني
+                        بأمان.</p>
+
+                </td>
+            </tr>
+            <!-- end copy -->
+
+            <!-- start copy -->
+            <tr>
+                <td bgcolor="#ffffff"
+                    style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px; border-bottom: 3px solid #d4dadf"
+                    align="right">
+                    <p style="margin: 0;">شكراً لك,<br> فريق أضف</p>
+                </td>
+            </tr>
+            <!-- end copy -->
+
+            </tbody>
+        </table>
+        <!--[if (gte mso 9)|(IE)]>
+        </td>
+        </tr>
+        </table>
+        <![endif]-->
+    </td>
+</tr>
+<!-- end copy block -->
+
+{% endblock %}

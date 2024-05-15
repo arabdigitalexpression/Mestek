@@ -1,0 +1,27 @@
+{% extends 'default/base.html' %}
+{% block tab_title %}
+حسابك غير نشط
+{% endblock %}
+
+{% block content %}
+<section class="container py-5 my-5">
+    <div class="card border rounded my-5 overflow-hidden">
+        <div class="row no-gutters row-bordered row-border-light">
+            <div class="col-12 p-5">
+                <h4 class="font-weight-bold mb-4 text-primary">حسابك غير نشط</h4>
+
+                <p>
+                    لم تقم بتأكيد حسابك.
+                    يرجى التحقق من صندوق البريد الإلكتروني الخاص بك (ومجلد بريد spam) - من المفترض أن تكون قد تلقيت رسالة بريد إلكتروني تحتوي على رابط التأكيد.
+                </p>
+
+                <p>
+                    لم تحصل على البريد الإلكتروني؟
+                    <a href="{{ url_for('auth.resend_confirmation') }}">أعد الإرسال</a>.
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

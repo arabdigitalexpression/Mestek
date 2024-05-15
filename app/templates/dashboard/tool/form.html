@@ -1,0 +1,154 @@
+{% extends 'dashboard/base.html' %} {% block title %} {% if isUpdate %} تعديل
+الأداة {% else %} إنشاء أداة {% endif %} {% endblock %} {% block content %}
+<h2>{% if isUpdate %} تعديل الأداة {% else %} إنشاء أداة {% endif %}</h2>
+
+{% if isUpdate %} {% set form_action = url_for('dashboard.tool.update_tool', id=tool.id) %} {%
+else %} {% set form_action = url_for('dashboard.tool.create_tool') %} {% endif %}
+
+<form method="POST" enctype="multipart/form-data" action="{{ form_action }}">
+    {{ form.csrf_token }}
+
+    <div class="row d-flex align-items-center justify-content-between mb-5">
+        <div class="col-md-3">
+            {% if form.name.errors %} {%for error in form.name.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.name}}
+        </div>
+        <div class="col-md-3">
+            {% if form.space.errors %} {%for error in form.space.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%} {{form.space}}
+        </div>
+        <div class="col-md-3">
+            {% if form.quantity.errors %} {%for error in form.quantity.errors %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%}
+            <div class="input-group">
+                {{form.quantity}}
+                <span class="input-group-text bg-primary text-white ">أداة</span>
+            </div>
+        </div>
+        <div class="col-md-3 d-flex justify-content-center">
+            {% if form.has_operator.errors %} {%for error in form.has_operator.errors
+            %}
+            <span class="form_error">{{ error }}</span>
+            {%endfor%} {% endif%}
+            <div class="form-check form-switch">
+                {{form.has_operator}}
+                {{form.has_operator.label(class_="form-check-label")}}
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table
+                class="price-table table table-bordered"
+        >
+            <thead class="fst-normal text-center align-middle">
+            <tr class="bg-primary text-white">
+                <th></th>
+                <th scope="col">
+                    سعر/تصنيف
+                </th>
+                {% for category in categories %}
+                <th>{{category.name}}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for cp in form.category_prices %}
+            <tr>
+                <th>
+                {% if loop.length > 1 %}
+                    {% if not isUpdate %}
+                        {% if not loop.last %}
+                <button class="btn"
+                        id="{{cp.delete.name}}"
+                        name="{{cp.delete.name}}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                        {% endif %}
+                    {% else %}
+                <button class="btn"
+                        id="{{ cp.delete.name}}"
+                        name="{{cp.delete.name}}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                    {% endif %}
+                {% else %}
+                    {% if not loop.first %}
+                <button class="btn"
+                        id="{{ cp.delete.name }}"
+                        name="{{ cp.delete.name }}"
+                        type="submit" value="{{cp.delete.name}}">
+                    <i class="fas fa-fw fa-minus-circle" style="color: #e01b24;"></i>
+                </button>
+                    {% endif %}
+                {% endif %}
+                </th>
+                <th>
+                    {{ cp.unit_value }}
+                    <div class="mt-1">{{ cp.unit }}</div>
+                </th>
+                {% for pl in cp.price_list %}
+                <td>
+                    {{ pl.category_id }}
+                    {{ pl.price }}
+                    <div class="mt-1">{{ pl.price_unit }}</div>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {{ form.add_new_price }}
+
+    <div class="my-5">
+        {% if form.description.errors %} {%for error in form.description.errors %}
+        <span class="form_error">{{ error }}</span>
+        {%endfor%} {% endif%} {{form.description}}
+    </div>
+
+    <div class="my-5">
+        {% if form.guidelines.errors %} {%for error in form.guidelines.errors %}
+        <span class="form_error">{{ error }}</span>
+        {%endfor%} {% endif%} {{form.guidelines}}
+    </div>
+    <div class="my-5">
+        {{ form.images.label(class_="form-label")}} {{ form.images}}
+    </div>
+    {% if isUpdate %}
+    <div
+            class="row"
+            data-masonry='{"percentPosition": true, "transitionDuration": "0.8s" }'
+    >
+        {% for image in tool.images %}
+        <div class="col" style="width: 250px">
+            <i
+                    class="bi bi-x-circle-fill text-danger position-absolute"
+                    style="top: 10px; left: 20px; font-size: 1.2rem; cursor: pointer"
+            ></i>
+            <img
+                    class="img-fluid pb-4"
+                    src="{{image.url}}"
+                    style="object-fit: cover"
+            />
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="float-end my-3">
+        <a
+                href="{{url_for('dashboard.tool.tool_list')}}"
+                type="button"
+                class="btn btn-outline-danger">
+            الغاء
+        </a>
+        <button type="submit" class="btn btn-primary">
+            {% if isUpdate %} تعديل الأداة {% else %} إضافة أداة {% endif %}
+        </button>
+    </div>
+</form>
+{% endblock %}

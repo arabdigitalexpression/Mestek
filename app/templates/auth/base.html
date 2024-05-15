@@ -1,0 +1,24 @@
+{% extends 'base.html' %} {% block styles %}
+{{ super() }}
+<link
+        href="{{ url_for('static',filename='styles/default.rtl.css') }}"
+        rel="stylesheet"
+/>
+<!-- Custom styles for this template -->
+{% endblock %}
+
+{% block auth_analytics %}
+{% endblock %}
+
+{% block body %}
+<main class="d-flex justify-content-center align-items-center w-100 vh-100">
+    {% block content %}{% endblock %}
+</main>
+
+
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static',filename='js/default.js') }}"></script>
+
+{% endblock %}

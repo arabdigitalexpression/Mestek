@@ -1,0 +1,116 @@
+{% extends 'dashboard/base.html' %} {% block title %} اﻷدوات {% endblock %} {%
+block heading %} اﻷدوات {% endblock %}
+{% block content %}
+<div class="card shadow my-4">
+<div class="card-header py-3">
+	<h6 class="m-0 font-weight-bold text-primary">
+		اﻷدوات
+	</h6>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+	<table
+		id="dataTable"
+		cellspacing="0"
+		class="table align-middle text-center table-bordered"
+	>
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">إسم اﻷداة</th>
+				<th scope="col">مشرف؟</th>
+				<th scope="col">العدد</th>
+				<th scope="col">المساحة</th>
+				<th scope="col">إعدادات التحكم</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for tool in tools %}
+			<tr>
+				<td>{{tool.id}}</td>
+				<td>{{tool.name}}</td>
+				<td>
+					{% if tool.has_operator %}
+					<span>يوجد</span> {% else %}
+					<span>-</span> {% endif %}
+				</td>
+				<td>{{ tool.quantity }}</td>
+				<td>
+					{% if tool.space.name %} {{tool.space.name}} {% else %}
+					<span class="text-muted">لا يوجد</span> {% endif %}
+				</td>
+				<td class="d-flex">
+					<button
+						type="button"
+						class="btn btn-info btn-sm text-white mx-1 "
+					>
+						<i class="bi bi-info-circle"></i>
+					</button>
+					<a
+						href="{{url_for('dashboard.tool.update_tool', id=tool.id)}}"
+						class="text-white btn btn-warning btn-sm mx-1 "
+					>
+						<i class="bi bi-pencil"></i>
+					</a>
+					<form method="POST" action="{{url_for('dashboard.tool.delete_tool', id=tool.id)}}">
+						<button
+							type="button"
+							class="text-white btn btn-danger btn-sm mx-1 "
+							data-toggle="modal"
+							data-target="#deleteModal-{{tool.id}}"
+							data-toggle="tooltip"
+							data-placement="top"
+							title="حذف"
+						>
+							<i class="bi bi-trash3"></i>
+						</button>
+						<div
+							class="modal fade"
+							id="deleteModal-{{tool.id}}"
+							tabindex="-1"
+							aria-labelledby="deleteModalLabel"
+							aria-hidden="true"
+						>
+							<div class="modal-dialog">
+								<div class="modal-content ">
+									<div class="modal-header">
+										<h5 class="modal-title" id="deleteModalLabel">حذف!</h5>
+										<button
+											type="button"
+											class="btn-close"
+											data-dismiss="modal"
+											aria-label="Close"
+										></button>
+									</div>
+									<div class="modal-body">
+										هل أنت متأكد من حذف مساحة: {{tool.name}}
+									</div>
+									<div class="modal-footer">
+										<button
+											type="button"
+											class="btn  btn-outline-secondary"
+											data-dismiss="modal"
+										>
+											رجوع
+										</button>
+										<button
+											type="submit"
+											class="btn  btn-danger"
+										>
+											تأكيد الحذف
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{% endblock %}
